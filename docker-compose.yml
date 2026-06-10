@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    ports:
+      - "5431:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
+      PORT: 8000
+    ports:
+      - "7999:8000"
+    depends_on:
+      - postgres
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: npm run preview -- --host 0.0.0.0 --port 4173
+    ports:
+      - "4172:4173"
+    depends_on:
+      - server
+
+volumes:
+  db:
