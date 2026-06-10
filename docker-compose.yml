@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: app
     ports:
-      - "5431:5432"
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -20,7 +20,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
       PORT: 8000
     ports:
-      - "7999:8000"
+      - "8000:8000"
     depends_on:
       - postgres
 
@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile
     command: npm run preview -- --host 0.0.0.0 --port 4173
     ports:
-      - "4172:4173"
+      - "4173:4173"
     depends_on:
       - server
 
