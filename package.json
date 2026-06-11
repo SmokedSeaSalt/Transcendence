@@ -6,9 +6,9 @@
     "server"
   ],
   "scripts": {
-    "dev": "docker compose up",
-    "dev:build": "docker compose up --build",
-    "down": "docker compose down",
+    "dev": "docker-compose up",
+    "dev:build": "docker-compose up --build",
+    "down": "docker-compose down",
     "lint": "biome check .",
     "format": "biome format --write .",
     "prisma:generate": "npm --workspace server run prisma:generate",
