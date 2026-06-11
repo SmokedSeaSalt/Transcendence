@@ -21,6 +21,9 @@ services:
       PORT: 8000
     ports:
       - "8000:8000"
+    volumes:
+      - ./server/src:/app/src
+      - ./server/package.json:/app/package.json
     depends_on:
       - postgres
 
@@ -32,6 +35,9 @@ services:
     command: npm run preview -- --host 0.0.0.0 --port 4173
     ports:
       - "4173:4173"
+    volumes:
+      - ./client/src:/app/src
+      - ./client/package.json:/app/package.json
     depends_on:
       - server
 

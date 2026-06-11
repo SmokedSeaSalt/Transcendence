@@ -6,9 +6,9 @@
     "server"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "npm --workspace server run dev",
-    "dev:client": "npm --workspace client run dev",
+    "dev": "docker compose up",
+    "dev:build": "docker compose up --build",
+    "down": "docker compose down",
     "lint": "biome check .",
     "format": "biome format --write .",
     "prisma:generate": "npm --workspace server run prisma:generate",

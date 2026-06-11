@@ -1,20 +1,10 @@
 {
   "name": "Transcendence Dev",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
-  "remoteUser": "node",
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "postCreateCommand": "npm ci || npm install",
-  "forwardPorts": [3000, 5173],
-  "portsAttributes": {
-    "3000": { "label": "React/Frontend" },
-    "5173": { "label": "Vite" }
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
-      ]
-    }
-  }
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+  "mounts": [
+    "source=transcendence-node_modules,target=/workspaces/Transcendence/node_modules,type=volume"
+  ],
+  "postCreateCommand": "npm install"
 }
