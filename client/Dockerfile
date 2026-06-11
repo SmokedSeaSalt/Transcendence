@@ -14,4 +14,4 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "5173"]
