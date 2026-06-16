@@ -6,8 +6,9 @@
     "server"
   ],
   "scripts": {
-    "dev": "docker-compose up",
-    "dev:build": "docker-compose up --build",
+    "up": "docker-compose up",
+    "prod": "docker-compose --env-file .env up --build",
+    "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build",
     "down": "docker-compose down",
     "lint": "biome check .",
     "format": "biome format --write .",

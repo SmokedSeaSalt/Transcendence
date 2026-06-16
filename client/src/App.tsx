@@ -4,7 +4,7 @@ export default function App() {
   const [message, setMessage] = useState("");
 
   const handleClick = async () => {
-    const response = await fetch("/hello");
+    const response = await fetch("/server/hello");
     const text = await response.text();
     setMessage(text);
   };

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+
+  server:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server/src:/app/src
+
+  client:
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client/src:/app/src
