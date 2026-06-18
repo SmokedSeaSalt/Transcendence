@@ -1,0 +1,13 @@
+{
+  "name": "Transcendence Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+  "mounts": [
+    "source=transcendence-node_modules,target=/workspaces/Transcendence/node_modules,type=volume",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "postCreateCommand": "npm install"
+}
