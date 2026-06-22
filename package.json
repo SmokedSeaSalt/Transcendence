@@ -13,8 +13,9 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "prisma:generate": "npm --workspace server run prisma:generate",
-    "prisma:migrate": "npm --workspace server run prisma:migrate",
-    "prisma:studio": "npm --workspace server run prisma:studio"
+    "prisma:migrate": "docker exec -it server npx prisma migrate dev --name",
+    "prisma:studio": "npm --workspace server run prisma:studio",
+    "prisma:reset": "docker exec -it server npx prisma migrate reset --force"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

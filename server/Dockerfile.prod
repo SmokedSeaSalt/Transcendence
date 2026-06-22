@@ -2,6 +2,8 @@ FROM node:26-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev --silent
+COPY prisma ./prisma
+RUN npx prisma generate
 
 FROM node:26-alpine AS build
 WORKDIR /app
@@ -15,6 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
+COPY entrypoint.prod.sh ./
 ENV PORT=8000
 EXPOSE 8000
-CMD ["npm", "run", "start"]
+CMD ["sh", "entrypoint.prod.sh"]

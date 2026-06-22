@@ -2,6 +2,8 @@ FROM node:26-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --silent
+COPY prisma ./prisma
+RUN npm run prisma:generate
 COPY . .
 EXPOSE 8000
-CMD ["npm", "run", "dev"]
+CMD ["sh", "entrypoint.dev.sh"]
