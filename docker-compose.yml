@@ -19,7 +19,7 @@ services:
       context: ./server
       dockerfile: ${DOCKERFILE:-Dockerfile.prod}
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
       PORT: 8000
     volumes:
       - ./server/prisma:/app/prisma
