@@ -10,6 +10,7 @@
 		"reset_db": "docker-compose down -v",
 		"lint": "biome check .",
 		"format": "biome format --write .",
+		"test": "echo 'No tests yet' && exit 0",
 		"prisma:generate": "npm --workspace server run prisma:generate",
 		"prisma:migrate": "docker exec -it server npx prisma migrate dev --name",
 		"prisma:studio": "npm --workspace server run prisma:studio",
