@@ -65,7 +65,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
 
       - name: Run tests
-        run: npm --workspace server run test
+        run: npm run test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
 

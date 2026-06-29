@@ -4,7 +4,7 @@
 	"workspaces": ["client", "server"],
 	"scripts": {
 		"up": "docker-compose up",
-		"prod": "docker-compose --env-file .env up --build",
+		"prod": "docker-compose up --build",
 		"dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build",
 		"down": "docker-compose down",
 		"reset_db": "docker-compose down -v",
