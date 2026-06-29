@@ -1,23 +1,22 @@
 {
-  "name": "transcendence",
-  "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
-  "scripts": {
-    "up": "docker-compose up",
-    "prod": "docker-compose --env-file .env up --build",
-    "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build",
-    "down": "docker-compose down",
-    "lint": "biome check .",
-    "format": "biome format --write .",
-    "prisma:generate": "npm --workspace server run prisma:generate",
-    "prisma:migrate": "npm --workspace server run prisma:migrate",
-    "prisma:studio": "npm --workspace server run prisma:studio"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "concurrently": "^9.1.0"
-  }
+	"name": "transcendence",
+	"private": true,
+	"workspaces": ["client", "server"],
+	"scripts": {
+		"up": "docker-compose up",
+		"prod": "docker-compose --env-file .env up --build",
+		"dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build",
+		"down": "docker-compose down",
+		"reset_db": "docker-compose down -v",
+		"lint": "biome check .",
+		"format": "biome format --write .",
+		"prisma:generate": "npm --workspace server run prisma:generate",
+		"prisma:migrate": "docker exec -it server npx prisma migrate dev --name",
+		"prisma:studio": "npm --workspace server run prisma:studio",
+		"prisma:reset": "docker exec -it server npx prisma migrate reset --force"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"concurrently": "^9.1.0"
+	}
 }
