@@ -6,8 +6,11 @@
 		"dev": "tsx watch src/index.ts",
 		"build": "tsc -p tsconfig.json",
 		"start": "node dist/index.js",
+		"test": "vitest run",
+		"test:local": "dotenv -e ../.env.dev -- vitest run",
 		"prisma:generate": "prisma generate",
-		"prisma:migrate": "prisma migrate dev",
+		"prisma:migrate:dev": "prisma migrate dev",
+		"prisma:migrate:deploy": "prisma migrate deploy",
 		"prisma:studio": "dotenv -e ../.env -- prisma studio"
 	},
 	"dependencies": {
@@ -21,10 +24,14 @@
 	"devDependencies": {
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
-		"@types/node": "^22.0.0",
+		"@types/node": "^24.13.2",
+		"@types/supertest": "^7.2.0",
 		"dotenv-cli": "^11.0.0",
 		"prisma": "^6.19.3",
+		"socket.io-client": "^4.8.3",
+		"supertest": "^7.2.2",
 		"tsx": "^4.19.2",
-		"typescript": "^5.7.3"
+		"typescript": "^5.7.3",
+		"vitest": "^4.1.9"
 	}
 }

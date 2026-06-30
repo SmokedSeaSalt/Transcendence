@@ -1,14 +1,7 @@
-import express from "express";
+import { app } from "./app.js";
 import { prisma } from "./db.js";
 
-const app = express();
 const port = Number(process.env.PORT ?? 8000);
-
-app.get("/server/hello", async (_req, res) => {
-	//get test user name to respond
-	const user = await prisma.user.findFirst();
-	res.send(`hello ${user?.name ?? "nobody"}`);
-});
 
 app.listen(port, async () => {
 	console.log(`Server listening on http://localhost:${port}`);
