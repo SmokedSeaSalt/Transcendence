@@ -59,6 +59,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Generate database
+        run: npm --workspace server run prisma:generate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
+
       - name: Run migrations
         run: npm --workspace server run prisma:migrate:deploy
         env:
