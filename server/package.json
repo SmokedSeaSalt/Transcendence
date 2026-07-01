@@ -11,7 +11,7 @@
 		"prisma:generate": "prisma generate",
 		"prisma:migrate:dev": "prisma migrate dev",
 		"prisma:migrate:deploy": "prisma migrate deploy",
-		"prisma:studio": "dotenv -e ../.env -- prisma studio"
+		"prisma:studio": "dotenv -e ../.env.dev -- bash -c 'DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB prisma studio'"
 	},
 	"dependencies": {
 		"@prisma/client": "^6.19.3",
