@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import * as userServices from "../services/userServices.js";
 
 export const getHello = async (req: Request, res: Response) => {
@@ -6,24 +6,18 @@ export const getHello = async (req: Request, res: Response) => {
 	res.send(`hello ${user?.name ?? "nobody"}`);
 };
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const { email, name, unhashedPassword } = req.body;
+		const { email, name, password } = req.body;
 
 		// Validate input
-		if (!email || !name || !unhashedPassword) {
-			return res.status(400).json({ error: "Missing required fields" });
+		if (!email || !name || !password) {
+			return res.status(400).json({ error: "Missing required fields: " + email + " " + name + " " + password });
 		}
 
-		const user = await userServices.createUser(email, name, unhashedPassword);
+		const user = await userServices.createUser(email, name, password);
 		res.status(201).json(user);
 	} catch (error: any) {
-		// Check for specific Prisma errors
-		if (error.code === "P2002") {
-			return res.status(409).json({ error: "Email already exists" });
-		}
-
-		// Generic error
-		res.status(500).json({ error: "Failed to create user" });
+		next(error);
 	}
 };

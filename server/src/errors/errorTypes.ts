@@ -11,3 +11,10 @@ export class HashError extends Error {
 		this.name = "HashError";
 	}
 }
+
+export class InvalidEmailError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "InvalidEmailError";
+	}
+}

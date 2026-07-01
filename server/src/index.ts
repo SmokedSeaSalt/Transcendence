@@ -1,12 +1,18 @@
 import express from "express";
 import { prisma } from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 const port = Number(process.env.PORT ?? 8000);
 
+
 app.use(express.json());
+app.use(requestLogger);
 app.use("/api", userRoutes);
+app.use("/api", errorHandler);
+
 
 app.listen(port, async () => {
 	console.log(`Server listening on http://localhost:${port}`);
