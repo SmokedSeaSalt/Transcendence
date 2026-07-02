@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { HashError, PasswordValidationError } from "../errors/errorTypes.js";
+import { HashError, PasswordValidationError, EmailAlreadyExistsError } from "../errors/errorTypes.js";
 
 export const errorHandler = (
 	error: unknown,
@@ -18,11 +18,10 @@ export const errorHandler = (
 		return res.status(500).json({ error: error.message });
 	}
 
-	if (error instanceof PrismaClientKnownRequestError) {
-		if (error.code === "P2002") {
-			return res.status(409).json({ error: "Email already exists" });
-		}
+	if (error instanceof EmailAlreadyExistsError) {
+		return res.status(409).json({ error: error.message });
 	}
+
 
 	return res.status(500).json({ error: "Internal server error" });
 };

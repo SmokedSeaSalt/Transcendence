@@ -1,6 +1,6 @@
 import { prisma } from "../db.js";
 import { generateApiKey } from "./apiKeyServices.js";
-import { PasswordValidationError, HashError} from "../errors/errorTypes.js"
+import { PasswordValidationError, HashError, EmailAlreadyExistsError} from "../errors/errorTypes.js"
 import bcrypt from "bcrypt";
 
 
@@ -30,6 +30,7 @@ export const authenticateUser = async ( email: string, unhashedPassword: string 
 	}
 
 	const hashedPassword = await getUserPassword(user.id);
+	// todo do bycrpt comapre()
 	const newUser = await prisma.user.create({
 		data: {
 			email: email,
@@ -52,8 +53,7 @@ const getUserPassword = async (userId: number): Promise<string | null> => {
 const verifyPassword = async (userId: number, userInputPassword: string): Promise<boolean> => {
 
 	const userHashedPassword = await getUserPassword(userId)
-	bcrypt.compare(userInputPassword, userHashedPassword);
-	return true;
+	return await bcrypt.compare(userInputPassword, userHashedPassword);
 }
 
 
@@ -63,10 +63,16 @@ const verifyPassword = async (userId: number, userInputPassword: string): Promis
 /////////////////////////////////////
 
 export const createUser = async ( email: string, name: string, unhashedPassword: string ) => {
-	const [hashedPassword, apiKey] = await Promise.all([
+	const [hashedPassword, apiKey, emailExists] = await Promise.all([
 		hashPassword(unhashedPassword),
-		generateApiKey()
+		generateApiKey(),
+		emailAlreadyExists(email)
 	]);
+
+	if (emailExists) {
+		throw new EmailAlreadyExistsError("User already exists with this email.");
+	}
+
 	const newUser = await prisma.user.create({
 		data: {
 			email: email,
@@ -80,7 +86,7 @@ export const createUser = async ( email: string, name: string, unhashedPassword:
 };
 
 const hashPassword = async (password: string): Promise<string> => {
-	const saltRounds = 10;
+	const saltRounds: number = 10;
 	if (typeof password !== "string" || password.length === 0) {
 		throw new PasswordValidationError("Password is required");
 	}
@@ -91,4 +97,12 @@ const hashPassword = async (password: string): Promise<string> => {
 		console.error("Failed to hash password:", err);
 		throw new HashError("bcyrpt.hash() failed to hash password");
 	}
+};
+
+const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
+	const user = await prisma.user.findUnique({
+		where: { email: userInputEmail },
+	});
+
+	return user ? true : false;
 };

@@ -1,4 +1,5 @@
 import { app } from "./app.js";
+import express from "express";
 import { prisma } from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
 import { requestLogger } from "./middleware/requestLogger.js";
