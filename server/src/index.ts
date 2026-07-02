@@ -1,10 +1,9 @@
-import express from "express";
+import { app } from "./app.js";
 import { prisma } from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
 import { requestLogger } from "./middleware/requestLogger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
-const app = express();
 const port = Number(process.env.PORT ?? 8000);
 
 
