@@ -1,11 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import * as userServices from "../services/userServices.js";
 
-export const getHello = async (req: Request, res: Response) => {
-	const user = await userServices.getFirstUser();
-	res.send(`hello ${user?.name ?? "nobody"}`);
-};
-
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { email, name, password } = req.body;

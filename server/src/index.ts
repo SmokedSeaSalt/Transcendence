@@ -1,17 +1,8 @@
 import { app } from "./app.js";
-import express from "express";
 import { prisma } from "./db.js";
-import userRoutes from "./routes/userRoutes.js";
-import { requestLogger } from "./middleware/requestLogger.js";
-import { errorHandler } from "./middleware/errorHandler.js";
+
 
 const port = Number(process.env.PORT ?? 8000);
-
-
-app.use(express.json());
-app.use(requestLogger);
-app.use("/api", userRoutes);
-app.use("/api", errorHandler);
 
 
 app.listen(port, async () => {
