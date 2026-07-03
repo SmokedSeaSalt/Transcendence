@@ -1,10 +1,21 @@
 import express from "express";
 import { prisma } from "./db.js";
+import apiRoutes from "./routes/api/index.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 export const app = express();
 
-app.get("/server/hello", async (_req, res) => {
-	//get test user name to respond
-	const user = await prisma.user.findFirst();
-	res.send(`hello ${user?.name ?? "nobody"}`);
+app.use(express.json());
+app.use(requestLogger);
+app.use("/api", apiRoutes);
+
+// Health check endpoint
+// todo: Place before authentication so monitoring can access it
+app.get('/health', (req, res) => {
+	res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
+
+app.use(errorHandler);
+
+

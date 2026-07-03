@@ -4,7 +4,7 @@ export default function App() {
 	const [message, setMessage] = useState("");
 
 	const handleClick = async () => {
-		const response = await fetch("/server/hello");
+		const response = await fetch("/health");
 		const text = await response.text();
 		setMessage(text);
 	};
@@ -13,7 +13,7 @@ export default function App() {
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<h1>React + Express</h1>
 			<button type="button" onClick={handleClick}>
-				Call /hello
+				Call /health
 			</button>
 			{message ? <p>{message}</p> : null}
 		</main>
