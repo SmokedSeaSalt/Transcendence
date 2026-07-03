@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "./db.js";
 import apiRoutes from "./routes/api/index.js";
+import webRoutes from "./routes/web/index.js";
 import { requestLogger } from "./middleware/requestLogger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -9,6 +10,8 @@ export const app = express();
 app.use(express.json());
 app.use(requestLogger);
 app.use("/api", apiRoutes);
+app.use("/web", webRoutes);
+
 
 // Health check endpoint
 // todo: Place before authentication so monitoring can access it
