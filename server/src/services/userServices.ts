@@ -108,5 +108,5 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 		where: { email: userInputEmail },
 	});
 
-	return user ? true : false;
+	return !!user;
 };

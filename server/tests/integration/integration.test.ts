@@ -65,7 +65,7 @@ const createUser = async (email: string, name: string, password: string) => {
 
 const userExists = async (email: string) => {
 	const user = await testClient.user.findUnique({ where: { email } });
-	return user ? true : false;
+	return !!user;
 };
 
 describe("GET /health", () => {
