@@ -6,7 +6,6 @@ const port = Number(process.env.PORT ?? 8000);
 app.listen(port, async () => {
 	console.log(`Server listening on http://localhost:${port}`);
 
-	// create dummy user to test database
 	const existing = await prisma.user.findUnique({
 		where: { email: "test@test.com" },
 	});
