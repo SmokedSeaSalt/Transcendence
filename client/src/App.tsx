@@ -1,21 +1,15 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import CallHealth from "./pages/CallHealthy";
+
 
 export default function App() {
-	const [message, setMessage] = useState("");
-
-	const handleClick = async () => {
-		const response = await fetch("/health");
-		const text = await response.text();
-		setMessage(text);
-	};
-
-	return (
-		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-			<h1>React + Express</h1>
-			<button type="button" onClick={handleClick}>
-				Call /health
-			</button>
-			{message ? <p>{message}</p> : null}
-		</main>
-	);
+return (
+	<BrowserRouter>
+		<Routes>
+			<Route path="/login" element={<Login />} />
+			<Route path="/" element={<CallHealth />} />
+		</Routes>
+	</BrowserRouter>
+);
 }
