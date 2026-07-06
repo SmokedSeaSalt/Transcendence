@@ -1,21 +1,23 @@
-import { prisma } from "../db.js";
-import { generateApiKey } from "./apiKeyServices.js";
-import { PasswordValidationError, HashError, EmailAlreadyExistsError} from "../errors/errorTypes.js"
 import bcrypt from "bcrypt";
-
-
+import { prisma } from "../db.js";
+import {
+	EmailAlreadyExistsError,
+	HashError,
+	PasswordValidationError,
+} from "../errors/errorTypes.js";
+import { generateApiKey } from "./apiKeyServices.js";
 
 export const getFirstUser = async () => {
 	return await prisma.user.findFirst();
 };
 
-
-
 //////////////////////////////////
 // Login ////////////////////////
 ////////////////////////////////
-export const authenticateUser = async ( email: string, unhashedPassword: string ) => {
-
+export const authenticateUser = async (
+	email: string,
+	unhashedPassword: string,
+) => {
 	const user = await prisma.user.findUnique({
 		where: { email },
 		select: {
@@ -26,7 +28,6 @@ export const authenticateUser = async ( email: string, unhashedPassword: string 
 	});
 
 	if (!user) {
-		
 	}
 
 	const hashedPassword = await getUserPassword(user.id);
@@ -35,11 +36,10 @@ export const authenticateUser = async ( email: string, unhashedPassword: string 
 		data: {
 			email: email,
 			hashedPassword: hashedPassword,
-		}
+		},
 	});
 	return newUser;
 };
-
 
 const getUserPassword = async (userId: number): Promise<string | null> => {
 	const user = await prisma.user.findUnique({
@@ -50,23 +50,27 @@ const getUserPassword = async (userId: number): Promise<string | null> => {
 	return user?.hashedPassword ?? null;
 };
 
-const verifyPassword = async (userId: number, userInputPassword: string): Promise<boolean> => {
-
-	const userHashedPassword = await getUserPassword(userId)
+const verifyPassword = async (
+	userId: number,
+	userInputPassword: string,
+): Promise<boolean> => {
+	const userHashedPassword = await getUserPassword(userId);
 	return await bcrypt.compare(userInputPassword, userHashedPassword);
-}
-
-
+};
 
 ///////////////////////////////////////
 // Signup ////////////////////////////
 /////////////////////////////////////
 
-export const createUser = async ( email: string, name: string, unhashedPassword: string ) => {
+export const createUser = async (
+	email: string,
+	name: string,
+	unhashedPassword: string,
+) => {
 	const [hashedPassword, apiKey, emailExists] = await Promise.all([
 		hashPassword(unhashedPassword),
 		generateApiKey(),
-		emailAlreadyExists(email)
+		emailAlreadyExists(email),
 	]);
 
 	if (emailExists) {
@@ -78,8 +82,8 @@ export const createUser = async ( email: string, name: string, unhashedPassword:
 			email: email,
 			name: name,
 			hashedPassword: hashedPassword,
-			apiKey: apiKey.keyHash
-		}
+			apiKey: apiKey.keyHash,
+		},
 	});
 	// todo still send apiKey.key back to client
 	return newUser;

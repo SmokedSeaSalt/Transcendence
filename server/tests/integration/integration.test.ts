@@ -1,17 +1,22 @@
 import request from "supertest";
-import { beforeEach, afterAll, describe, expect, it } from "vitest";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { testClient } from "../vitest.setup.js";
 
-const registerPaths = [
-	"/api/users/register",
-	"/web/users/register",
-] as const;
+const registerPaths = ["/api/users/register", "/web/users/register"] as const;
 
 const validCases = [
-	{email: "abc@gmail.com", name: "john", password: "ValidPassword123!"},
-	{email: "helloworld@hotmail.net", name: "hello world abcdef", password: "!!!!!Aa1"},
-	{email: "mat@yahoo.co", name: "m", password: "superlong_ValidPassword?123456!"},
+	{ email: "abc@gmail.com", name: "john", password: "ValidPassword123!" },
+	{
+		email: "helloworld@hotmail.net",
+		name: "hello world abcdef",
+		password: "!!!!!Aa1",
+	},
+	{
+		email: "mat@yahoo.co",
+		name: "m",
+		password: "superlong_ValidPassword?123456!",
+	},
 ];
 
 const invalidEmails = [
@@ -41,11 +46,11 @@ const deleteValidCaseUser = async () => {
 	for (const { email } of validCases) {
 		await testClient.user.deleteMany({ where: { email } });
 	}
-}
+};
 
 const deleteUser = async (email: string) => {
 	await testClient.user.deleteMany({ where: { email } });
-}
+};
 
 const createUser = async (email: string, name: string, password: string) => {
 	await testClient.user.create({
@@ -53,15 +58,15 @@ const createUser = async (email: string, name: string, password: string) => {
 			email: email,
 			name: name,
 			hashedPassword: password,
-			apiKey: "verySecureKey"
-		}
+			apiKey: "verySecureKey",
+		},
 	});
-}
+};
 
 const userExists = async (email: string) => {
 	const user = await testClient.user.findUnique({ where: { email } });
 	return user ? true : false;
-}
+};
 
 describe("GET /health", () => {
 	it("returns healthy", async () => {
@@ -80,24 +85,26 @@ describe.each(registerPaths)("POST %s", (path) => {
 		await deleteValidCaseUser();
 	});
 
-	it.each(validCases)("returns 201 created $email", async ({email, name, password}) => {
-		const res = await request(app)
-			.post(path)
-			.send({ email, name, password });
+	it.each(validCases)(
+		"returns 201 created $email",
+		async ({ email, name, password }) => {
+			const res = await request(app).post(path).send({ email, name, password });
 
-		expect(res.status).toBe(201);
-		expect(res.body.email).toBe(email);
-		expect(res.body.name).toBe(name);
+			expect(res.status).toBe(201);
+			expect(res.body.email).toBe(email);
+			expect(res.body.name).toBe(name);
 
-		expect(userExists, `User with ${email} has not been added to the database.`).toBeTruthy();
-	});
+			expect(
+				userExists,
+				`User with ${email} has not been added to the database.`,
+			).toBeTruthy();
+		},
+	);
 
 	it("returns 409 conflict", async () => {
 		await createUser(email, name, password);
 
-		const res = await request(app)
-			.post(path)
-			.send({ email, name, password });
+		const res = await request(app).post(path).send({ email, name, password });
 
 		expect(res.status).toBe(409);
 		await deleteUser(email);
@@ -112,14 +119,17 @@ describe.each(registerPaths)("POST %s", (path) => {
 		expect(res.body.errors[0].msg).not.toHaveLength(0);
 	});
 
-	it.each(invalidPasswords)("returns 400 invalid password: %s", async (badPassword) => {
-		const res = await request(app)
-			.post(path)
-			.send({ email, name, password: badPassword });
+	it.each(invalidPasswords)(
+		"returns 400 invalid password: %s",
+		async (badPassword) => {
+			const res = await request(app)
+				.post(path)
+				.send({ email, name, password: badPassword });
 
-		expect(res.status).toBe(400);
-		expect(res.body.errors[0].msg).not.toHaveLength(0);
-	});
+			expect(res.status).toBe(400);
+			expect(res.body.errors[0].msg).not.toHaveLength(0);
+		},
+	);
 
 	it.each(invalidNames)("returns 400 invalid name: %s", async (badName) => {
 		const res = await request(app)
