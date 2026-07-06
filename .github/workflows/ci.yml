@@ -62,17 +62,17 @@ jobs:
       - name: Generate database
         run: npm --workspace server run prisma:generate
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
 
       - name: Run migrations
         run: npm --workspace server run prisma:migrate:deploy
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
 
       - name: Run tests
         run: npm run test
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
 
   docker:
       runs-on: ubuntu-latest
