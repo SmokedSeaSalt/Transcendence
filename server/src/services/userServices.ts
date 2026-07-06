@@ -55,6 +55,9 @@ const verifyPassword = async (
 	userInputPassword: string,
 ): Promise<boolean> => {
 	const userHashedPassword = await getUserPassword(userId);
+	if (!userHashedPassword) {
+		return false;
+	}
 	return await bcrypt.compare(userInputPassword, userHashedPassword);
 };
 
