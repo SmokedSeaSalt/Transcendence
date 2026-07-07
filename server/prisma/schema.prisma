@@ -14,13 +14,31 @@ enum GameStatus {
   ABANDONED
 }
 
+model Session {
+  token           String      @id
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id])
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
+model APIKey {
+  token           String      @id
+  scope           String      ///indicates whether key has user or admin access
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id])
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
 model User {
   id             Int           @id @default(autoincrement())
   email          String        @unique
   name           String
   hashedPassword String
   createdAt      DateTime      @default(now())
-  apiKey         String        @unique
+  session        Session?
+  apiKey         APIKey?
   gameResults    GameResult[]
   gameSessions   GameSession[]
 }
