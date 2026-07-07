@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegistration } from "./useRegistration";
 import { createUserSchema } from "./schemas"
+import LoginButton from "../../components/LoginButton"
+
 
 export default function RegistrationForm() {
 	const [email, setEmail] = useState("");
@@ -43,7 +45,7 @@ export default function RegistrationForm() {
 					{fieldErrors.password && <div role="alert" style={{ color: "red" }}>{fieldErrors.password}</div>}
 				</div>
 				{error ? <div role="alert" style={{ color: "red" }}>{error}</div> : null}
-				<button id="login-button" type="submit" disabled={loading}>{loading ? "Creating…" : "Sign up"}</button>
+				<LoginButton loading={loading}>Login</LoginButton>
 			</form>
 		</section>
 	);

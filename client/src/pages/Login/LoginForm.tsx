@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "./useLogin";
 import { loginSchema } from "./schemas"
+import LoginButton from "../../components/LoginButton"
 
 
 
@@ -27,7 +28,7 @@ export default function LoginForm() {
 		await login({ email, password });
 	};
 
-		return (
+	return (
 		<section style={{ flex: 1, padding: 24 }}>
 			<h2 id="login-title">Login</h2>
 			<form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -40,7 +41,7 @@ export default function LoginForm() {
 					{fieldErrors.password && <div role="alert" style={{ color: "red" }}>{fieldErrors.password}</div>}
 				</div>
 				{error ? <div role="alert" style={{ color: "red" }}>{error}</div> : null}
-				<button id="login-button" type="submit" disabled={loading}>{loading ? "Creating…" : "Sign up"}</button>
+				<LoginButton loading={loading}>Login</LoginButton>
 			</form>
 		</section>
 	);
