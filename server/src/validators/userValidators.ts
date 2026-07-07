@@ -13,3 +13,15 @@ export const createUserValidation = () => [
 		),
 	validateRequest,
 ];
+
+// todo make this use the shared/src/validators/schema.ts
+
+// export const createUserValidation = () => [
+// 	body("email").custom((value) => {
+// 		const result = createUserSchema.pick({ email: true }).safeParse({ email: value });
+// 		if (!result.success) {
+// 			throw new Error(result.error.errors[0].message);
+// 		}
+// 	}),
+// 	// ...rest
+// ];
