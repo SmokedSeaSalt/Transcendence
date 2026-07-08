@@ -19,7 +19,7 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const loginSchema = z.object({
 	email: z.email("Invalid email address"),
-	password: passwordSchema,
+	password: z.string().min(1, "Password cannot be empty"),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
