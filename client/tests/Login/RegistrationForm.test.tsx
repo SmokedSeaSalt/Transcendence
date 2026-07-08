@@ -4,10 +4,14 @@ import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi } from "vitest";
 import RegistrationForm from "../../src/pages/Login/RegistrationForm";
 
+type VitestMock = ReturnType<typeof vi.fn>;
+
 test("successful registration calls fetch with credentials", async () => {
-	(globalThis.fetch as any) = vi
-		.fn()
-		.mockResolvedValue({ ok: true, json: async () => ({ id: 1 }) });
+	const mockFetch = vi.fn().mockResolvedValue({
+		ok: true,
+		json: async () => ({ token: "ok" }),
+	}) as unknown as VitestMock;
+	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
 		<MemoryRouter>
@@ -26,16 +30,21 @@ test("successful registration calls fetch with credentials", async () => {
 
 	await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
 
-	const [url, opts] = (globalThis.fetch as any).mock.calls[0];
+	const [url, opts] = mockFetch.mock.calls[0] as [
+		string,
+		{ method?: string; body?: string },
+	];
 	expect(typeof url).toBe("string");
 	expect(opts).toMatchObject({ method: "POST" });
-	expect(JSON.parse(opts.body)).toEqual({ email, name, password });
+	expect(JSON.parse(opts.body ?? "")).toEqual({ email, name, password });
 });
 
 test("valid email + invalid password shows password validation and does not call fetch", async () => {
-	(globalThis.fetch as any) = vi
-		.fn()
-		.mockResolvedValue({ ok: true, json: async () => ({ id: 1 }) });
+	const mockFetch = vi.fn().mockResolvedValue({
+		ok: true,
+		json: async () => ({ token: "ok" }),
+	}) as unknown as VitestMock;
+	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
 		<MemoryRouter>
@@ -60,9 +69,11 @@ test("valid email + invalid password shows password validation and does not call
 });
 
 test("invalid email + valid password shows email validation and does not call fetch", async () => {
-	(globalThis.fetch as any) = vi
-		.fn()
-		.mockResolvedValue({ ok: true, json: async () => ({ id: 1 }) });
+	const mockFetch = vi.fn().mockResolvedValue({
+		ok: true,
+		json: async () => ({ token: "ok" }),
+	}) as unknown as VitestMock;
+	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
 		<MemoryRouter>
@@ -80,9 +91,11 @@ test("invalid email + valid password shows email validation and does not call fe
 });
 
 test("both email and password invalid show both errors and do not call fetch", async () => {
-	(globalThis.fetch as any) = vi
-		.fn()
-		.mockResolvedValue({ ok: true, json: async () => ({ id: 1 }) });
+	const mockFetch = vi.fn().mockResolvedValue({
+		ok: true,
+		json: async () => ({ token: "ok" }),
+	}) as unknown as VitestMock;
+	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
 		<MemoryRouter>
