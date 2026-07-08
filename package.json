@@ -1,10 +1,7 @@
 {
 	"name": "transcendence",
 	"private": true,
-	"workspaces": [
-		"client",
-		"server"
-	],
+	"workspaces": ["client", "server"],
 	"scripts": {
 		"up": "docker compose up",
 		"prod": "docker compose up --build",
