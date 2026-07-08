@@ -25,3 +25,10 @@ export class EmailAlreadyExistsError extends Error {
 		this.name = "EmailAlreadyExistsError";
 	}
 }
+
+export class LoginInvalidCredentialsError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "LoginInvalidCredentialsError";
+	}
+}

@@ -4,6 +4,7 @@ import {
 	EmailAlreadyExistsError,
 	HashError,
 	PasswordValidationError,
+	LoginInvalidCredentialsError,
 } from "../errors/errorTypes.js";
 
 export const errorHandler = (
@@ -24,6 +25,10 @@ export const errorHandler = (
 
 	if (error instanceof EmailAlreadyExistsError) {
 		return res.status(409).json({ error: error.message });
+	}
+
+	if (error instanceof LoginInvalidCredentialsError) {
+		return res.status(401).json({ error: error.message });
 	}
 
 	return res.status(500).json({ error: "Internal server error" });
