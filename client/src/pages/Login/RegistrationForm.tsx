@@ -45,7 +45,7 @@ export default function RegistrationForm() {
 					{fieldErrors.password && <div role="alert" style={{ color: "red" }}>{fieldErrors.password}</div>}
 				</div>
 				{error ? <div role="alert" style={{ color: "red" }}>{error}</div> : null}
-				<LoginButton loading={loading}>Login</LoginButton>
+				<LoginButton loading={loading}>Register</LoginButton>
 			</form>
 		</section>
 	);
