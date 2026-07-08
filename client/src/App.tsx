@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Footer from "./components/Footer";
 import CallHealth from "./pages/CallHealthy";
 import Login from "./pages/Login";
-import TermsOfService from  "./pages/TermsOfService"
-import PrivacyPolicy from "./pages/PrivacyPolicy"
-import Footer from "./components/Footer";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 export default function App() {
 	return (
