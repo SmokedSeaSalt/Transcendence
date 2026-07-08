@@ -6,7 +6,11 @@ export const useRegistration = () => {
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
 
-	const register = async (payload: { name: string; email: string; password: string }) => {
+	const register = async (payload: {
+		name: string;
+		email: string;
+		password: string;
+	}) => {
 		setLoading(true);
 		setError(null);
 		try {
@@ -15,7 +19,8 @@ export const useRegistration = () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(payload),
 			});
-			if (!res.ok) throw new Error((await res.json()).message || "Registration failed");
+			if (!res.ok)
+				throw new Error((await res.json()).message || "Registration failed");
 			const data = await res.json();
 			localStorage.setItem("token", data.token ?? "");
 			nav("/");

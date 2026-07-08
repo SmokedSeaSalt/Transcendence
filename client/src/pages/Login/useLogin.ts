@@ -15,7 +15,8 @@ export const useLogin = () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(payload),
 			});
-			if (!res.ok) throw new Error((await res.json()).message || "Registration failed");
+			if (!res.ok)
+				throw new Error((await res.json()).message || "Registration failed");
 			const data = await res.json();
 			localStorage.setItem("token", data.token ?? "");
 			nav("/");
