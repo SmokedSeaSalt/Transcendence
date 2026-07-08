@@ -3,8 +3,8 @@ import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
 	HashError,
-	PasswordValidationError,
 	LoginInvalidCredentialsError,
+	PasswordValidationError,
 } from "../errors/errorTypes.js";
 
 export const errorHandler = (

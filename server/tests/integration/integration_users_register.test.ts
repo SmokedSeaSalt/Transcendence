@@ -58,7 +58,6 @@ const createUser = async (email: string, name: string, password: string) => {
 			email: email,
 			name: name,
 			hashedPassword: password,
-			apiKey: "verySecureKey",
 		},
 	});
 };
