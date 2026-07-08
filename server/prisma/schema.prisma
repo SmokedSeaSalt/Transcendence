@@ -15,7 +15,7 @@ enum GameStatus {
 }
 
 model Session {
-  token           String      @id
+  hashedToken     String      @id
   userId          Int         @unique
   user            User        @relation(fields: [userId], references: [id])
   expiresAt       DateTime
@@ -23,7 +23,7 @@ model Session {
 }
 
 model APIKey {
-  token           String      @id
+  hashedKey       String      @id
   scope           String      ///indicates whether key has user or admin access
   userId          Int         @unique
   user            User        @relation(fields: [userId], references: [id])
