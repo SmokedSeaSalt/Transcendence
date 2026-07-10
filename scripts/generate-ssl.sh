@@ -6,6 +6,7 @@ mkdir -p "$CERT_DIR"
 
 if [ -f "$CRT" ] && [ -f "$KEY" ]; then
 	echo "SSL certificate already exists in $CERT_DIR. Skipping certificate generation."
+	exit 0
 fi
 
 echo "Generating self-signed cert "
