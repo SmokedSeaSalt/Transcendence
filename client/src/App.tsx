@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 import CallHealth from "./pages/CallHealthy";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -9,6 +10,7 @@ export default function App() {
 	return (
 		<BrowserRouter>
 			<div className="min-h-screen flex flex-col">
+				<Header />
 				<main className="flex-1">
 					<Routes>
 						<Route path="/login" element={<Login />} />
