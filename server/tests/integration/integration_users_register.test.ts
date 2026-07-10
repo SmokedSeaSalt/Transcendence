@@ -1,8 +1,8 @@
 import request from "supertest";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
-import { createUser, deleteUser } from "../helpers/dbHelpers.js";
 import { prisma } from "../../src/db.js";
+import { createUser, deleteUser } from "../helpers/dbHelpers.js";
 
 const registerPaths = ["/api/users/register", "/web/users/register"] as const;
 
@@ -79,8 +79,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 			expect(res.status).toBe(201);
 			expect(res.body.email).toBe(email);
 			expect(res.body.name).toBe(name);
-			if (path == "/web/users/register")
-			{
+			if (path === "/web/users/register") {
 				expect(res.headers["set-cookie"]).toBeDefined();
 				expect(res.headers["set-cookie"][0]).toContain("session");
 			}

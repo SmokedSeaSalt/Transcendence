@@ -1,8 +1,8 @@
+import type { Session, User } from "@prisma/client";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { prisma } from "../../src/db.js";
 import { updateSession } from "../../src/services/sessionServices.js";
 import { createUser, deleteUser } from "../helpers/dbHelpers.js";
-import { prisma } from "../../src/db.js";
-import type { Session, User } from "@prisma/client";
 
 //token generation
 describe("create session for user", () => {
@@ -12,19 +12,19 @@ describe("create session for user", () => {
 
 	let user: User;
 
-    beforeAll(async () => {
-        user = await createUser(email, name, password);
-    });
+	beforeAll(async () => {
+		user = await createUser(email, name, password);
+	});
 
-    afterAll(async () => {
-        await deleteUser(email);
-    });
+	afterAll(async () => {
+		await deleteUser(email);
+	});
 
 	it("returns token", async () => {
 		const tokenRet = await updateSession(user);
 		expect(tokenRet).toHaveLength(64);
 		const session: Session = await prisma.session.findUnique({
-			where: {userId: user.id},
+			where: { userId: user.id },
 		});
 		expect(session).toBeTruthy();
 	});
@@ -33,9 +33,6 @@ describe("create session for user", () => {
 		const tokenRet = await updateSession(user);
 		expect(tokenRet).toHaveLength(64);
 		const tokenRet2 = await updateSession(user);
-		expect(tokenRet != tokenRet2);
+		expect(tokenRet !== tokenRet2);
 	});
 });
-
-
-

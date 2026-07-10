@@ -6,11 +6,11 @@ const TEST_DB = "app_test";
 const DATABASE_URL_TEST = `postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${TEST_DB}`;
 
 export const testClient = new PrismaClient({
-  datasources: {
-    db: {
-      url: DATABASE_URL_TEST,
-    },
-  },
+	datasources: {
+		db: {
+			url: DATABASE_URL_TEST,
+		},
+	},
 });
 
 setPrisma(testClient);
