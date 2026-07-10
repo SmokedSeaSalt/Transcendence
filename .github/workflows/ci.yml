@@ -7,24 +7,7 @@ on:
     branches: [main]
 
 jobs:
-
-  generate-ssl:
-    runs-on: ubuntu-latest
-    outputs: {}
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Generate SSL certs
-        run: bash scripts/generate-ssl.sh
-
-      - name: Upload certs artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: certs
-          path: .certs/*
-
   lint-and-build:
-    needs: generate-ssl
     runs-on: ubuntu-latest
 
     steps:
@@ -99,7 +82,6 @@ jobs:
           run: docker compose down -v
 
   docker:
-      needs: generate-ssl
       runs-on: ubuntu-latest
 
       steps:
@@ -114,6 +96,9 @@ jobs:
             echo "POSTGRES_PASSWORD=postgres" >> .env
             echo "POSTGRES_DB=app" >> .env
             echo "EXTERNAL_PORT=8443" >> .env
+
+        - name: Generate ssl cert
+          run: ./scripts/generate-ssl.sh
 
         - name: Build and start containers
           run: docker compose up --build -d

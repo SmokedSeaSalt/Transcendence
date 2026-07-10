@@ -4,8 +4,8 @@
 	"workspaces": ["client", "server"],
 	"scripts": {
 		"up": "docker compose up",
-		"prod": "docker compose up --build",
-		"dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build",
+		"prod": "./scripts/run_prod.sh",
+		"dev": "./scripts/run_dev.sh",
 		"down": "docker compose down",
 		"reset_db": "docker compose down -v",
 		"lint": "biome check .",
