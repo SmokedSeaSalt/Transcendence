@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import express from "express";
 import { prisma } from "./db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
@@ -7,6 +8,7 @@ import webRoutes from "./routes/web/index.js";
 
 export const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
 app.use("/api", apiRoutes);

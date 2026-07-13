@@ -1,19 +1,27 @@
-import { randomBytes } from "node:crypto";
-import bcrypt from "bcrypt";
+import { createHash, randomBytes } from "node:crypto";
+import type { User } from "@prisma/client";
+import { prisma } from "../db.js";
 
-// todo: generate API key at creation? or at the request of the user? should keys expire? keys should be encrypted in db.
-// https://codesignal.com/learn/courses/api-key-authentication-security/lessons/api-key-generation-basics
-export const generateApiKey = async (): Promise<{
-	key: string;
-	keyHash: string;
-}> => {
-	const generatedBytes = randomBytes(32);
-	const key = generatedBytes.toString("hex");
+export const updateAPIKey = async (
+	user: User,
+	scope: string,
+): Promise<string> => {
+	const apiKey = randomBytes(32).toString("hex");
+	const hashedapiKey = createHash("sha256").update(apiKey).digest("hex");
 
-	// Hash the key for secure storage
-	const keyHash = await bcrypt.hash(key, 12);
+	await prisma.aPIKey.upsert({
+		where: { userId: user.id },
+		update: {
+			hashedKey: hashedapiKey,
+			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+		},
+		create: {
+			hashedKey: hashedapiKey,
+			userId: user.id,
+			scope: scope,
+			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+		},
+	});
 
-	// todo: maybe add prefix
-
-	return { key, keyHash };
+	return apiKey;
 };
