@@ -20,7 +20,7 @@ export const createUser = async (
 		//put sessionToken in cookies
 		res.cookie("session", sessionToken, {
 			httpOnly: true,
-			//secure: true, //todo enable when we have https
+			secure: true,
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
@@ -48,7 +48,7 @@ export const loginUser = async (
 		//put sessionToken in cookies
 		res.cookie("session", sessionToken, {
 			httpOnly: true,
-			//secure: true, //todo enable when we have https
+			secure: true,
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
@@ -79,7 +79,7 @@ export const logoutUser = async (
 		res.clearCookie("session", {
 			httpOnly: true,
 			sameSite: "strict",
-			//secure: true, //todo enable when we have https
+			secure: true,
 		});
 		res.status(201).json({ message: "logged out" });
 	} catch (error: unknown) {
