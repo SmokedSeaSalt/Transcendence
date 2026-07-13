@@ -9,6 +9,7 @@ import { requestLogger } from "./middleware/requestLogger.js";
 import apiRoutes from "./routes/api/index.js";
 import webRoutes from "./routes/web/index.js";
 
+// This import must be after apiRoutes is imported as it is dependent on it.
 import { swaggerSpec } from "./swagger/spec.js";
 
 
