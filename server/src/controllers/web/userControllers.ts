@@ -76,6 +76,11 @@ export const logoutUser = async (
 		//invalidate token
 		invalidateSession(token);
 		//delete token from coockies
+		res.clearCookie("session", {
+			httpOnly: true,
+			sameSite: "strict",
+			//secure: true, //todo enable when we have https
+		})
 		res.status(201).json({ message: "logged out" });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
