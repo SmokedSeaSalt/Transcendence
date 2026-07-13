@@ -51,6 +51,9 @@ jobs:
             echo "POSTGRES_DB=app" >> .env
             echo "EXTERNAL_PORT=8443" >> .env
 
+        - name: Generate ssl cert
+          run: ./scripts/generate-ssl.sh
+
         - name: Build and start containers
           run: docker compose -f docker-compose.yml -f docker-compose.dev.yml up  --build -d
 
