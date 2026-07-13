@@ -80,7 +80,7 @@ export const logoutUser = async (
 			httpOnly: true,
 			sameSite: "strict",
 			//secure: true, //todo enable when we have https
-		})
+		});
 		res.status(201).json({ message: "logged out" });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
