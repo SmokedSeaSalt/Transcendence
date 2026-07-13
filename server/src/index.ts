@@ -16,7 +16,6 @@ app.listen(port, async () => {
 				email: "test@test.com",
 				name: "Test User",
 				hashedPassword: "hashed",
-				apiKey: "test-api-key",
 			},
 		});
 		console.log(`Created dummy user: ${user.name}`);
