@@ -1,14 +1,14 @@
 import { Router } from "express";
 import * as userController from "../../controllers/api/userControllers.js";
 import { createUserValidation } from "../../validators/userValidators.js";
-import { registry } from "../../swagger/registry.js";
+import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserSchema,createUserResponseSchema, zodValidationErrorSchema, singleErrorSchema } from "../../validators/userValidators.js";
 
 const router = Router();
 
 
 
-registry.registerPath({
+apiRegistry.registerPath({
 	method: "post",
 	path: "/users/register",
 	tags: ["Users"],
