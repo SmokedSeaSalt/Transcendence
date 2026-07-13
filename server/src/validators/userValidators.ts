@@ -10,13 +10,13 @@ const passwordSchema = z
 	.regex(/\d/, "Password must contain a digit")
 	.regex(/[^A-Za-z\d]/, "Password must contain a special character");
 
-const createUserSchema = z.object({
+export const createUserSchema = z.object({
 	email: z.email("Invalid email address"),
 	name: z.string().min(1, "Name is required").max(100, "Name too long"),
 	password: passwordSchema,
-});
+}).openapi("CreateUser");
 
-const loginSchema = z.object({
+export const loginSchema = z.object({
 	email: z.email("Invalid email address"),
 	password: z.string().min(1, "Password cannot be empty"),
 });

@@ -1,7 +1,10 @@
 {
 	"name": "transcendence",
 	"private": true,
-	"workspaces": ["client", "server"],
+	"workspaces": [
+		"client",
+		"server"
+	],
 	"scripts": {
 		"up": "docker compose up",
 		"prod": "docker compose up --build",
@@ -23,5 +26,8 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"concurrently": "^9.1.0"
+	},
+	"dependencies": {
+		"zod": "^4.4.3"
 	}
 }

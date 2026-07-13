@@ -14,6 +14,7 @@
 		"prisma:studio": "dotenv -e ../.env.dev -- bash -c 'DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB prisma studio'"
 	},
 	"dependencies": {
+		"@asteasolutions/zod-to-openapi": "^8.5.0",
 		"@prisma/client": "^6.19.3",
 		"bcrypt": "^6.0.0",
 		"cors": "^2.8.5",
@@ -21,9 +22,9 @@
 		"express": "^4.21.2",
 		"pg": "^8.13.1",
 		"socket.io": "^4.8.3",
-		"swagger-jsdoc": "^6.3.0",
 		"swagger-ui-express": "^5.0.1",
-		"zod": "^4.4.3"
+		"zod": "^4.4.3",
+		"zod-to-json-schema": "^3.25.2"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
