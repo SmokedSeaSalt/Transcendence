@@ -1,4 +1,5 @@
-import type { User } from "@prisma/client";
+import { BinaryLike, createHash, randomBytes } from "node:crypto";
+import type { Session, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { prisma } from "../db.js";
 import {
@@ -80,3 +81,25 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 
 	return !!user;
 };
+
+// returns the user object based on sessionToken, or null.
+// const getUserFromSession(sessionToken: BinaryLike) : Promise<User> => {
+// 	const sessionHashedToken = createHash("sha256").update(sessionToken).digest("hex");
+// 	try
+// 	{
+// 		const sessionWithUser = await prisma.session.findUnique({
+// 			where: { hashedToken: sessionHashedToken },
+// 			include: { user: true }
+// 		});
+// 		if (sessionWithUser == null)
+// 		{
+// 			return null;
+// 		}
+// 		return sessionWithUser.user;
+// 	}
+// 	catch
+// 	{
+// 		// todo: throw error
+// 		return null;
+// 	}
+// };

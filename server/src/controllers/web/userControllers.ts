@@ -1,5 +1,7 @@
+import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { prisma } from "../../db.js";
 import {
 	invalidateSession,
 	updateSession,
@@ -88,5 +90,55 @@ export const logoutUser = async (
 		} else {
 			next(new Error(String(error)));
 		}
+	}
+};
+
+export const buildUserResponseFromSession = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const sessionToken = req.cookies.session;
+	if (!sessionToken) res.status(200).json({ user: null });
+	const sessionHashedToken = createHash("sha256")
+		.update(sessionToken)
+		.digest("hex");
+	// todo: improve error handling -> more specific message
+	try {
+		const userInfo = await prisma.session.findUnique({
+			where: { hashedToken: sessionHashedToken },
+			include: {
+				user: {
+					select: {
+						name: true,
+						email: true,
+						createdAt: true,
+					},
+				},
+			},
+		});
+		if (!userInfo) {
+			res
+				.status(200)
+				.json({
+					user: null,
+					name: null,
+					email: null,
+					error: "hash correct but won't build user",
+				});
+		} else
+			res
+				.status(200)
+				.json({
+					user: null,
+					name: null,
+					email: null,
+					error: "returning nulls on purpose! check usercontrollers.ts",
+				});
+		// res.status(200).json({user: "not null", name: userInfo.user.name, email: userInfo.user.email});
+	} catch {
+		res
+			.status(200)
+			.json({ user: null, name: null, email: null, error: " WRONG!" });
 	}
 };
