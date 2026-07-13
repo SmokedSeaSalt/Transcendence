@@ -1,15 +1,25 @@
-import { body } from "express-validator";
-import { validateRequest } from "../middleware/validateRequest.js";
+import { z } from "zod";
+import { zodValidate } from "../middleware/zodValidate.js";
 
-export const createUserValidation = () => [
-	body("email").isEmail().normalizeEmail(),
-	body("name").trim().isLength({ min: 1, max: 100 }),
-	body("password")
-		.isLength({ min: 8, max: 64 })
-		.withMessage("Password must be between 8 and 64 characters long")
-		.matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/)
-		.withMessage(
-			"Password must contain one uppercase letter, one lowercase letter, one digit, and one special character",
-		),
-	validateRequest,
-];
+const passwordSchema = z
+	.string()
+	.min(8, "Password must be at least 8 characters")
+	.max(64, "Password must be at most 64 characters")
+	.regex(/[a-z]/, "Password must contain a lowercase letter")
+	.regex(/[A-Z]/, "Password must contain an uppercase letter")
+	.regex(/\d/, "Password must contain a digit")
+	.regex(/[^A-Za-z\d]/, "Password must contain a special character");
+
+const createUserSchema = z.object({
+	email: z.email("Invalid email address"),
+	name: z.string().min(1, "Name is required").max(100, "Name too long"),
+	password: passwordSchema,
+});
+
+const loginSchema = z.object({
+	email: z.email("Invalid email address"),
+	password: z.string().min(1, "Password cannot be empty"),
+});
+
+export const createUserValidation = () => zodValidate(createUserSchema);
+export const loginValidation = () => zodValidate(loginSchema);
