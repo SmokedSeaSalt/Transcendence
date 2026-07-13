@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Footer from "./components/Footer";
+import CallHealth from "./pages/CallHealthy";
+import Login from "./pages/Login";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 export default function App() {
-	const [message, setMessage] = useState("");
-
-	const handleClick = async () => {
-		const response = await fetch("/health");
-		const text = await response.text();
-		setMessage(text);
-	};
-
 	return (
-		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-			<h1>React + Express</h1>
-			<button type="button" onClick={handleClick}>
-				Call /health
-			</button>
-			{message ? <p>{message}</p> : null}
-		</main>
+		<BrowserRouter>
+			<div className="min-h-screen flex flex-col">
+				<main className="flex-1">
+					<Routes>
+						<Route path="/login" element={<Login />} />
+						<Route path="/terms-of-service" element={<TermsOfService />} />
+						<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+						<Route path="/" element={<CallHealth />} />
+					</Routes>
+				</main>
+				<Footer />
+			</div>
+		</BrowserRouter>
 	);
 }
