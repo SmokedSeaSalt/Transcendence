@@ -23,7 +23,7 @@ describe("create session for user", () => {
 	it("returns token", async () => {
 		const tokenRet = await updateSession(user);
 		expect(tokenRet).toHaveLength(64);
-		const session: Session = await prisma.session.findUnique({
+		const session: Session | null = await prisma.session.findUnique({
 			where: { userId: user.id },
 		});
 		expect(session).toBeTruthy();
