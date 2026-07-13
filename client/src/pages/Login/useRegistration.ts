@@ -21,8 +21,6 @@ export const useRegistration = () => {
 			});
 			if (!res.ok)
 				throw new Error((await res.json()).message || "Registration failed");
-			const data = await res.json();
-			localStorage.setItem("token", data.token ?? "");
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));

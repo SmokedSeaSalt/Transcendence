@@ -15,3 +15,17 @@ body {
 #login-title {
 	color: orange;
 }
+
+a {
+	color: #1d4ed8;
+	text-decoration: underline;
+}
+
+a:visited {
+	color: #480e9a;
+}
+
+a:hover,
+a:active {
+	color: #2563eb;
+}
