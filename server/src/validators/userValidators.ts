@@ -42,9 +42,9 @@ export const createUserSchema = z
 	})
 	.openapi("CreateUser");
 
-export const createUserResponseSchema = z
+export const userResponseSchema = z
 	.object({
-		id: z.string(),
+		id: z.number(),
 		name: z.string(),
 		email: emailSchema,
 		createdAt: z.iso.datetime(),

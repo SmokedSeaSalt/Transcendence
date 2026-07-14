@@ -6,7 +6,7 @@ import {
 	loginUserValidation,
 } from "../../validators/userValidators.js";
 import {
-	createUserResponseSchema,
+	userResponseSchema,
 	createUserSchema,
 	singleErrorSchema,
 	zodValidationErrorSchema,
@@ -34,7 +34,7 @@ webRegistry.registerPath({
 			description: "User created",
 			content: {
 				"application/json": {
-					schema: createUserResponseSchema,
+					schema: userResponseSchema,
 				},
 			},
 		},
