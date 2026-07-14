@@ -4,7 +4,7 @@ export const useApiKey = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const getapikey = async (): Promise<String> => {
+	const getapikey = async (): Promise<string> => {
 		setLoading(true);
 		setError(null);
 		try {
