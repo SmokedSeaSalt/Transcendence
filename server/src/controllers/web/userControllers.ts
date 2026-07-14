@@ -103,7 +103,6 @@ export const buildUserResponseFromSession = async (
 	const sessionHashedToken = createHash("sha256")
 		.update(sessionToken)
 		.digest("hex");
-	// todo: improve error handling -> more specific message
 	try {
 		const userInfo = await prisma.session.findUnique({
 			where: { hashedToken: sessionHashedToken },
@@ -121,24 +120,28 @@ export const buildUserResponseFromSession = async (
 			res
 				.status(200)
 				.json({
-					user: null,
 					name: null,
 					email: null,
-					error: "hash correct but won't build user",
+					error: "hash is correct but won't build user",
 				});
 		} else
+			// res
+			// 	.status(200)
+			// 	.json({
+			// 		name: null,
+			// 		email: null,
+			// 		error: "returning nulls on purpose! check usercontrollers.ts",
+			// 	});
 			res
 				.status(200)
 				.json({
-					user: null,
-					name: null,
-					email: null,
-					error: "returning nulls on purpose! check usercontrollers.ts",
+					name: userInfo.user.name,
+					email: userInfo.user.email
 				});
-		// res.status(200).json({user: "not null", name: userInfo.user.name, email: userInfo.user.email});
 	} catch {
 		res
 			.status(200)
-			.json({ user: null, name: null, email: null, error: " WRONG!" });
+			.json({ name: null, email: null, error: "no user logged" });
+		// throw / log error somewhere? or is this expected when user not found?		
 	}
 };
