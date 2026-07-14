@@ -9,6 +9,8 @@ services:
     volumes:
       - ./server/src:/app/src
       - ./server/tests:/app/tests
+    environment:
+      NODE_ENV: ${NODE_ENV}
 
   client:
     ports:
