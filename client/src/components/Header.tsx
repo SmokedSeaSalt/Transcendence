@@ -1,18 +1,12 @@
-import React from "react";
-import { useState , useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo_temp_cat.png";
-import { userAuth , jsonUser } from "../hooks/userAuth";
+import { jsonUser, userAuth } from "../hooks/userAuth";
+import { CurrentUserContext, userContextType } from "../App";
+import { useContext } from "react";
 
 
 export default function Header() {
-	// const [userData, setUserData] = useState<jsonUser | undefined>(undefined);
-
-
-	const { userData, loading} = userAuth();
-
-	// userAuth()
-	// 	.then(userData => setUserData(userData))
+	const userContext = useContext(CurrentUserContext);
 
 	return (
 		<header className="bg-gray-900 border-t mt-0">
@@ -34,7 +28,7 @@ export default function Header() {
 							🏆 Leaderboard
 						</button>
 					</Link>
-					{loading || !userData ? (
+					{ userContext === null || userContext.currentUser === null ? (
 						<Link to="/login" className="text-white hover:text-orange-600">
 							<button
 								type="button"
@@ -49,7 +43,7 @@ export default function Header() {
 								type="button"
 								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
-								{userData.name}'s Profile
+								{userContext.currentUser.name}'s Profile
 							</button>
 						</Link>
 					)}
@@ -58,3 +52,24 @@ export default function Header() {
 		</header>
 	);
 }
+
+
+					// {loading || !userData ? (
+					// 	<Link to="/login" className="text-white hover:text-orange-600">
+					// 		<button
+					// 			type="button"
+					// 			className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
+					// 		>
+					// 			Log in / Make an Account
+					// 		</button>
+					// 	</Link>
+					// ) : (
+					// 	<Link to="/profile" className="text-white hover:text-orange-600">
+					// 		<button
+					// 			type="button"
+					// 			className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
+					// 		>
+					// 			{userData.name}'s Profile
+					// 		</button>
+					// 	</Link>
+					// )}

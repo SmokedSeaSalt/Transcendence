@@ -1,5 +1,4 @@
 // import { useNavigate } from "react-router-dom";
-import type { User } from "@prisma/client";
 import { useState, useEffect } from "react";
 
 export type jsonUser = {
@@ -33,5 +32,6 @@ export const userAuth = () => {
 		};
 		fetchData();
 	}, []);
-	return { userData, loading };
+	// return { userData, loading };
+	return userData;
 };
