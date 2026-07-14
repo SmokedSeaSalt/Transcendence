@@ -7,6 +7,7 @@ import {
 	LoginInvalidCredentialsError,
 	PasswordValidationError,
 } from "../errors/errorTypes.js";
+import { createHash } from "node:crypto";
 
 //////////////////////////////////
 // Login ////////////////////////
@@ -79,4 +80,28 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 	});
 
 	return !!user;
+};
+
+// returns the user object based on sessionToken, or null.
+export const getUserFromSession = async (sessionToken: BinaryLike) => {
+	const sessionHashedToken = createHash("sha256").update(sessionToken).digest("hex");
+	try
+	{
+		const sessionWithUser = await prisma.session.findUnique({
+			where: { hashedToken: sessionHashedToken },
+			include: { user: true }
+		});
+		if (sessionWithUser == null)
+		{
+			console.log("getUserFromSession: user null");
+			return null;
+		}
+		return sessionWithUser.user;
+	}
+	catch
+	{
+		// todo: throw error
+		console.log("getUserFromSession: threw error searching prisma sessions");
+		return null;
+	}
 };

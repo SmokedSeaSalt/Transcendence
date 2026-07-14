@@ -5,6 +5,7 @@ import {
 	updateSession,
 } from "../../services/sessionServices.js";
 import * as userServices from "../../services/userServices.js";
+import { updateAPIKey } from "../../services/apiKeyServices.js";
 
 export const createUser = async (
 	req: Request,
@@ -82,6 +83,36 @@ export const logoutUser = async (
 			secure: true,
 		});
 		res.status(201).json({ message: "logged out" });
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
+
+export const updateApiKey = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		//get token
+		const token = req.cookies.session;
+		if (!token) {
+			return res.status(401).json({ error: "Not logged in" });
+		}
+		//get user from token
+		const user = await userServices.getUserFromSession(token);
+		//update apikey
+
+		if (!user) {
+			return res.status(401).json({ error: "Invalid token" });
+		}
+		const apikey = await updateAPIKey(user, "user");
+		//return apikey
+		res.status(201).json({ apikey: apikey });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
