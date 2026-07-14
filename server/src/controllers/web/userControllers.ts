@@ -99,13 +99,11 @@ export const buildUserResponseFromSession = async (
 ) => {
 	const sessionToken = req.cookies.session;
 	if (!sessionToken) {
-		res.status(401).json({	error: "Not logged in" });
+		res.status(401).json({	error: "No session token found" });
 	}
 	try {
-		const sessionHashedToken = createHash("sha256")
-			.update(sessionToken)
-			.digest("hex");
-		const user = await userServices.getUserFromSession(sessionHashedToken);
+		console.log(sessionToken);
+		const user = await userServices.getUserFromSession(sessionToken);
 
 		if (!user) {
 			res.status(401).json({	error: "Not logged in" });
