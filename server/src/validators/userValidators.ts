@@ -56,4 +56,4 @@ export const loginSchema = z.object({
 });
 
 export const createUserValidation = () => zodValidate(createUserSchema);
-export const loginValidation = () => zodValidate(loginSchema);
+export const loginUserValidation = () => zodValidate(loginSchema);

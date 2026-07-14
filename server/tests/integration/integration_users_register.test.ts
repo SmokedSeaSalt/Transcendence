@@ -1,7 +1,8 @@
 import request from "supertest";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
-import { testClient } from "../vitest.setup.js";
+import { prisma } from "../../src/db.js";
+import { createUser, deleteUser } from "../helpers/dbHelpers.js";
 
 const registerPaths = ["/api/users/register", "/web/users/register"] as const;
 
@@ -44,27 +45,12 @@ const invalidNames = [
 
 const deleteValidCaseUser = async () => {
 	for (const { email } of validCases) {
-		await testClient.user.deleteMany({ where: { email } });
+		deleteUser(email);
 	}
 };
 
-const deleteUser = async (email: string) => {
-	await testClient.user.deleteMany({ where: { email } });
-};
-
-const createUser = async (email: string, name: string, password: string) => {
-	await testClient.user.create({
-		data: {
-			email: email,
-			name: name,
-			hashedPassword: password,
-			apiKey: "verySecureKey",
-		},
-	});
-};
-
 const userExists = async (email: string) => {
-	const user = await testClient.user.findUnique({ where: { email } });
+	const user = await prisma.user.findUnique({ where: { email } });
 	return !!user;
 };
 
@@ -93,6 +79,10 @@ describe.each(registerPaths)("POST %s", (path) => {
 			expect(res.status).toBe(201);
 			expect(res.body.email).toBe(email);
 			expect(res.body.name).toBe(name);
+			if (path === "/web/users/register") {
+				expect(res.headers["set-cookie"]).toBeDefined();
+				expect(res.headers["set-cookie"][0]).toContain("session");
+			}
 
 			expect(
 				userExists,

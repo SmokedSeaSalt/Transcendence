@@ -1,7 +1,10 @@
 import { Router } from "express";
 import * as userController from "../../controllers/web/userControllers.js";
 import { webRegistry } from "../../swagger/webRegistry.js";
-import { createUserValidation } from "../../validators/userValidators.js";
+import {
+	createUserValidation,
+	loginUserValidation,
+} from "../../validators/userValidators.js";
 import {
 	createUserResponseSchema,
 	createUserSchema,
@@ -57,5 +60,7 @@ webRegistry.registerPath({
 });
 
 router.post("/register", createUserValidation(), userController.createUser);
+router.post("/login", loginUserValidation(), userController.loginUser);
+router.post("/logout", userController.logoutUser);
 
 export default router;

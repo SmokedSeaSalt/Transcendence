@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import "./swagger/openapi.js";
 
 import express from "express";
@@ -16,6 +17,7 @@ import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
 export const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
 

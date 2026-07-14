@@ -14,13 +14,31 @@ enum GameStatus {
   ABANDONED
 }
 
+model Session {
+  hashedToken     String      @id
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
+model APIKey {
+  hashedKey       String      @id
+  scope           String      ///indicates whether key has user or admin access
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
 model User {
   id             Int           @id @default(autoincrement())
   email          String        @unique
   name           String
   hashedPassword String
   createdAt      DateTime      @default(now())
-  apiKey         String        @unique
+  session        Session?
+  apiKey         APIKey?
   gameResults    GameResult[]
   gameSessions   GameSession[]
 }
@@ -51,6 +69,6 @@ model GameResult {
   sessionId Int
   session   GameSession @relation(fields: [sessionId], references: [id])
   userId    Int?
-  user      User?       @relation(fields: [userId], references: [id])
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   guestName String?
 }

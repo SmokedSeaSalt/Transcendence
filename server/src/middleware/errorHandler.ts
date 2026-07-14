@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
 	HashError,
+	LoginInvalidCredentialsError,
 	PasswordValidationError,
 } from "../errors/errorTypes.js";
 
@@ -24,6 +25,10 @@ export const errorHandler = (
 
 	if (error instanceof EmailAlreadyExistsError) {
 		return res.status(409).json({ error: error.message });
+	}
+
+	if (error instanceof LoginInvalidCredentialsError) {
+		return res.status(401).json({ error: error.message });
 	}
 
 	return res.status(500).json({ error: "Internal server error" });
