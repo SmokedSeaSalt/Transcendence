@@ -8,7 +8,7 @@ const router = Router();
 
 webRegistry.registerPath({
 	method: "post",
-	path: "/users/register",
+	path: "/web/users/register",
 	tags: ["Web"],
 	request: {
 		body: {

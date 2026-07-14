@@ -10,8 +10,8 @@ const router = Router();
 
 apiRegistry.registerPath({
 	method: "post",
-	path: "/users/register",
-	tags: ["Users"],
+	path: "/api/users/register",
+	tags: ["Api"],
 
 	request: {
 		body: {

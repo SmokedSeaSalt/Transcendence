@@ -12,7 +12,7 @@ import webRoutes from "./routes/web/index.js";
 // This import must be after apiRoutes is imported as it is dependent on it.
 import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 
-import { getWebSwaggerSpec } from "./swagger/webSpec.js";
+import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
 
 export const app = express();
@@ -20,12 +20,10 @@ export const app = express();
 app.use(express.json());
 app.use(requestLogger);
 
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(getApiSwaggerSpec()));
-app.use("/api", apiRoutes);
+const isDev = process.env.NODE_ENV === "development";
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()));
 
-if (process.env.NODE_ENV === "development") {
-	app.use("/web/docs", swaggerUi.serve, swaggerUi.setup(getWebSwaggerSpec()));
-}
+app.use("/api", apiRoutes);
 app.use("/web", webRoutes);
 
 console.log("NODE_ENV:", process.env.NODE_ENV);
