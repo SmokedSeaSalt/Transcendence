@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../errors/errorTypes.js"
+import { UnauthorizedError, ForbiddenError } from "../errors/errorTypes.js"
 import { prisma } from "../db.js";
 import { createHash } from "node:crypto";
 
@@ -27,13 +27,13 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 		});
 
 		if (!apiKey) {
-			return next(new UnauthorizedError('Invalid token provided'));
+			return next(new UnauthorizedError('Invalid token'));
 		}
 
 		// Attach decoded user info to request
 		req.user = {
-			id: apiKey.id,
-			email: apiKey.email,
+			id: apiKey.user.id,
+			email: apiKey.user.email,
 			role: apiKey.scope,
 		};
 
@@ -50,7 +50,7 @@ export const requireAdmin = (
 	next: NextFunction
 ) => {
 	if (req.user?.role !== "admin") {
-		return next(new UnauthorizedError('Admin access required'));
+		return next(new ForbiddenError('Admin access required'));
 	}
 
 	next();
