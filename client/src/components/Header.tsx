@@ -8,7 +8,7 @@ import { userAuth , jsonUser } from "../hooks/userAuth";
 export default function Header() {
 	// const [userData, setUserData] = useState<jsonUser | undefined>(undefined);
 
-	
+
 	const { userData, loading} = userAuth();
 
 	// userAuth()
@@ -34,7 +34,7 @@ export default function Header() {
 							🏆 Leaderboard
 						</button>
 					</Link>
-					{!loading || !userData ? (
+					{loading || !userData ? (
 						<Link to="/login" className="text-white hover:text-orange-600">
 							<button
 								type="button"
