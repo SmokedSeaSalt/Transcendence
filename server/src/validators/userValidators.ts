@@ -12,18 +12,24 @@ const passwordSchema = z
 
 export const emailSchema = z
 	.email("Invalid email address")
-	.refine((email) => {
-		const at = email.indexOf("@");
-		return at !== -1 && at <= 64;
-	}, {
-		message: "Email username must be at most 64 characters",
-	})
-	.refine((email) => {
-		const at = email.indexOf("@");
-		return at !== -1 && email.length - at - 1 <= 253;
-	}, {
-		message: "Email domain must be at most 253 characters",
-	});
+	.refine(
+		(email) => {
+			const at = email.indexOf("@");
+			return at !== -1 && at <= 64;
+		},
+		{
+			message: "Email username must be at most 64 characters",
+		},
+	)
+	.refine(
+		(email) => {
+			const at = email.indexOf("@");
+			return at !== -1 && email.length - at - 1 <= 253;
+		},
+		{
+			message: "Email domain must be at most 253 characters",
+		},
+	);
 
 ///////////////
 // User signup/
@@ -72,4 +78,3 @@ export const loginSchema = z.object({
 
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
-
