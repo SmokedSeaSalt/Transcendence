@@ -1,11 +1,8 @@
 import ApiKeyButton from "./APIKeyButton";
 import LogoutButton from "./LogoutButton";
-import { useLogout } from "./useLogout";
 
 export default function NameBar() {
-	//const currentUser = userAuth();
-	const currentUser = "testuser";
-	const { logout, loading, error } = useLogout();
+	const currentUser = "testuser"; //todo change to currentusercontext
 
 	return (
 		<section style={{ display: "flex", alignItems: "center"}}>
