@@ -1,7 +1,24 @@
 import { getApiSwaggerSpec } from "./apiSpec.js";
 import { getWebSwaggerSpec } from "./webSpec.js";
 
-function mergeComponents(apiComponents: any = {}, webComponents: any = {}) {
+type ComponentSection = Record<string, unknown>;
+
+type SwaggerComponents = {
+	schemas?: ComponentSection;
+	responses?: ComponentSection;
+	parameters?: ComponentSection;
+	requestBodies?: ComponentSection;
+	headers?: ComponentSection;
+	securitySchemes?: ComponentSection;
+	examples?: ComponentSection;
+	links?: ComponentSection;
+	callbacks?: ComponentSection;
+};
+
+function mergeComponents(
+	apiComponents: SwaggerComponents = {},
+	webComponents: SwaggerComponents = {},
+) {
 	return {
 		schemas: {
 			...(apiComponents.schemas ?? {}),

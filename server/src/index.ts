@@ -3,7 +3,6 @@ import { prisma } from "./db.js";
 
 const port = Number(process.env.PORT ?? 8000);
 
-
 app.listen(port, async () => {
 	console.log(`Server listening on http://localhost:${port}`);
 

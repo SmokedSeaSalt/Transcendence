@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import type { ZodType } from "zod";
-import { zodValidationErrorSchema } from "../validators/userValidators.js"
+import { zodValidationErrorSchema } from "../validators/userValidators.js";
 // This is a middleware factory that takes a zod schema. the return is checked against zodValidationErrorSchema
 export const zodValidate =
 	<T extends ZodType>(schema: T) =>
@@ -18,5 +18,4 @@ export const zodValidate =
 		}
 		req.body = parsed.data;
 		next();
-
 	};

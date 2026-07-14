@@ -14,14 +14,17 @@ import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 
 import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
-
 export const app = express();
 
 app.use(express.json());
 app.use(requestLogger);
 
 const isDev = process.env.NODE_ENV === "development";
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()));
+app.use(
+	"/api/docs",
+	swaggerUi.serve,
+	swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()),
+);
 
 app.use("/api", apiRoutes);
 app.use("/web", webRoutes);

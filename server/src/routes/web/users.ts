@@ -1,8 +1,13 @@
 import { Router } from "express";
 import * as userController from "../../controllers/web/userControllers.js";
-import { createUserValidation } from "../../validators/userValidators.js";
 import { webRegistry } from "../../swagger/webRegistry.js";
-import { createUserSchema,createUserResponseSchema, zodValidationErrorSchema, singleErrorSchema } from "../../validators/userValidators.js";
+import { createUserValidation } from "../../validators/userValidators.js";
+import {
+	createUserResponseSchema,
+	createUserSchema,
+	singleErrorSchema,
+	zodValidationErrorSchema,
+} from "../../validators/userValidators.js";
 
 const router = Router();
 

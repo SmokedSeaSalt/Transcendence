@@ -1,12 +1,15 @@
 import { Router } from "express";
 import * as userController from "../../controllers/api/userControllers.js";
-import { createUserValidation } from "../../validators/userValidators.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
-import { createUserSchema,createUserResponseSchema, zodValidationErrorSchema, singleErrorSchema } from "../../validators/userValidators.js";
+import { createUserValidation } from "../../validators/userValidators.js";
+import {
+	createUserResponseSchema,
+	createUserSchema,
+	singleErrorSchema,
+	zodValidationErrorSchema,
+} from "../../validators/userValidators.js";
 
 const router = Router();
-
-
 
 apiRegistry.registerPath({
 	method: "post",
