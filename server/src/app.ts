@@ -21,6 +21,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
 
+// when in dev mode with NODE_ENV=development in the .env file, it will also generate docs for /web endpoints in addition to /api endpoints
 const isDev = process.env.NODE_ENV === "development";
 app.use(
 	"/api/docs",
@@ -30,8 +31,6 @@ app.use(
 
 app.use("/api", apiRoutes);
 app.use("/web", webRoutes);
-
-console.log("NODE_ENV:", process.env.NODE_ENV);
 
 // Health check endpoint
 // todo: Place before authentication so monitoring can access it
