@@ -12,7 +12,7 @@ export const useApiKey = () => {
 			if (!res.ok)
 				throw new Error((await res.json()).message || "Logout failed");
 			//return api key
-			return((await res.json()).apikey);
+			return (await res.json()).apikey;
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
 			throw err;

@@ -10,8 +10,10 @@ export default function LogoutButton() {
 	};
 
 	return (
-			<div style={{padding: "1em"}}>
-				<Button onClick={clickLogout} type={"button"} loading={loading}>Logout</Button>
-			</div>
+		<div style={{ padding: "1em" }}>
+			<Button onClick={clickLogout} type={"button"} loading={loading}>
+				Logout
+			</Button>
+		</div>
 	);
 }

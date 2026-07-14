@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Button from "../../components/Button";
-import { useApiKey } from "./useApiKey";
 import Popup from "../../components/Popup";
 import ApiKeyDisplay from "./ApiKeyDisplay";
+import { useApiKey } from "./useApiKey";
 
 export default function ApiKeyButton() {
 	const { getapikey, loading, error } = useApiKey();
@@ -12,7 +12,7 @@ export default function ApiKeyButton() {
 	const clickapikey = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault(); // prevent default page reload
 		setApikey(await getapikey());
-		if(error){
+		if (error) {
 			setApikey("Error while generating API key");
 		}
 		setOpen(true);
@@ -20,17 +20,20 @@ export default function ApiKeyButton() {
 	};
 
 	return (
-			<div style={{padding: "1em"}}>
-				<Button onClick={clickapikey} type={"button"} loading={loading}>Generate Api Key</Button>
+		<div style={{ padding: "1em" }}>
+			<Button onClick={clickapikey} type={"button"} loading={loading}>
+				Generate Api Key
+			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<h3 className="text-base font-semibold text-slate-400">Generated key</h3>
+				<h3 className="text-base font-semibold text-slate-400">
+					Generated key
+				</h3>
 				<p className="mt-2 text-sm text-slate-400">
 					Save this key as you will only see it once!
 				</p>
 				<ApiKeyDisplay apikey={apikey} />
 			</Popup>
-
-			</div>
+		</div>
 	);
 }

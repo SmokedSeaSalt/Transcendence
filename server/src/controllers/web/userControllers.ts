@@ -1,11 +1,11 @@
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { updateAPIKey } from "../../services/apiKeyServices.js";
 import {
 	invalidateSession,
 	updateSession,
 } from "../../services/sessionServices.js";
 import * as userServices from "../../services/userServices.js";
-import { updateAPIKey } from "../../services/apiKeyServices.js";
 
 export const createUser = async (
 	req: Request,
