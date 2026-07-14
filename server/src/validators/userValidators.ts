@@ -10,12 +10,27 @@ const passwordSchema = z
 	.regex(/\d/, "Password must contain a digit")
 	.regex(/[^A-Za-z\d]/, "Password must contain a special character");
 
+export const emailSchema = z
+	.email("Invalid email address")
+	.refine((email) => {
+		const at = email.indexOf("@");
+		return at !== -1 && at <= 64;
+	}, {
+		message: "Email username must be at most 64 characters",
+	})
+	.refine((email) => {
+		const at = email.indexOf("@");
+		return at !== -1 && email.length - at - 1 <= 253;
+	}, {
+		message: "Email domain must be at most 253 characters",
+	});
+
 ///////////////
 // User signup/
 ///////////////
 export const createUserSchema = z
 	.object({
-		email: z.email("Invalid email address"),
+		email: emailSchema,
 		name: z.string().min(1, "Name is required").max(100, "Name too long"),
 		password: passwordSchema,
 	})
@@ -25,7 +40,7 @@ export const createUserResponseSchema = z
 	.object({
 		id: z.string(),
 		name: z.string(),
-		email: z.email("Invalid email address"),
+		email: emailSchema,
 		createdAt: z.iso.datetime(),
 	})
 	.openapi("CreateUserResponse");
@@ -57,3 +72,4 @@ export const loginSchema = z.object({
 
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
+
