@@ -80,3 +80,16 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 
 	return !!user;
 };
+
+
+/////////////////////
+// Querying from db /
+/////////////////////
+
+export const getUserByID = async (id: number) : Promise<User|null> => {
+	const user = await prisma.user.findUnique({
+		where: { id: id },
+	});
+
+	return user;
+}
