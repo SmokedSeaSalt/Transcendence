@@ -83,7 +83,7 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 };
 
 // returns the user object based on sessionToken, or null.
-const getUserFromSession = async (sessionToken: BinaryLike) => {
+export const getUserFromSession = async (sessionToken: string): Promise<User | null> =>  {
 	const sessionHashedToken = createHash("sha256").update(sessionToken).digest("hex");
 	try
 	{

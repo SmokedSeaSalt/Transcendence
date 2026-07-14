@@ -1,7 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
-import { prisma } from "../../db.js";
 import {
 	invalidateSession,
 	updateSession,
@@ -99,32 +98,24 @@ export const buildUserResponseFromSession = async (
 	next: NextFunction,
 ) => {
 	const sessionToken = req.cookies.session;
-	if (!sessionToken) res.status(200).json({ user: null });
-	const sessionHashedToken = createHash("sha256")
-		.update(sessionToken)
-		.digest("hex");
+	if (!sessionToken) {
+		res.status(401).json({	error: "Not logged in" });
+	}
 	try {
-		const userInfo = await prisma.session.findUnique({
-			where: { hashedToken: sessionHashedToken },
-			include: {
-				user: {
-					select: {
-						name: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-			},
-		});
-		if (!userInfo) {
+		const sessionHashedToken = createHash("sha256")
+			.update(sessionToken)
+			.digest("hex");
+		const user = await userServices.getUserFromSession(sessionHashedToken);
+
+		if (!user) {
 			res.status(401).json({	error: "Not logged in" });
 		} else
 			res
 				.status(200)
 				.json({
-					name: userInfo.user.name,
-					email: userInfo.user.email,
-					createdAt: userInfo.user.createdAt,
+					name: user.name,
+					email: user.email,
+					createdAt: user.createdAt,
 				});
 	} catch (err) {
 		res.status(401).json({ error: "Something went wrong in findUnique" });
