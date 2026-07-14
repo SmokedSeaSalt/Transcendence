@@ -2,40 +2,17 @@ import React from "react";
 import { useState , useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo_temp_cat.png";
-// import { userAuth } from "../hooks/userAuth";
-
-type jsonUser = {
-	user: string;
-	name: string;
-	email: string;
-
-};
+import { userAuth , jsonUser } from "../hooks/userAuth";
 
 
 export default function Header() {
-	// const {current_user, loading, error} = userAuth();
+	// const [userData, setUserData] = useState<jsonUser | undefined>(undefined);
 
-	// const current_user = userAuth();
 	
+	const { userData, loading} = userAuth();
 
-	// TRY IN THIS FILE
-	// const [data, setData] = useState<jsonUser | undefined>(undefined);
-	const [data, setData] = useState<jsonUser | undefined>(undefined);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await fetch("/web/users/me");
-				const jsonData = await response.json();
-				console.log("json data header: ", jsonData);
-				setData(jsonData);
-			} catch (error) {
-				console.log(error, "error");
-			}
-		};
-		fetchData();
-	}, []);
-
+	// userAuth()
+	// 	.then(userData => setUserData(userData))
 
 	return (
 		<header className="bg-gray-900 border-t mt-0">
@@ -57,8 +34,7 @@ export default function Header() {
 							🏆 Leaderboard
 						</button>
 					</Link>
-					{/* {userAuth() == null ? ( */}
-					{data == undefined || !data.name ? (
+					{!loading || !userData ? (
 						<Link to="/login" className="text-white hover:text-orange-600">
 							<button
 								type="button"
@@ -73,7 +49,7 @@ export default function Header() {
 								type="button"
 								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
-								{data.name}'s Profile
+								{userData.name}'s Profile
 							</button>
 						</Link>
 					)}
@@ -82,29 +58,3 @@ export default function Header() {
 		</header>
 	);
 }
-
-// OLD VERSION
-
-// 	// export const userAuth = async () : Promise< JSON | null > => {
-// export const userAuth = async () => {
-// 	// todo: set loading & error properly
-// 	// const [loading, setLoading] = useState(false); // todo: change without usestate
-// 	// const [error, setError] = useState<string | null>(null);
-// 	// setLoading(true);
-// 	// setError(null);
-
-// 	try {
-// 		const res = await fetch("/web/users/me");
-// 		if (!res.ok)
-// 			throw new Error((await res.json()).error || "Finding user failed");
-// 		return (await res.json());
-// 		// return null;
-// 	} catch (err) {
-// 		// setError(err instanceof Error ? err.message : String(err));
-// 		console.log("error thrown user auth");
-// 		throw err;
-// 	} finally {
-// 		// setLoading(false);
-// 	}
-	
-// };

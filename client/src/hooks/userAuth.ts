@@ -1,28 +1,37 @@
 // import { useNavigate } from "react-router-dom";
 import type { User } from "@prisma/client";
+import { useState, useEffect } from "react";
+
+export type jsonUser = {
+	name: string;
+	email: string;
+	createdAt: string; // todo: change to actual type
+};
+
 // hook to return either user object or null if user is not logged in
-import { useState } from "react";
-
-// // export const userAuth = async () : Promise< JSON | null > => {
-// export const userAuth = async () => {
-// 	// todo: set loading & error properly
-// 	// const [loading, setLoading] = useState(false); // todo: change without usestate
-// 	// const [error, setError] = useState<string | null>(null);
-// 	// setLoading(true);
-// 	// setError(null);
-
-// 	try {
-// 		const res = await fetch("/web/users/me");
-// 		if (!res.ok)
-// 			throw new Error((await res.json()).error || "Finding user failed");
-// 		return (await res.json());
-// 		// return null;
-// 	} catch (err) {
-// 		// setError(err instanceof Error ? err.message : String(err));
-// 		console.log("error thrown user auth");
-// 		throw err;
-// 	} finally {
-// 		// setLoading(false);
-// 	}
-	
-// };
+export const userAuth = () => {
+	const [userData, setData] = useState<jsonUser | null>(null);
+	const [loading, setLoading] = useState <boolean>(true);
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch("/web/users/me");
+				if (!response.ok)
+					setData(null);
+				else
+				{
+					const jsonData = await response.json();
+					console.log("json data from /web/users/me: ", jsonData);
+					setData(jsonData);
+				}
+			} catch (error) {
+				console.log(error, "error");
+			}
+			finally{
+				setLoading(false);
+			}
+		};
+		fetchData();
+	}, []);
+	return { userData, loading };
+};

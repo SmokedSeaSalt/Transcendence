@@ -117,31 +117,17 @@ export const buildUserResponseFromSession = async (
 			},
 		});
 		if (!userInfo) {
-			res
-				.status(200)
-				.json({
-					name: null,
-					email: null,
-					error: "hash is correct but won't build user",
-				});
+			res.status(401).json({	error: "Not logged in" });
 		} else
-			// res
-			// 	.status(200)
-			// 	.json({
-			// 		name: null,
-			// 		email: null,
-			// 		error: "returning nulls on purpose! check usercontrollers.ts",
-			// 	});
 			res
 				.status(200)
 				.json({
 					name: userInfo.user.name,
-					email: userInfo.user.email
+					email: userInfo.user.email,
+					createdAt: userInfo.user.createdAt,
 				});
-	} catch {
-		res
-			.status(200)
-			.json({ name: null, email: null, error: "no user logged" });
-		// throw / log error somewhere? or is this expected when user not found?		
+	} catch (err) {
+		res.status(401).json({ error: "Something went wrong in findUnique" });
+		console.log("error buildUserResponseFromSession: ", err);
 	}
 };
