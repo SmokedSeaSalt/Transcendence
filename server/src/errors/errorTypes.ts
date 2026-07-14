@@ -32,3 +32,12 @@ export class LoginInvalidCredentialsError extends Error {
 		this.name = "LoginInvalidCredentialsError";
 	}
 }
+
+export class UnauthorizedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "UnauthorizedError";
+	}
+}
+
+

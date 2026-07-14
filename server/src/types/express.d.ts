@@ -1,0 +1,16 @@
+// Custom type to be able to set req.user. This is required in ts because express Request type doesn't have .user.
+export interface AuthUser {
+	id: number;
+	email: string;
+	role: "admin" | "user";
+}
+
+declare global {
+	namespace Express {
+		interface Request {
+			user?: AuthUser;
+		}
+	}
+}
+
+export {};

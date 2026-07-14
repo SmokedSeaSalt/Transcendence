@@ -1,0 +1,57 @@
+import type { NextFunction, Request, Response } from "express";
+import { UnauthorizedError } from "../errors/errorTypes.js"
+import { prisma } from "../db.js";
+import { createHash } from "node:crypto";
+
+// Gets the user from the provided api key and sets req.user so that next has access to it. If api key invalid, return error.
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+	const authHeader = req.headers.authorization;
+
+	if (!authHeader) {
+		return next(new UnauthorizedError('No token provided'));
+	}
+
+	try {
+		const hashedApiKey = createHash("sha256").update(authHeader).digest("hex");
+		const apiKey = await prisma.aPIKey.findUnique({
+			where: { hashedKey: hashedApiKey },
+			select: {
+				scope: true,
+				user: {
+					select: {
+						id: true,
+						email: true,
+					},
+				},
+			},
+		});
+
+		if (!apiKey) {
+			return next(new UnauthorizedError('Invalid token provided'));
+		}
+
+		// Attach decoded user info to request
+		req.user = {
+			id: apiKey.id,
+			email: apiKey.email,
+			role: apiKey.scope,
+		};
+
+		return next();
+	} catch (error: any) {
+		console.log(error);
+		return next(new UnauthorizedError('Invalid token'));
+	}
+};
+
+export const requireAdmin = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	if (req.user?.role !== "admin") {
+		return next(new UnauthorizedError('Admin access required'));
+	}
+
+	next();
+};

@@ -5,6 +5,7 @@ import {
 	HashError,
 	LoginInvalidCredentialsError,
 	PasswordValidationError,
+	UnauthorizedError,	
 } from "../errors/errorTypes.js";
 
 export const errorHandler = (
@@ -19,6 +20,10 @@ export const errorHandler = (
 		return res.status(400).json({ error: error.message });
 	}
 
+	if (error instanceof UnauthorizedError) {
+		return res.status(403).json({ error: error.message });
+	}
+
 	if (error instanceof HashError) {
 		return res.status(500).json({ error: error.message });
 	}
@@ -30,6 +35,8 @@ export const errorHandler = (
 	if (error instanceof LoginInvalidCredentialsError) {
 		return res.status(401).json({ error: error.message });
 	}
+
+	
 
 	return res.status(500).json({ error: "Internal server error" });
 };

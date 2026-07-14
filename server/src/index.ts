@@ -1,5 +1,6 @@
 import { app } from "./app.js";
 import { prisma } from "./db.js";
+import { updateAPIKey } from "./services/apiKeyServices.js";
 
 const port = Number(process.env.PORT ?? 8000);
 
@@ -18,7 +19,9 @@ app.listen(port, async () => {
 				hashedPassword: "hashed",
 			},
 		});
+		const apikey = await updateAPIKey(user, "admin");
 		console.log(`Created dummy user: ${user.name}`);
+		console.log(`With apikey = ${apikey}`);
 	} else {
 		console.log(`Dummy user already exists: ${existing.name}`);
 	}
