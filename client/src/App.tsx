@@ -6,6 +6,7 @@ import type { jsonUser } from "./hooks/userAuth";
 import CallHealth from "./pages/CallHealthy";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
 
 export interface userContextType {
@@ -31,6 +32,7 @@ export default function App() {
 					<main className="flex-1">
 						<Routes>
 							<Route path="/login" element={<Login />} />
+							<Route path="/profile" element={<Profile />} />
 							<Route path="/terms-of-service" element={<TermsOfService />} />
 							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 							<Route path="/" element={<CallHealth />} />

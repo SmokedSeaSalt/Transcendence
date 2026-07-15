@@ -1,5 +1,5 @@
-import { BinaryLike, createHash, randomBytes } from "node:crypto";
-import type { Session, User } from "@prisma/client";
+import { createHash } from "node:crypto";
+import type { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { prisma } from "../db.js";
 import {
