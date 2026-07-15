@@ -1,12 +1,14 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCurrentUserContext, userContextType } from "../../App";
+import { AuthContext, AuthProvider, useAuthContext} from "../../App";
 import { userAuth } from "../../hooks/userAuth";
 
 export const useLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
+	const { setLoggedIn } = useAuthContext();
+	// const { refresh } = useAuthContext(); // unused refresh function, preferred over setLoggedIn if we fix hook-in-hook issue
 	const login = async (payload: { email: string; password: string }) => {
 		setLoading(true);
 		setError(null);
@@ -18,7 +20,7 @@ export const useLogin = () => {
 			});
 			if (!res.ok)
 				throw new Error((await res.json()).message || "Registration failed");
-			// this would be where we check userAuth and set context
+			setLoggedIn(true);
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
