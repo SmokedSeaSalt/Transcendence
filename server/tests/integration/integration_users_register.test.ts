@@ -1,5 +1,5 @@
 import request from "supertest";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
 import { createUser, deleteUser, createUserWithRoleAndApiKey } from "../helpers/dbHelpers.js";
@@ -45,7 +45,7 @@ const invalidNames = [
 
 const deleteValidCaseUser = async () => {
 	for (const { email } of validCases) {
-		deleteUser(email);
+		await deleteUser(email);
 	}
 };
 
@@ -58,7 +58,6 @@ const postRegister = (path: string, body: object, unhashedApiKey: string) => {
 	const req = request(app).post(path).send(body);
 
 	if (path === "/api/users/register") {
-		console.log("api key set");
 		req.set("Authorization", unhashedApiKey);
 	}
 
@@ -77,9 +76,15 @@ describe.each(registerPaths)("POST %s", (path) => {
 	const email = "test@example.com";
 	const name = "Test User";
 	const password = "ValidPassword123!";
-
+	
+	const adminEmail = "testAdmin@example.com";
+	const adminName = "Test Admin User";
+	const adminPassword = "ValidPassword123!";
 	const unhashedApiKey = "key";
-	const adminUser = createUserWithRoleAndApiKey(email, name, password, unhashedApiKey, "admin");
+
+	beforeAll(async () => {
+		const adminUser = await createUserWithRoleAndApiKey(adminEmail, adminName, adminPassword, unhashedApiKey, "admin");
+	})
 
 	beforeEach(async () => {
 		await deleteValidCaseUser();
@@ -89,7 +94,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 		"returns 201 created $email",
 		async ({ email, name, password }) => {
 			const res = await postRegister(path, { email, name, password }, unhashedApiKey);
-
+			
 			expect(res.status).toBe(201);
 			expect(res.body.email).toBe(email);
 			expect(res.body.name).toBe(name);
@@ -99,7 +104,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 			}
 
 			expect(
-				userExists,
+				await userExists(email),
 				`User with ${email} has not been added to the database.`,
 			).toBeTruthy();
 		},
@@ -142,5 +147,6 @@ describe.each(registerPaths)("POST %s", (path) => {
 
 	afterAll(async () => {
 		await deleteValidCaseUser();
+		await deleteUser(adminEmail);
 	});
 });
