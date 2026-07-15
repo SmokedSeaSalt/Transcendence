@@ -83,23 +83,23 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 };
 
 // returns the user object based on sessionToken, or null.
-export const getUserFromSession = async (sessionToken: string): Promise<User | null> =>  {
-	const sessionHashedToken = createHash("sha256").update(sessionToken).digest("hex");
-	try
-	{
+export const getUserFromSession = async (
+	sessionToken: string,
+): Promise<User | null> => {
+	const sessionHashedToken = createHash("sha256")
+		.update(sessionToken)
+		.digest("hex");
+	try {
 		const sessionWithUser = await prisma.session.findUnique({
 			where: { hashedToken: sessionHashedToken },
-			include: { user: true }
+			include: { user: true },
 		});
-		if (sessionWithUser == null)
-		{
+		if (sessionWithUser == null) {
 			console.log("getUserFromSession: user null");
 			return null;
 		}
 		return sessionWithUser.user;
-	}
-	catch
-	{
+	} catch {
 		// todo: throw error
 		console.log("getUserFromSession: threw error searching prisma sessions");
 		return null;

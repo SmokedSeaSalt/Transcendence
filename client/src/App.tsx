@@ -1,12 +1,12 @@
+import { Children, createContext, useContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import type { jsonUser } from "./hooks/userAuth";
 import CallHealth from "./pages/CallHealthy";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
-import { useState , createContext, useContext } from "react";
-import { jsonUser } from "./hooks/userAuth";
 
 export interface userContextType {
 	currentUser: jsonUser | null;
@@ -26,7 +26,7 @@ export default function App() {
 	return (
 		<BrowserRouter>
 			<div className="min-h-screen flex flex-col">
-				<CurrentUserContext value={{currentUser, setCurrentUser}}>
+				<CurrentUserContext value={{ currentUser, setCurrentUser }}>
 					<Header />
 					<main className="flex-1">
 						<Routes>

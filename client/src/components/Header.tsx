@@ -1,12 +1,12 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CurrentUserContext, userContextType } from "../App";
 import logo from "../assets/logo_temp_cat.png";
 import { jsonUser, userAuth } from "../hooks/userAuth";
-import { CurrentUserContext, userContextType } from "../App";
-import { useContext } from "react";
-
 
 export default function Header() {
-	const userContext = useContext(CurrentUserContext);
+	// const userContext = useContext(CurrentUserContext);
+	const { userData, loading } = userAuth();
 
 	return (
 		<header className="bg-gray-900 border-t mt-0">
@@ -28,7 +28,7 @@ export default function Header() {
 							🏆 Leaderboard
 						</button>
 					</Link>
-					{ userContext === null || userContext.currentUser === null ? (
+					{loading || !userData ? (
 						<Link to="/login" className="text-white hover:text-orange-600">
 							<button
 								type="button"
@@ -43,7 +43,7 @@ export default function Header() {
 								type="button"
 								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
-								{userContext.currentUser.name}'s Profile
+								{userData.name}'s Profile
 							</button>
 						</Link>
 					)}
@@ -52,24 +52,3 @@ export default function Header() {
 		</header>
 	);
 }
-
-
-					// {loading || !userData ? (
-					// 	<Link to="/login" className="text-white hover:text-orange-600">
-					// 		<button
-					// 			type="button"
-					// 			className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
-					// 		>
-					// 			Log in / Make an Account
-					// 		</button>
-					// 	</Link>
-					// ) : (
-					// 	<Link to="/profile" className="text-white hover:text-orange-600">
-					// 		<button
-					// 			type="button"
-					// 			className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
-					// 		>
-					// 			{userData.name}'s Profile
-					// 		</button>
-					// 	</Link>
-					// )}
