@@ -18,3 +18,20 @@ export const createUser = async (
 	});
 	return user;
 };
+
+export const createApiKey = async (
+	hashedKey: string,
+	scope: string,
+	userId: number,
+	expiresAt: Date,
+) => {
+	const apiKey = await prisma.aPIKey.create({
+		data: {
+			hashedKey,
+			scope,
+			userId,
+			expiresAt,
+		},
+	});
+	return apiKey;
+};

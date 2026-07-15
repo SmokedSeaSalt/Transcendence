@@ -22,7 +22,7 @@ export const getMyProfile = async (
 			createdAt: user.createdAt.toISOString(),
 		});
 
-		res.status(201).json(response);
+		res.status(200).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
