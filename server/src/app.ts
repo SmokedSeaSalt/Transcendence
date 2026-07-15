@@ -1,16 +1,34 @@
 import cookieParser from "cookie-parser";
+import "./swagger/openapi.js";
+
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+
 import { prisma } from "./db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { requestLogger } from "./middleware/requestLogger.js";
 import apiRoutes from "./routes/api/index.js";
 import webRoutes from "./routes/web/index.js";
 
+// This import must be after apiRoutes is imported as it is dependent on it.
+import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
+
+import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
+
 export const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
+
+// when in dev mode with NODE_ENV=development in the .env file, it will also generate docs for /web endpoints in addition to /api endpoints
+const isDev = process.env.NODE_ENV === "development";
+app.use(
+	"/api/docs",
+	swaggerUi.serve,
+	swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()),
+);
+
 app.use("/api", apiRoutes);
 app.use("/web", webRoutes);
 
