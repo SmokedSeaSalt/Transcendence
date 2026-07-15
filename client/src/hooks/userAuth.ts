@@ -8,7 +8,7 @@ export type jsonUser = {
 };
 
 // hook to return either user object or null if user is not logged in
-export const userAuth = () => {
+export const userAuth = () : [jsonUser | null, boolean] => {
 	const [userData, setData] = useState<jsonUser | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	useEffect(() => {
@@ -29,5 +29,5 @@ export const userAuth = () => {
 		};
 		fetchData();
 	}, []);
-	return { userData, loading };
+	return [userData, loading];
 };
