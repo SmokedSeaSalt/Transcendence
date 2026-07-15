@@ -9,19 +9,18 @@ export default function ApiKeyButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [apikey, setApikey] = useState<string>("");
 
-	const clickapikey = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const clickApikey = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault(); // prevent default page reload
 		setApikey(await getapikey());
 		if (error) {
 			setApikey("Error while generating API key");
 		}
 		setOpen(true);
-		console.log(apikey); //replace for popup later
 	};
 
 	return (
 		<div style={{ padding: "1em" }}>
-			<Button onClick={clickapikey} type={"button"} loading={loading}>
+			<Button onClick={clickApikey} type={"button"} loading={loading}>
 				Generate Api Key
 			</Button>
 
