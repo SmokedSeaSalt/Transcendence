@@ -10,7 +10,7 @@ describe("GET /me", () => {
 	it("returns 401 unauthorized", async () => {
 		const res = await request(app).get(mePath);
 		expect(res.status).toBe(401);
-		expect(res.text).toContain("No token provided");
+		expect(res.text).toContain("No API key provided");
 	});
 
 	it("returns 200 with valid api key", async () => {
@@ -18,6 +18,8 @@ describe("GET /me", () => {
 		const name = "bob";
 		const unhashedPassword = "Password1!";
 		const unhashedApiKey = "key";
+
+		// await deleteUser(email);
 
 
 		const user = await createUserWithRoleAndApiKey(email, name, unhashedPassword, unhashedApiKey, "user");
