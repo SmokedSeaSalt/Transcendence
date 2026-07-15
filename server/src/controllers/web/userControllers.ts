@@ -1,3 +1,4 @@
+import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import { updateAPIKey } from "../../services/apiKeyServices.js";
@@ -89,6 +90,33 @@ export const logoutUser = async (
 		} else {
 			next(new Error(String(error)));
 		}
+	}
+};
+
+export const buildUserResponseFromSession = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const sessionToken = req.cookies.session;
+	if (!sessionToken) {
+		return res.status(401).json({ error: "No session token found" });
+	}
+	try {
+		console.log(sessionToken);
+		const user = await userServices.getUserFromSession(sessionToken);
+
+		if (!user) {
+			return res.status(401).json({ error: "Not logged in" });
+		}
+		return res.status(200).json({
+			name: user.name,
+			email: user.email,
+			createdAt: user.createdAt,
+		});
+	} catch (err) {
+		res.status(401).json({ error: "Something went wrong in findUnique" });
+		console.log("error buildUserResponseFromSession: ", err);
 	}
 };
 
