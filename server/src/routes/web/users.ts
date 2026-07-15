@@ -62,5 +62,6 @@ webRegistry.registerPath({
 router.post("/register", createUserValidation(), userController.createUser);
 router.post("/login", loginUserValidation(), userController.loginUser);
 router.post("/logout", userController.logoutUser);
+router.get("/me", userController.buildUserResponseFromSession);
 
 export default router;
