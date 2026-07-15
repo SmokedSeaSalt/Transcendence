@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../App";
 
 export const useLogout = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
+	const { updateLoggedinUser } = useAuthContext();
 
 	const logout = async () => {
 		setLoading(true);
@@ -18,6 +20,7 @@ export const useLogout = () => {
 			throw err;
 		} finally {
 			setLoading(false);
+			updateLoggedinUser();
 			nav("/");
 		}
 	};

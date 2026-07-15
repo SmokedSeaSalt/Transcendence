@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../App";
 
 export const useRegistration = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
+	const { updateLoggedinUser } = useAuthContext();
 
 	const register = async (payload: {
 		name: string;
@@ -21,6 +23,7 @@ export const useRegistration = () => {
 			});
 			if (!res.ok)
 				throw new Error((await res.json()).message || "Registration failed");
+			await updateLoggedinUser();
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
