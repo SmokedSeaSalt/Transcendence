@@ -2,7 +2,7 @@ import request from "supertest";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
-import { createUser, deleteUser } from "../helpers/dbHelpers.js";
+import { createUser, deleteUser, createApiKey } from "../helpers/dbHelpers.js";
 
 const registerPaths = ["/api/users/register", "/web/users/register"] as const;
 
@@ -66,6 +66,8 @@ describe.each(registerPaths)("POST %s", (path) => {
 	const email = "test@example.com";
 	const name = "Test User";
 	const password = "ValidPassword123!";
+
+	const mockApiKey = "key";
 
 	beforeEach(async () => {
 		await deleteValidCaseUser();
