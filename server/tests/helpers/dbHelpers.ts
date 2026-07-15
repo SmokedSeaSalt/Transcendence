@@ -2,6 +2,8 @@ import { prisma } from "../../src/db.js";
 import bcrypt from "bcrypt";
 import { createHash } from "node:crypto";
 
+type Role = "user" | "admin";
+
 export const deleteUser = async (email: string) => {
 	await prisma.user.deleteMany({ where: { email } });
 };
@@ -44,7 +46,7 @@ export const createUserWithRoleAndApiKey = async (
 	name: string,
 	unhashedPassword: string,
 	unhashedApiKey: string,
-	role: string,
+	role: Role,
 ) => {
 	const hashedPassword = await bcrypt.hash(unhashedPassword, 1);
 	const user = await createUser(email, name, hashedPassword);
