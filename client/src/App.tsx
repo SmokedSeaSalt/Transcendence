@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const value: authContextType = {
 		currentUser: userData,
 		loading,
+		//do we want separate loggedIn bool so we don't need to check currentUser every time?
+		//if we do this typescript probably still will complain that currentUser can be null and is not checked.
+		//so maybe without is acrually cleaner?
 		updateLoggedinUser: refetch,
 	};
 
