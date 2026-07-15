@@ -8,11 +8,11 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 	const authHeader = req.headers.authorization;
 
 	if (!authHeader) {
-		return next(new UnauthorizedError('No token provided'));
+		return next(new UnauthorizedError('No API key provided'));
 	}
 
 	try {
-		const hashedApiKey = createHash("sha256").update(authHeader).digest("hex");
+		const hashedApiKey = await createHash("sha256").update(authHeader).digest("hex");
 		const apiKey = await prisma.aPIKey.findUnique({
 			where: { hashedKey: hashedApiKey },
 			select: {
@@ -27,7 +27,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 		});
 
 		if (!apiKey) {
-			return next(new UnauthorizedError('Invalid token'));
+			return next(new UnauthorizedError('Invalid API key'));
 		}
 
 		// Attach decoded user info to request
@@ -40,7 +40,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 		return next();
 	} catch (error: any) {
 		console.log(error);
-		return next(new UnauthorizedError('Invalid token'));
+		return next(new UnauthorizedError('Invalid API key'));
 	}
 };
 
