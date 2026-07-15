@@ -106,7 +106,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 			.send({ email: badEmail, name, password });
 
 		expect(res.status).toBe(400);
-		expect(res.body.errors[0].msg).not.toHaveLength(0);
+		expect(res.body.errors[0].message).not.toHaveLength(0);
 	});
 
 	it.each(invalidPasswords)(
@@ -117,7 +117,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 				.send({ email, name, password: badPassword });
 
 			expect(res.status).toBe(400);
-			expect(res.body.errors[0].msg).not.toHaveLength(0);
+			expect(res.body.errors[0].message).not.toHaveLength(0);
 		},
 	);
 
@@ -127,7 +127,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 			.send({ email, name: badName, password });
 
 		expect(res.status).toBe(400);
-		expect(res.body.errors[0].msg).not.toHaveLength(0);
+		expect(res.body.errors[0].message).not.toHaveLength(0);
 	});
 
 	afterAll(async () => {
