@@ -14,6 +14,7 @@ export const updateAPIKey = async (
 		update: {
 			hashedKey: hashedapiKey,
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+			createdAt: new Date(Date.now()),
 		},
 		create: {
 			hashedKey: hashedapiKey,
