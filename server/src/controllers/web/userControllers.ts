@@ -1,5 +1,7 @@
+import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { updateAPIKey } from "../../services/apiKeyServices.js";
 import {
 	invalidateSession,
 	updateSession,
@@ -82,6 +84,63 @@ export const logoutUser = async (
 			secure: true,
 		});
 		res.status(201).json({ message: "logged out" });
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
+
+export const buildUserResponseFromSession = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const sessionToken = req.cookies.session;
+	if (!sessionToken) {
+		return res.status(401).json({ error: "No session token found" });
+	}
+	try {
+		console.log(sessionToken);
+		const user = await userServices.getUserFromSession(sessionToken);
+
+		if (!user) {
+			return res.status(401).json({ error: "Not logged in" });
+		}
+		return res.status(200).json({
+			name: user.name,
+			email: user.email,
+			createdAt: user.createdAt,
+		});
+	} catch (err) {
+		res.status(401).json({ error: "Something went wrong in findUnique" });
+		console.log("error buildUserResponseFromSession: ", err);
+	}
+};
+
+export const updateApiKey = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		//get token
+		const token = req.cookies.session;
+		if (!token) {
+			return res.status(401).json({ error: "Not logged in" });
+		}
+		//get user from token
+		const user = await userServices.getUserFromSession(token);
+		//update apikey
+
+		if (!user) {
+			return res.status(401).json({ error: "Invalid token" });
+		}
+		const apikey = await updateAPIKey(user, "user");
+		//return apikey
+		res.status(201).json({ apikey: apikey });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { prisma } from "../db.js";
@@ -82,10 +83,7 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 };
 
 
-/////////////////////
-// Querying from db /
-/////////////////////
-
+// Querying user from db with id
 export const getUserByID = async (id: number) : Promise<User|null> => {
 	const user = await prisma.user.findUnique({
 		where: { id: id },
@@ -93,3 +91,27 @@ export const getUserByID = async (id: number) : Promise<User|null> => {
 
 	return user;
 }
+
+// returns the user object based on sessionToken, or null.
+export const getUserFromSession = async (
+	sessionToken: string,
+): Promise<User | null> => {
+	const sessionHashedToken = createHash("sha256")
+		.update(sessionToken)
+		.digest("hex");
+	try {
+		const sessionWithUser = await prisma.session.findUnique({
+			where: { hashedToken: sessionHashedToken },
+			include: { user: true },
+		});
+		if (sessionWithUser == null) {
+			console.log("getUserFromSession: user null");
+			return null;
+		}
+		return sessionWithUser.user;
+	} catch {
+		// todo: throw error
+		console.log("getUserFromSession: threw error searching prisma sessions");
+		return null;
+	}
+};

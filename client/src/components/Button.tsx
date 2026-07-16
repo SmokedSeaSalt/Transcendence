@@ -1,18 +1,18 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	loading?: boolean;
 	children: ReactNode;
 };
 
-export default function LoginButton({
+export default function Button({
 	loading = false,
 	children,
 	className = "",
 	disabled,
 	type = "submit",
 	...props
-}: LoginButtonProps) {
+}: ButtonProps) {
 	return (
 		<button
 			type={type}
