@@ -21,6 +21,7 @@ export async function createAdminUser() {
 				email: email,
 				name: "I am very important",
 				hashedPassword: hashedPassword,
+				role: "admin",
 			},
 		});
 		console.log(`Created admin user: ${user.name}`);

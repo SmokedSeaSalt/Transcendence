@@ -16,11 +16,11 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 		const apiKey = await prisma.aPIKey.findUnique({
 			where: { hashedKey: hashedApiKey },
 			select: {
-				scope: true,
 				user: {
 					select: {
 						id: true,
 						email: true,
+						role: true,
 					},
 				},
 			},
@@ -34,7 +34,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 		req.user = {
 			id: apiKey.user.id,
 			email: apiKey.user.email,
-			role: apiKey.scope,
+			role: apiKey.user.role,
 			hashedApiKey: hashedApiKey,
 		};
 

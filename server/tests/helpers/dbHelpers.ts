@@ -12,12 +12,14 @@ export const createUser = async (
 	email: string,
 	name: string,
 	password: string,
+	role: Role = "user"
 ) => {
 	const user = await prisma.user.create({
 		data: {
 			email: email,
 			name: name,
 			hashedPassword: password,
+			role: role,
 		},
 	});
 	return user;
@@ -25,7 +27,6 @@ export const createUser = async (
 
 export const createApiKey = async (
 	unhashedKey: string,
-	scope: string,
 	userId: number,
 	expiresAt: Date,
 ) => {
@@ -33,7 +34,6 @@ export const createApiKey = async (
 	const apiKey = await prisma.aPIKey.create({
 		data: {
 			hashedKey,
-			scope,
 			userId,
 			expiresAt,
 		},
@@ -49,7 +49,7 @@ export const createUserWithRoleAndApiKey = async (
 	role: Role,
 ) => {
 	const hashedPassword = await bcrypt.hash(unhashedPassword, 1);
-	const user = await createUser(email, name, hashedPassword);
-	await createApiKey(unhashedApiKey, role, user.id, new Date(Date.now() + 60 * 60 * 1000));
+	const user = await createUser(email, name, hashedPassword, role);
+	await createApiKey(unhashedApiKey, user.id, new Date(Date.now() + 60 * 60 * 1000));
 	return user;
 }
