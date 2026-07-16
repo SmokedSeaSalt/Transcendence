@@ -1,8 +1,12 @@
 import request from "supertest";
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
-import { createUser, deleteUser } from "../helpers/dbHelpers.js";
+import {
+	createUser,
+	createUserWithRoleAndApiKey,
+	deleteUser,
+} from "../helpers/dbHelpers.js";
 
 const registerPaths = ["/api/users/register", "/web/users/register"] as const;
 
@@ -45,13 +49,23 @@ const invalidNames = [
 
 const deleteValidCaseUser = async () => {
 	for (const { email } of validCases) {
-		deleteUser(email);
+		await deleteUser(email);
 	}
 };
 
 const userExists = async (email: string) => {
 	const user = await prisma.user.findUnique({ where: { email } });
 	return !!user;
+};
+
+const postRegister = (path: string, body: object, unhashedApiKey: string) => {
+	const req = request(app).post(path).send(body);
+
+	if (path === "/api/users/register") {
+		req.set("Authorization", unhashedApiKey);
+	}
+
+	return req;
 };
 
 describe("GET /health", () => {
@@ -67,6 +81,21 @@ describe.each(registerPaths)("POST %s", (path) => {
 	const name = "Test User";
 	const password = "ValidPassword123!";
 
+	const adminEmail = "testAdmin@example.com";
+	const adminName = "Test Admin User";
+	const adminPassword = "ValidPassword123!";
+	const unhashedApiKey = "key";
+
+	beforeAll(async () => {
+		const adminUser = await createUserWithRoleAndApiKey(
+			adminEmail,
+			adminName,
+			adminPassword,
+			unhashedApiKey,
+			"admin",
+		);
+	});
+
 	beforeEach(async () => {
 		await deleteValidCaseUser();
 	});
@@ -74,7 +103,11 @@ describe.each(registerPaths)("POST %s", (path) => {
 	it.each(validCases)(
 		"returns 201 created $email",
 		async ({ email, name, password }) => {
-			const res = await request(app).post(path).send({ email, name, password });
+			const res = await postRegister(
+				path,
+				{ email, name, password },
+				unhashedApiKey,
+			);
 
 			expect(res.status).toBe(201);
 			expect(res.body.email).toBe(email);
@@ -85,7 +118,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 			}
 
 			expect(
-				userExists,
+				await userExists(email),
 				`User with ${email} has not been added to the database.`,
 			).toBeTruthy();
 		},
@@ -94,16 +127,22 @@ describe.each(registerPaths)("POST %s", (path) => {
 	it("returns 409 conflict", async () => {
 		await createUser(email, name, password);
 
-		const res = await request(app).post(path).send({ email, name, password });
+		const res = await postRegister(
+			path,
+			{ email, name, password },
+			unhashedApiKey,
+		);
 
 		expect(res.status).toBe(409);
 		await deleteUser(email);
 	});
 
 	it.each(invalidEmails)("returns 400 invalid email: %s", async (badEmail) => {
-		const res = await request(app)
-			.post(path)
-			.send({ email: badEmail, name, password });
+		const res = await postRegister(
+			path,
+			{ email: badEmail, name, password },
+			unhashedApiKey,
+		);
 
 		expect(res.status).toBe(400);
 		expect(res.body.errors[0].message).not.toHaveLength(0);
@@ -112,9 +151,11 @@ describe.each(registerPaths)("POST %s", (path) => {
 	it.each(invalidPasswords)(
 		"returns 400 invalid password: %s",
 		async (badPassword) => {
-			const res = await request(app)
-				.post(path)
-				.send({ email, name, password: badPassword });
+			const res = await postRegister(
+				path,
+				{ email, name, password: badPassword },
+				unhashedApiKey,
+			);
 
 			expect(res.status).toBe(400);
 			expect(res.body.errors[0].message).not.toHaveLength(0);
@@ -122,9 +163,11 @@ describe.each(registerPaths)("POST %s", (path) => {
 	);
 
 	it.each(invalidNames)("returns 400 invalid name: %s", async (badName) => {
-		const res = await request(app)
-			.post(path)
-			.send({ email, name: badName, password });
+		const res = await postRegister(
+			path,
+			{ email, name: badName, password },
+			unhashedApiKey,
+		);
 
 		expect(res.status).toBe(400);
 		expect(res.body.errors[0].message).not.toHaveLength(0);
@@ -132,5 +175,42 @@ describe.each(registerPaths)("POST %s", (path) => {
 
 	afterAll(async () => {
 		await deleteValidCaseUser();
+		await deleteUser(adminEmail);
+	});
+});
+
+describe("POST /api/users/register with user API key", () => {
+	const email = "test@example.com";
+	const name = "Test User";
+	const password = "ValidPassword123!";
+	const unhashedApiKey = "key";
+
+	const emailToCreate = "willFail@example.com";
+	const nameToCreate = "Failed User";
+	const passwordToCreate = "OtherPassword123!";
+
+	// create regular user
+	beforeAll(async () => {
+		await createUserWithRoleAndApiKey(
+			email,
+			name,
+			password,
+			unhashedApiKey,
+			"user",
+		);
+	});
+
+	it("Returns 403 when regular user attempts to POST to admin only endpoint", async () => {
+		const res = await postRegister(
+			"/api/users/register",
+			{ email: emailToCreate, name: nameToCreate, password: passwordToCreate },
+			unhashedApiKey,
+		);
+		expect(res.status).toBe(403);
+		expect(res.text).toContain("Admin access required");
+	});
+
+	afterAll(async () => {
+		await deleteUser(email);
 	});
 });
