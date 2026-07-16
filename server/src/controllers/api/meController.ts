@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import * as userServices from "../../services/userServices.js";
-import { UnauthorizedError } from "../../errors/errorTypes.js";
+import { UnauthorizedError, NotFoundError } from "../../errors/errorTypes.js";
 import { userResponseSchema } from "../../validators/userValidators.js"
 
 export const getMyProfile = async (
@@ -15,7 +15,10 @@ export const getMyProfile = async (
 		const { id, email, role } = req.user;
 		const user = await userServices.getUserByID(id);
 
-		// todo check if user can ever be null.
+		if (!user) {
+			return next(new NotFoundError("User not found"));
+		}
+
 		const response = userResponseSchema.parse({
 			id: user.id,
 			name: user.name,
