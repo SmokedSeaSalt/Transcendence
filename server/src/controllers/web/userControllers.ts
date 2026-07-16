@@ -138,7 +138,7 @@ export const updateApiKey = async (
 		if (!user) {
 			return res.status(401).json({ error: "Invalid token" });
 		}
-		const apikey = await updateAPIKey(user, "user");
+		const apikey = await updateAPIKey(user);
 		//return apikey
 		res.status(201).json({ apikey: apikey });
 	} catch (error: unknown) {
