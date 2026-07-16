@@ -45,7 +45,7 @@ describe("Rate limit should 429 after max requests. GET /me", () => {
 			const res = await request(app)
 				.get(mePath)
 				.set("Authorization", unhashedApiKey1);
-			if (i == RATE_LIMIT_MAX_REQUESTS) {
+			if (i === RATE_LIMIT_MAX_REQUESTS) {
 				expect(res.status).toBe(429);
 			} else {
 				expect(res.status).toBe(200);
