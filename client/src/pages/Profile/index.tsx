@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NameBar from "./NameBar";
+import { useAuthContext } from "../../App";
 
 export default function ProfilePage() {
+	const {updateLoggedinUser, currentUser} = useAuthContext();
+	const nav = useNavigate();
+	
+	useEffect(()=>{
+		updateLoggedinUser();
+    }, []);
+
+	if (currentUser === null){
+		nav("/login");
+	}
+
 	return (
 		<main
 			style={{
