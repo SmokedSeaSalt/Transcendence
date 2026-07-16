@@ -150,3 +150,30 @@ describe.each(registerPaths)("POST %s", (path) => {
 		await deleteUser(adminEmail);
 	});
 });
+
+
+describe("POST /api/users/register with user API key", () => {
+	const email = "test@example.com";
+	const name = "Test User";
+	const password = "ValidPassword123!";
+	const unhashedApiKey = "key";
+
+	const emailToCreate = "willFail@example.com";
+	const nameToCreate = "Failed User";
+	const passwordToCreate = "OtherPassword123!";
+
+	// create regular user
+	beforeAll(async () => {
+		await createUserWithRoleAndApiKey(email, name, password, unhashedApiKey, "user");
+	})
+
+	it("Returns 403 when regular user attempts to POST to admin only endpoint", async () => {
+		const res = await postRegister("/api/users/register", { email: emailToCreate, name: nameToCreate, password: passwordToCreate }, unhashedApiKey);
+		expect(res.status).toBe(403);
+		expect(res.text).toContain("Admin access required");
+	});
+
+	afterAll(async () => {
+		await deleteUser(email);
+	});
+});
