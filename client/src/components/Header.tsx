@@ -34,6 +34,15 @@ export default function Header() {
 								Log in / Make an Account
 							</button>
 						</Link>
+					) : currentUser === null ? (
+						<Link to="/profile" className="text-white hover:text-orange-600">
+							<button
+								type="button"
+								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
+							>
+								Your Profile
+							</button>
+						</Link>
 					) : (
 						<Link to="/profile" className="text-white hover:text-orange-600">
 							<button

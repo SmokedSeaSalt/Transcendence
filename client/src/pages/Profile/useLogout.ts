@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../App";
+import { useAuthContext } from "../../App";
 
 export const useLogout = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
+	const { updateLoggedinUser } = useAuthContext();
 	const { updateLoggedinUser } = useAuthContext();
 
 	const logout = async () => {
