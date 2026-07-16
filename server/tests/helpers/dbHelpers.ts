@@ -30,7 +30,7 @@ export const createApiKey = async (
 	userId: number,
 	expiresAt: Date,
 ) => {
-	const hashedKey = await createHash("sha256")
+	const hashedKey = createHash("sha256")
 		.update(unhashedKey)
 		.digest("hex");
 	const apiKey = await prisma.aPIKey.create({
