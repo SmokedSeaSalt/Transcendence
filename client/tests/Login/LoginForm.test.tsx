@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi } from "vitest";
 import LoginForm from "../../src/pages/Login/LoginForm";
+import { AuthProvider } from "../../src/components/AuthContext";
 
 type VitestMock = ReturnType<typeof vi.fn>;
 
@@ -15,9 +16,11 @@ test("shows validation and calls fetch with credentials", async () => {
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>
 	);
 
 	// trigger validation error with empty input
@@ -55,9 +58,11 @@ test("valid email + empty password and does not call fetch", async () => {
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(
@@ -80,9 +85,11 @@ test("invalid email + valid password shows email validation and does not call fe
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "not-an-email");
@@ -101,9 +108,11 @@ test("both email and password invalid show both errors and do not call fetch", a
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "bad");
