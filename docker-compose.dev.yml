@@ -17,4 +17,4 @@ services:
       - "5173:5173"
     volumes:
       - ./client/src:/app/src
-      - ./server/tests:/app/tests
+      - ./client/tests:/app/tests
