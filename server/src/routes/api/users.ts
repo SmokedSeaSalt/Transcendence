@@ -3,9 +3,9 @@ import * as userController from "../../controllers/api/userControllers.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserValidation } from "../../validators/userValidators.js";
 import {
-	userResponseSchema,
 	createUserSchema,
 	singleErrorSchema,
+	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
 

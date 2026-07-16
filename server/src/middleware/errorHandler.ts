@@ -2,11 +2,11 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
+	ForbiddenError,
 	HashError,
 	LoginInvalidCredentialsError,
 	PasswordValidationError,
 	UnauthorizedError,
-	ForbiddenError,
 } from "../errors/errorTypes.js";
 
 export const errorHandler = (
@@ -21,7 +21,10 @@ export const errorHandler = (
 		return res.status(400).json({ error: error.message });
 	}
 
-	if (error instanceof UnauthorizedError || error instanceof LoginInvalidCredentialsError) {
+	if (
+		error instanceof UnauthorizedError ||
+		error instanceof LoginInvalidCredentialsError
+	) {
 		return res.status(401).json({ error: error.message });
 	}
 

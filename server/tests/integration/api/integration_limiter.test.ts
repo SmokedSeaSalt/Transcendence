@@ -1,9 +1,14 @@
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "../../../src/app.js";
-import { deleteUser, createUserWithRoleAndApiKey } from "../../helpers/dbHelpers.js";
-import { RATE_LIMIT_WINDOW_MS, RATE_LIMIT_MAX_REQUESTS } from "../../../src/config/rateLimit.js"
-
+import {
+	RATE_LIMIT_MAX_REQUESTS,
+	RATE_LIMIT_WINDOW_MS,
+} from "../../../src/config/rateLimit.js";
+import {
+	createUserWithRoleAndApiKey,
+	deleteUser,
+} from "../../helpers/dbHelpers.js";
 
 describe("Rate limit should 429 after max requests. GET /me", () => {
 	const mePath = "/api/me";
@@ -19,13 +24,27 @@ describe("Rate limit should 429 after max requests. GET /me", () => {
 	const unhashedApiKey2 = "other_key";
 
 	beforeAll(async () => {
-		await createUserWithRoleAndApiKey(email1, name1, unhashedPassword1, unhashedApiKey1, "user");
-		await createUserWithRoleAndApiKey(email2, name2, unhashedPassword2, unhashedApiKey2, "user");
+		await createUserWithRoleAndApiKey(
+			email1,
+			name1,
+			unhashedPassword1,
+			unhashedApiKey1,
+			"user",
+		);
+		await createUserWithRoleAndApiKey(
+			email2,
+			name2,
+			unhashedPassword2,
+			unhashedApiKey2,
+			"user",
+		);
 	});
 
 	it("returns 200 with valid api key", async () => {
 		for (let i = 0; i <= RATE_LIMIT_MAX_REQUESTS; i++) {
-			const res = await request(app).get(mePath).set("Authorization", unhashedApiKey1);
+			const res = await request(app)
+				.get(mePath)
+				.set("Authorization", unhashedApiKey1);
 			if (i == RATE_LIMIT_MAX_REQUESTS) {
 				expect(res.status).toBe(429);
 			} else {
@@ -36,12 +55,12 @@ describe("Rate limit should 429 after max requests. GET /me", () => {
 		}
 
 		// other user shouldn't be rate limited
-		const res = await request(app).get(mePath).set("Authorization", unhashedApiKey2);
+		const res = await request(app)
+			.get(mePath)
+			.set("Authorization", unhashedApiKey2);
 		expect(res.status).toBe(200);
 		expect(res.body.name).toContain(name2);
 		expect(res.body.email).toContain(email2);
-
-
 	});
 
 	afterAll(async () => {

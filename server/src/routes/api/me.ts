@@ -1,10 +1,10 @@
 import { Router } from "express";
-import * as meController from "../../controllers/api/meController.js"
+import * as meController from "../../controllers/api/meController.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserValidation } from "../../validators/userValidators.js";
 import {
-	userResponseSchema,
 	singleErrorSchema,
+	userResponseSchema,
 } from "../../validators/userValidators.js";
 
 const router = Router();

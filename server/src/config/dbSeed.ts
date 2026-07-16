@@ -1,12 +1,14 @@
-import { prisma } from "../db.js";
 import bcrypt from "bcrypt";
+import { prisma } from "../db.js";
 
 export async function createAdminUser() {
 	const email = process.env.ADMIN_EMAIL;
 	const password = process.env.ADMIN_PASSWORD;
 
 	if (!email || !password) {
-		console.log("ADMIN_EMAIL and ADMIN_PASSWORD not set in .env file. Continuing without creating admin user.");
+		console.log(
+			"ADMIN_EMAIL and ADMIN_PASSWORD not set in .env file. Continuing without creating admin user.",
+		);
 		return;
 	}
 
@@ -29,4 +31,3 @@ export async function createAdminUser() {
 		console.log(`Admin user already exists: ${existing.name}`);
 	}
 }
-

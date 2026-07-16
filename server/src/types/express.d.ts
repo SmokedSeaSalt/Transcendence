@@ -3,7 +3,7 @@ export interface AuthUser {
 	id: number;
 	email: string;
 	role: string;
-	hashedApiKey: string
+	hashedApiKey: string;
 }
 
 declare global {
@@ -13,5 +13,3 @@ declare global {
 		}
 	}
 }
-
-export {};

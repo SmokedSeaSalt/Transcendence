@@ -6,9 +6,9 @@ import {
 	loginUserValidation,
 } from "../../validators/userValidators.js";
 import {
-	userResponseSchema,
 	createUserSchema,
 	singleErrorSchema,
+	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
 

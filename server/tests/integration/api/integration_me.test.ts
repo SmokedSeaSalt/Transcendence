@@ -1,9 +1,13 @@
+import { createHash } from "node:crypto";
 import request from "supertest";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../../src/app.js";
-import { createUser, deleteUser, createApiKey, createUserWithRoleAndApiKey } from "../../helpers/dbHelpers.js";
-import { createHash } from "node:crypto";
-
+import {
+	createApiKey,
+	createUser,
+	createUserWithRoleAndApiKey,
+	deleteUser,
+} from "../../helpers/dbHelpers.js";
 
 describe("GET /me", () => {
 	const mePath = "/api/me";
@@ -21,17 +25,21 @@ describe("GET /me", () => {
 
 		// await deleteUser(email);
 
+		const user = await createUserWithRoleAndApiKey(
+			email,
+			name,
+			unhashedPassword,
+			unhashedApiKey,
+			"user",
+		);
 
-		const user = await createUserWithRoleAndApiKey(email, name, unhashedPassword, unhashedApiKey, "user");
-
-		const res = await request(app).get(mePath).set("Authorization", unhashedApiKey);
+		const res = await request(app)
+			.get(mePath)
+			.set("Authorization", unhashedApiKey);
 		expect(res.status).toBe(200);
 		expect(res.body.name).toContain(name);
 		expect(res.body.email).toContain(email);
 
-
-
 		await deleteUser(email);
-
 	});
 });

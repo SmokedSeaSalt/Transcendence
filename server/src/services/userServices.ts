@@ -82,15 +82,14 @@ const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
 	return !!user;
 };
 
-
 // Querying user from db with id
-export const getUserByID = async (id: number) : Promise<User|null> => {
+export const getUserByID = async (id: number): Promise<User | null> => {
 	const user = await prisma.user.findUnique({
 		where: { id: id },
 	});
 
 	return user;
-}
+};
 
 // returns the user object based on sessionToken, or null.
 export const getUserFromSession = async (

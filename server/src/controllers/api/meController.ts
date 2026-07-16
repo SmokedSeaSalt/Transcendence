@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { NotFoundError, UnauthorizedError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
-import { UnauthorizedError, NotFoundError } from "../../errors/errorTypes.js";
-import { userResponseSchema } from "../../validators/userValidators.js"
+import { userResponseSchema } from "../../validators/userValidators.js";
 
 export const getMyProfile = async (
 	req: Request,
@@ -10,7 +10,7 @@ export const getMyProfile = async (
 ) => {
 	try {
 		if (!req.user) {
-			return next(new UnauthorizedError('Invalid token'))
+			return next(new UnauthorizedError("Invalid token"));
 		}
 		const { id, email, role } = req.user;
 		const user = await userServices.getUserByID(id);

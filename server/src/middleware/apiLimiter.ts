@@ -1,6 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
-import { RATE_LIMIT_WINDOW_MS, RATE_LIMIT_MAX_REQUESTS } from "../config/rateLimit.js"
+import { ipKeyGenerator, rateLimit } from "express-rate-limit";
+import {
+	RATE_LIMIT_MAX_REQUESTS,
+	RATE_LIMIT_WINDOW_MS,
+} from "../config/rateLimit.js";
 
 export const limiter = rateLimit({
 	windowMs: RATE_LIMIT_WINDOW_MS,
@@ -14,7 +17,6 @@ export const limiter = rateLimit({
 	handler: (req, res) => {
 		res.status(429).json({
 			message: "Rate limit exceeded. Try again later.",
-		})
-	}
-})
-
+		});
+	},
+});

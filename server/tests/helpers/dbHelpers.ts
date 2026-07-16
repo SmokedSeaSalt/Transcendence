@@ -1,6 +1,6 @@
-import { prisma } from "../../src/db.js";
-import bcrypt from "bcrypt";
 import { createHash } from "node:crypto";
+import bcrypt from "bcrypt";
+import { prisma } from "../../src/db.js";
 
 type Role = "user" | "admin";
 
@@ -12,7 +12,7 @@ export const createUser = async (
 	email: string,
 	name: string,
 	password: string,
-	role: Role = "user"
+	role: Role = "user",
 ) => {
 	const user = await prisma.user.create({
 		data: {
@@ -30,7 +30,9 @@ export const createApiKey = async (
 	userId: number,
 	expiresAt: Date,
 ) => {
-	const hashedKey = await createHash("sha256").update(unhashedKey).digest("hex");
+	const hashedKey = await createHash("sha256")
+		.update(unhashedKey)
+		.digest("hex");
 	const apiKey = await prisma.aPIKey.create({
 		data: {
 			hashedKey,
@@ -50,6 +52,10 @@ export const createUserWithRoleAndApiKey = async (
 ) => {
 	const hashedPassword = await bcrypt.hash(unhashedPassword, 1);
 	const user = await createUser(email, name, hashedPassword, role);
-	await createApiKey(unhashedApiKey, user.id, new Date(Date.now() + 60 * 60 * 1000));
+	await createApiKey(
+		unhashedApiKey,
+		user.id,
+		new Date(Date.now() + 60 * 60 * 1000),
+	);
 	return user;
-}
+};

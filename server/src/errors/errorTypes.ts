@@ -53,4 +53,3 @@ export class NotFoundError extends Error {
 		this.name = "ForbiddenError";
 	}
 }
-
