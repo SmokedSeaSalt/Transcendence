@@ -3,6 +3,7 @@ export interface AuthUser {
 	id: number;
 	email: string;
 	role: string;
+	hashedApiKey: string
 }
 
 declare global {

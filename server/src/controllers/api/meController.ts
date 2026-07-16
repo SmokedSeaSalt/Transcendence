@@ -15,6 +15,7 @@ export const getMyProfile = async (
 		const { id, email, role } = req.user;
 		const user = await userServices.getUserByID(id);
 
+		// todo check if user can ever be null.
 		const response = userResponseSchema.parse({
 			id: user.id,
 			name: user.name,

@@ -30,11 +30,12 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 			return next(new UnauthorizedError('Invalid API key'));
 		}
 
-		// Attach decoded user info to request
+		// Attach decoded user info to request for later middleware
 		req.user = {
 			id: apiKey.user.id,
 			email: apiKey.user.email,
 			role: apiKey.scope,
+			hashedApiKey: hashedApiKey,
 		};
 
 		return next();
