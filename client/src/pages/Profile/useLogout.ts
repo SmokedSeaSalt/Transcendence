@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../App";
+import { useAuthContext } from "../../components/AuthContext";
 
 export const useLogout = () => {
 	const [loading, setLoading] = useState(false);

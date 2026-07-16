@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../App";
 import NameBar from "./NameBar";
+import { useAuthContext } from "../../components/AuthContext";
 
 export default function ProfilePage() {
 	const { updateLoggedinUser, currentUser } = useAuthContext();

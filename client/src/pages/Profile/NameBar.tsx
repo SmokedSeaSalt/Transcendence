@@ -1,10 +1,9 @@
-import { useAuthContext } from "../../App";
+import { useAuthContext } from "../../components/AuthContext";
 import ApiKeyButton from "./APIKeyButton";
 import LogoutButton from "./LogoutButton";
 
 export default function NameBar() {
 	const { currentUser } = useAuthContext();
-	// const currentUser = "testuser"; //todo change to currentusercontext
 
 	return (
 		<section style={{ display: "flex", alignItems: "center" }}>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../App";
 import logo from "../assets/logo_temp_cat.png";
+import { useAuthContext } from "./AuthContext";
 
 export default function Header() {
 	const { currentUser } = useAuthContext();
