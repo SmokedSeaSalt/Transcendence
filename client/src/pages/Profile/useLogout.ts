@@ -20,7 +20,7 @@ export const useLogout = () => {
 			throw err;
 		} finally {
 			setLoading(false);
-			updateLoggedinUser();
+			await updateLoggedinUser();
 			nav("/");
 		}
 	};
