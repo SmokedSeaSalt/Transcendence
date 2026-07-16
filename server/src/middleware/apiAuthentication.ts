@@ -16,9 +16,7 @@ export const authenticate = async (
 	}
 
 	try {
-		const hashedApiKey = createHash("sha256")
-			.update(authHeader)
-			.digest("hex");
+		const hashedApiKey = createHash("sha256").update(authHeader).digest("hex");
 		const apiKey = await prisma.aPIKey.findUnique({
 			where: { hashedKey: hashedApiKey },
 			select: {
