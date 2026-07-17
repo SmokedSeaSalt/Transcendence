@@ -35,12 +35,10 @@ describe("PUT /api/me to update name", () => {
 			.put(mePath)
 			.send(body)
 			.set("Authorization", unhashedApiKey);
-		console.log("0------------------------");
 
 		expect(res.status).toBe(204);
 		const user = await getUserByEmail(email);
 		expect(user?.name === newName);
-		console.log("2------------------------");
 	});
 
 	it("returns 400 with valid api key with invalid body", async () => {
