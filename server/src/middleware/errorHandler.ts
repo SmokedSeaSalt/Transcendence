@@ -2,9 +2,11 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
+	ForbiddenError,
 	HashError,
 	LoginInvalidCredentialsError,
 	PasswordValidationError,
+	UnauthorizedError,
 } from "../errors/errorTypes.js";
 
 export const errorHandler = (
@@ -19,16 +21,23 @@ export const errorHandler = (
 		return res.status(400).json({ error: error.message });
 	}
 
+	if (
+		error instanceof UnauthorizedError ||
+		error instanceof LoginInvalidCredentialsError
+	) {
+		return res.status(401).json({ error: error.message });
+	}
+
+	if (error instanceof ForbiddenError) {
+		return res.status(403).json({ error: error.message });
+	}
+
 	if (error instanceof HashError) {
 		return res.status(500).json({ error: error.message });
 	}
 
 	if (error instanceof EmailAlreadyExistsError) {
 		return res.status(409).json({ error: error.message });
-	}
-
-	if (error instanceof LoginInvalidCredentialsError) {
-		return res.status(401).json({ error: error.message });
 	}
 
 	return res.status(500).json({ error: "Internal server error" });

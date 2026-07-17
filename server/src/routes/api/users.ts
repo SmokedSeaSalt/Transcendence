@@ -3,9 +3,9 @@ import * as userController from "../../controllers/api/userControllers.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserValidation } from "../../validators/userValidators.js";
 import {
-	createUserResponseSchema,
 	createUserSchema,
 	singleErrorSchema,
+	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
 
@@ -32,7 +32,7 @@ apiRegistry.registerPath({
 			description: "User created",
 			content: {
 				"application/json": {
-					schema: createUserResponseSchema,
+					schema: userResponseSchema,
 				},
 			},
 		},

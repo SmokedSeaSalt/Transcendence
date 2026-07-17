@@ -24,7 +24,6 @@ model Session {
 
 model APIKey {
   hashedKey       String      @id
-  scope           String      ///indicates whether key has user or admin access
   userId          Int         @unique
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt       DateTime
@@ -36,6 +35,7 @@ model User {
   email          String        @unique
   name           String
   hashedPassword String
+  role           String        @default("user")
   createdAt      DateTime      @default(now())
   session        Session?
   apiKey         APIKey?
