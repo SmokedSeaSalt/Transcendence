@@ -10,7 +10,6 @@ import {
 } from "../../helpers/dbHelpers.js";
 
 describe("authenticate middleware", () => {
-
 	const mePath = "/api/me";
 
 	const email = "example@gmail.com";
@@ -27,7 +26,6 @@ describe("authenticate middleware", () => {
 			"admin",
 		);
 	});
-
 
 	it("rejects requests without an API key", async () => {
 		const res = await request(app).get(mePath);

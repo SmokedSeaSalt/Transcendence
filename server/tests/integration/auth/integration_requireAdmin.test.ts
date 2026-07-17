@@ -9,10 +9,8 @@ import {
 	deleteUser,
 } from "../../helpers/dbHelpers.js";
 
-
 describe("requireAdmin middleware", () => {
-	const registerUserRoute = "/api/users/register"
-
+	const registerUserRoute = "/api/users/register";
 
 	const email = "testAdmin@example.com";
 	const name = "Test Admin User";
@@ -46,7 +44,7 @@ describe("requireAdmin middleware", () => {
 		const res = await request(app)
 			.post(registerUserRoute)
 			.set("Authorization", unhashedApiKey)
-			.send({email: "new@gmail.com", name: "jon", password: "Password1!"});
+			.send({ email: "new@gmail.com", name: "jon", password: "Password1!" });
 
 		expect(res.status).toBe(201);
 	});
