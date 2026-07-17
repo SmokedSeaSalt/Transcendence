@@ -40,6 +40,7 @@ export const createUserSchema = z
 		name: z.string().min(1, "Name is required").max(100, "Name too long"),
 		password: passwordSchema,
 	})
+	.strict()
 	.openapi("CreateUser");
 
 export const userResponseSchema = z
@@ -49,6 +50,7 @@ export const userResponseSchema = z
 		email: emailSchema,
 		createdAt: z.iso.datetime(),
 	})
+	.strict()
 	.openapi("CreateUserResponse");
 
 export const zodValidationErrorSchema = z
@@ -60,21 +62,38 @@ export const zodValidationErrorSchema = z
 			}),
 		),
 	})
+	.strict()
 	.openapi("ValidationError");
 
 export const singleErrorSchema = z
 	.object({
 		error: z.string(),
 	})
-	.openapi("ConflictError");
+	.strict()
+	.openapi("SigleErrorSchemaError");
 
 //////////////
 // User login/
 //////////////
-export const loginSchema = z.object({
-	email: z.email("Invalid email address"),
-	password: z.string().min(1, "Password cannot be empty"),
-});
+export const loginSchema = z
+	.object({
+		email: z.email("Invalid email address"),
+		password: z.string().min(1, "Password cannot be empty"),
+	})
+	.strict();
+
+
+/////////////////////
+// PUT new user name/
+/////////////////////
+export const putNameSchema = z
+	.object({
+		name: z.string().min(1, "Name cannot be empty").max(100, "Name too long"),
+	})
+	.strict();
 
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
+export const putNameValidation = () => zodValidate(putNameSchema);
+
+
