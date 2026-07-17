@@ -2,9 +2,17 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi } from "vitest";
+import { AuthProvider } from "../../src/components/AuthContext";
 import LoginForm from "../../src/pages/Login/LoginForm";
 
 type VitestMock = ReturnType<typeof vi.fn>;
+
+//if the AuthProvider needs to be rendered for the component to work, add the follwing code snippet:
+/*
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+*/
 
 test("shows validation and calls fetch with credentials", async () => {
 	// configure the fetch mock created in vitest.setup.ts. This ensures that the fetch in useLogin is mocked and does not call the backend
@@ -15,10 +23,16 @@ test("shows validation and calls fetch with credentials", async () => {
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	// trigger validation error with empty input
 	await userEvent.click(screen.getByRole("button", { name: /login/i }));
@@ -55,10 +69,16 @@ test("valid email + empty password and does not call fetch", async () => {
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	await userEvent.type(
 		screen.getByPlaceholderText(/email/i),
@@ -80,10 +100,16 @@ test("invalid email + valid password shows email validation and does not call fe
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "not-an-email");
 	await userEvent.type(screen.getByPlaceholderText(/password/i), "GoodPass1!");
@@ -101,10 +127,16 @@ test("both email and password invalid show both errors and do not call fetch", a
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<LoginForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<LoginForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "bad");
 	await userEvent.click(screen.getByRole("button", { name: /login/i }));

@@ -1,12 +1,9 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CurrentUserContext, userContextType } from "../App";
 import logo from "../assets/logo_temp_cat.png";
-import { jsonUser, userAuth } from "../hooks/userAuth";
+import { useAuthContext } from "./AuthContext";
 
 export default function Header() {
-	// const userContext = useContext(CurrentUserContext);
-	const { userData, loading } = userAuth();
+	const { currentUser } = useAuthContext();
 
 	return (
 		<header className="bg-gray-900 border-t mt-0">
@@ -28,7 +25,7 @@ export default function Header() {
 							🏆 Leaderboard
 						</button>
 					</Link>
-					{loading || !userData ? (
+					{currentUser === null ? (
 						<Link to="/login" className="text-white hover:text-orange-600">
 							<button
 								type="button"
@@ -37,13 +34,22 @@ export default function Header() {
 								Log in / Make an Account
 							</button>
 						</Link>
+					) : currentUser === null ? (
+						<Link to="/profile" className="text-white hover:text-orange-600">
+							<button
+								type="button"
+								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
+							>
+								Your Profile
+							</button>
+						</Link>
 					) : (
 						<Link to="/profile" className="text-white hover:text-orange-600">
 							<button
 								type="button"
 								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
-								{userData.name}'s Profile
+								{currentUser.name}'s Profile
 							</button>
 						</Link>
 					)}
