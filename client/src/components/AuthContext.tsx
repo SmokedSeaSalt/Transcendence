@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { jsonUser, userAuth } from "../hooks/userAuth";
+import { type jsonUser, userAuth } from "../hooks/userAuth";
 
 //create context type to mathc return object of userAuth
 export interface authContextType {
@@ -21,6 +21,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		loading,
 		updateLoggedinUser: refetch,
 	};
+
+	//optional to not display stuff while we check if the user is logged in:
+	// WARNING: results in flashing homepage when doing logged in related stuff.
+	//if (loading) {
+	//	return <AuthContext value={value}>{}</AuthContext>;
+	//}
 
 	return <AuthContext value={value}>{children}</AuthContext>;
 };

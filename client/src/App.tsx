@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./components/AuthContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import CallHealth from "./pages/CallHealthy";
@@ -6,7 +7,6 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
-import { AuthProvider } from "./components/AuthContext";
 
 export default function App() {
 	return (
