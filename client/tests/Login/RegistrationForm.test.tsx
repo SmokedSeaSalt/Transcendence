@@ -7,7 +7,7 @@ import RegistrationForm from "../../src/pages/Login/RegistrationForm";
 
 type VitestMock = ReturnType<typeof vi.fn>;
 
-//if a cookie is present during testing the following code needs to be added after the render:
+//if the AuthProvider needs to be rendered for the component to work, add the follwing code snippet:
 /*
 	// wait for the first Authprovider fetch and clear it
 	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
@@ -28,6 +28,10 @@ test("successful registration calls fetch with credentials", async () => {
 			</MemoryRouter>
 		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	const email = "bob@example.com";
 	const name = "Bob";
@@ -64,6 +68,10 @@ test("valid email + invalid password shows password validation and does not call
 		</AuthProvider>,
 	);
 
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+
 	await userEvent.type(
 		screen.getByPlaceholderText(/email/i),
 		"alice@example.com",
@@ -95,6 +103,10 @@ test("invalid email + valid password shows email validation and does not call fe
 		</AuthProvider>,
 	);
 
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "not-an-email");
 	await userEvent.type(screen.getByPlaceholderText(/name/i), "Sam");
 	await userEvent.type(screen.getByPlaceholderText(/password/i), "GoodPass1!");
@@ -118,6 +130,10 @@ test("both email and password invalid show both errors and do not call fetch", a
 			</MemoryRouter>
 		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "bad");
 	await userEvent.type(screen.getByPlaceholderText(/name/i), "X");

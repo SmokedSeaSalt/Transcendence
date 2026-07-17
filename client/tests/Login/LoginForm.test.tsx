@@ -7,7 +7,7 @@ import LoginForm from "../../src/pages/Login/LoginForm";
 
 type VitestMock = ReturnType<typeof vi.fn>;
 
-//if a cookie is present during testing the following code needs to be added after the render:
+//if the AuthProvider needs to be rendered for the component to work, add the follwing code snippet:
 /*
 	// wait for the first Authprovider fetch and clear it
 	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
@@ -29,6 +29,10 @@ test("shows validation and calls fetch with credentials", async () => {
 			</MemoryRouter>
 		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	// trigger validation error with empty input
 	await userEvent.click(screen.getByRole("button", { name: /login/i }));
@@ -72,6 +76,10 @@ test("valid email + empty password and does not call fetch", async () => {
 		</AuthProvider>,
 	);
 
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+
 	await userEvent.type(
 		screen.getByPlaceholderText(/email/i),
 		"alice@example.com",
@@ -99,6 +107,10 @@ test("invalid email + valid password shows email validation and does not call fe
 		</AuthProvider>,
 	);
 
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "not-an-email");
 	await userEvent.type(screen.getByPlaceholderText(/password/i), "GoodPass1!");
 	await userEvent.click(screen.getByRole("button", { name: /login/i }));
@@ -121,6 +133,10 @@ test("both email and password invalid show both errors and do not call fetch", a
 			</MemoryRouter>
 		</AuthProvider>,
 	);
+
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "bad");
 	await userEvent.click(screen.getByRole("button", { name: /login/i }));
