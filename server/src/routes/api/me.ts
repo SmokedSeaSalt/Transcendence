@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as meController from "../../controllers/api/meController.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
-import { createUserValidation } from "../../validators/userValidators.js";
+import { putNameSchema, putNameValidation, zodValidationErrorSchema } from "../../validators/userValidators.js";
 import {
 	singleErrorSchema,
 	userResponseSchema,
@@ -37,6 +37,47 @@ apiRegistry.registerPath({
 	},
 });
 router.get("/", meController.getMyProfile);
+
+
+apiRegistry.registerPath({
+	method: "put",
+	path: "/api/me",
+	tags: ["Api"],
+
+	request: {
+		body: {
+			required: true,
+			content: {
+				"application/json": {
+					schema: putNameSchema
+				},
+			},
+		},
+	},
+
+	responses: {
+		204: { description: "Name sucessfully put" },
+
+		400: {
+			description: "Bad request",
+			content: {
+				"application/json": {
+					schema: zodValidationErrorSchema,
+				},
+			},
+		},
+
+		401: {
+			description: "Unauthorized error",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.put("/", putNameValidation(), meController.putName);
 
 // router.put("/", meController.updateMyProfile);
 
