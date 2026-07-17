@@ -82,7 +82,6 @@ export const loginSchema = z
 	})
 	.strict();
 
-
 /////////////////////
 // PUT new user name/
 /////////////////////
@@ -95,5 +94,3 @@ export const putNameSchema = z
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
 export const putNameValidation = () => zodValidate(putNameSchema);
-
-

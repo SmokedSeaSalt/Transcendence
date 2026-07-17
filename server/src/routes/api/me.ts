@@ -1,7 +1,11 @@
 import { Router } from "express";
 import * as meController from "../../controllers/api/meController.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
-import { putNameSchema, putNameValidation, zodValidationErrorSchema } from "../../validators/userValidators.js";
+import {
+	putNameSchema,
+	putNameValidation,
+	zodValidationErrorSchema,
+} from "../../validators/userValidators.js";
 import {
 	singleErrorSchema,
 	userResponseSchema,
@@ -38,7 +42,6 @@ apiRegistry.registerPath({
 });
 router.get("/", meController.getMyProfile);
 
-
 apiRegistry.registerPath({
 	method: "put",
 	path: "/api/me",
@@ -49,7 +52,7 @@ apiRegistry.registerPath({
 			required: true,
 			content: {
 				"application/json": {
-					schema: putNameSchema
+					schema: putNameSchema,
 				},
 			},
 		},

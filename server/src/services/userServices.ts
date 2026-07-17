@@ -115,16 +115,18 @@ export const getUserFromSession = async (
 	}
 };
 
-
-export const setUserNameById = async (id: number, newName: string): Promise<User | null> => {
+export const setUserNameById = async (
+	id: number,
+	newName: string,
+): Promise<User | null> => {
 	const updatedUser = await prisma.user.update({
-		where: { 
-			id: id // Replace with the specific user's ID or unique identifier
+		where: {
+			id: id, // Replace with the specific user's ID or unique identifier
 		},
-		data: { 
-			name: newName
+		data: {
+			name: newName,
 		},
-	})
+	});
 
 	return updatedUser;
-}
+};
