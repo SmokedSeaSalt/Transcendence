@@ -1,5 +1,5 @@
 import request from "supertest";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { deleteUser } from "../helpers/dbHelpers.js";
 
