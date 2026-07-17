@@ -2,9 +2,17 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi } from "vitest";
+import { AuthProvider } from "../../src/components/AuthContext";
 import RegistrationForm from "../../src/pages/Login/RegistrationForm";
 
 type VitestMock = ReturnType<typeof vi.fn>;
+
+//if a cookie is present during testing the following code needs to be added after the render:
+/*
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+*/
 
 test("successful registration calls fetch with credentials", async () => {
 	const mockFetch = vi.fn().mockResolvedValue({
@@ -14,9 +22,11 @@ test("successful registration calls fetch with credentials", async () => {
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<RegistrationForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<RegistrationForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	const email = "bob@example.com";
@@ -47,9 +57,11 @@ test("valid email + invalid password shows password validation and does not call
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<RegistrationForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<RegistrationForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(
@@ -76,9 +88,11 @@ test("invalid email + valid password shows email validation and does not call fe
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<RegistrationForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<RegistrationForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "not-an-email");
@@ -98,9 +112,11 @@ test("both email and password invalid show both errors and do not call fetch", a
 	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
 	render(
-		<MemoryRouter>
-			<RegistrationForm />
-		</MemoryRouter>,
+		<AuthProvider>
+			<MemoryRouter>
+				<RegistrationForm />
+			</MemoryRouter>
+		</AuthProvider>,
 	);
 
 	await userEvent.type(screen.getByPlaceholderText(/email/i), "bad");

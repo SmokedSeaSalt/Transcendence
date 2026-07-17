@@ -2,10 +2,17 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi } from "vitest";
-import LoginForm from "../../src/pages/Login/LoginForm";
 import { AuthProvider } from "../../src/components/AuthContext";
+import LoginForm from "../../src/pages/Login/LoginForm";
 
 type VitestMock = ReturnType<typeof vi.fn>;
+
+//if a cookie is present during testing the following code needs to be added after the render:
+/*
+	// wait for the first Authprovider fetch and clear it
+	await waitFor(() => expect(mockFetch).toHaveBeenCalled());
+	mockFetch.mockClear();
+*/
 
 test("shows validation and calls fetch with credentials", async () => {
 	// configure the fetch mock created in vitest.setup.ts. This ensures that the fetch in useLogin is mocked and does not call the backend
@@ -20,7 +27,7 @@ test("shows validation and calls fetch with credentials", async () => {
 			<MemoryRouter>
 				<LoginForm />
 			</MemoryRouter>
-		</AuthProvider>
+		</AuthProvider>,
 	);
 
 	// trigger validation error with empty input
