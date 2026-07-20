@@ -22,7 +22,7 @@ export const checkCookieStatus = async (
 			return next(new UnauthorizedError("Invalid session token."));
 		}
 		const currentDate = new Date(Date.now());
-		if (currentDate < expirationDate) {
+		if (currentDate > expirationDate) {
 			console.log("Cookie is expired.");
 			invalidateSession(sessionToken);
 			res.clearCookie("session", {
