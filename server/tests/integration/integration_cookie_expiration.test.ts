@@ -1,8 +1,11 @@
-import { deleteSession, deleteUser, shortenExpiration } from "../helpers/dbHelpers.js";
 import request from "supertest";
 import { afterAll, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
-
+import {
+	deleteSession,
+	deleteUser,
+	shortenExpiration,
+} from "../helpers/dbHelpers.js";
 
 // check cookie expiration upon creation & over time
 describe("test cookie expiration", () => {
