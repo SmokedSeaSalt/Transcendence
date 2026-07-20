@@ -49,23 +49,6 @@ describe("PUT /api/me to update name", () => {
 		expect(res.status).toBe(400);
 	});
 
-	/// todo: these 401 cases should be deleted and it should be tested in auth middleware tests
-	it("returns 401 unauthorized without API key", async () => {
-		const res = await request(app).put(mePath).send(body);
-
-		expect(res.status).toBe(401);
-		expect(res.text).toContain("No API key provided");
-	});
-
-	it("returns 401 unauthorized with invalid API key", async () => {
-		const res = await request(app)
-			.put(mePath)
-			.send(body)
-			.set("Authorization", `${unhashedApiKey}123abc`);
-		expect(res.status).toBe(401);
-		expect(res.text).toContain("Invalid API key");
-	});
-
 	afterAll(async () => {
 		await deleteUser(email);
 	});
