@@ -1,24 +1,21 @@
 import { createHash } from "node:crypto";
 import request from "supertest";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "../../../src/app.js";
 import {
+	createApiKey,
+	createUser,
 	createUserWithRoleAndApiKey,
 	deleteUser,
-	getUserByEmail,
-	userExists,
 } from "../../helpers/dbHelpers.js";
 
-describe("PUT /api/me to update name", () => {
+describe("authenticate middleware", () => {
 	const mePath = "/api/me";
 
 	const email = "example@gmail.com";
 	const name = "bob";
 	const unhashedPassword = "Password1!";
 	const unhashedApiKey = "key";
-
-	const newName = "tom";
-	const body = { name: newName };
 
 	beforeAll(async () => {
 		await createUserWithRoleAndApiKey(
@@ -30,23 +27,28 @@ describe("PUT /api/me to update name", () => {
 		);
 	});
 
-	it("returns 204 with valid api key", async () => {
-		const res = await request(app)
-			.put(mePath)
-			.send(body)
-			.set("Authorization", unhashedApiKey);
+	it("rejects requests without an API key", async () => {
+		const res = await request(app).get(mePath);
 
-		expect(res.status).toBe(204);
-		const user = await getUserByEmail(email);
-		expect(user?.name === newName);
+		expect(res.status).toBe(401);
+		expect(res.text).toContain("No API key provided");
 	});
 
-	it("returns 400 with valid api key with invalid body", async () => {
+	it("rejects invalid API keys", async () => {
 		const res = await request(app)
-			.put(mePath)
-			.send({ age: "42" })
+			.get(mePath)
+			.set("Authorization", `${unhashedApiKey}abc123`);
+
+		expect(res.status).toBe(401);
+		expect(res.text).toContain("Invalid API key");
+	});
+
+	it("allows valid API keys", async () => {
+		const res = await request(app)
+			.get(mePath)
 			.set("Authorization", unhashedApiKey);
-		expect(res.status).toBe(400);
+
+		expect(res.status).toBe(200);
 	});
 
 	afterAll(async () => {

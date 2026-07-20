@@ -12,6 +12,7 @@
 		"format": "biome check --write .",
 		"//": "test requires npm dev to be run",
 		"test": "docker exec server npm run test && docker exec client npm run test",
+		"test:coverage": "docker exec server npm run test:coverage && docker exec client npm run test",
 		"test:local:server": "docker exec -it server npm run test",
 		"test:local:client": "docker exec -it client npm run test",
 		"test:watch": "docker exec -it server npm run test:watch",

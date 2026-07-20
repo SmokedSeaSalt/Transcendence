@@ -1,8 +1,9 @@
+import { useAuthContext } from "../../components/AuthContext";
 import ApiKeyButton from "./APIKeyButton";
 import LogoutButton from "./LogoutButton";
 
 export default function NameBar() {
-	const currentUser = "testuser"; //todo change to currentusercontext
+	const { currentUser } = useAuthContext();
 
 	return (
 		<section style={{ display: "flex", alignItems: "center" }}>
@@ -10,7 +11,7 @@ export default function NameBar() {
 				<ApiKeyButton />
 			</div>
 			<h1 style={{ padding: "1em" }} id="profile-title">
-				{currentUser}
+				{currentUser === null ? "Your" : currentUser.name}'s Profile
 			</h1>
 			<div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
 				<LogoutButton />
