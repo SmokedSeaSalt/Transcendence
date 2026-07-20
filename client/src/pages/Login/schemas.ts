@@ -21,5 +21,8 @@ export const loginSchema = z.object({
 });
 
 export const setDisplayNameSchema = z.object({
-	displayName: z.string().min(1).max(100),
+	displayName: z.string()
+	.min(1, "Use at least one character")
+	.max(100, "Name can't be more than 100 characters")
+	.regex(/^[a-zA-Z0-9_-]*$/, "Name can only contain letters, numbers, underscores and dashes"),
 });

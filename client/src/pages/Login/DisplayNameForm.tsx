@@ -8,6 +8,7 @@ export default function DisplayNameForm() {
 	const [displayName, setDisplayName] = useState("");
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const { storeDisplayName, loading, error } = useSetDisplayName();
+	const [fieldUpdated, setFieldUpdated] = useState("");
 
 	const submit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
 		console.log("Submitted something to display name!");
@@ -20,8 +21,13 @@ export default function DisplayNameForm() {
 				errors[field] = err.message;
 			});
 			setFieldErrors(errors);
+			setFieldUpdated("");
 			return;
 		}
+		if (!fieldUpdated)
+			setFieldUpdated("Name set successfully!");
+		else
+			setFieldUpdated("Name updated successfully!");
 		setFieldErrors({});
 		await storeDisplayName(displayName);
 	};
@@ -48,6 +54,11 @@ export default function DisplayNameForm() {
 				{error ? (
 					<div role="alert" style={{ color: "red" }}>
 						{error}
+					</div>
+				) : null}
+				{fieldUpdated ? (
+					<div role="alert" style={{ color: "green" }}>
+						{fieldUpdated}
 					</div>
 				) : null}
 				<SetNameButton loading={loading}>Set display name</SetNameButton>
