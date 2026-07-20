@@ -75,7 +75,7 @@ export const deleteUser = async (
 		const count = await userServices.deleteUserById(id);
 
 		if (count == 0) {
-			res.status(404).send();
+			return next(new NotFoundError("User not found"));
 		}
 
 		return res.status(204).send();
