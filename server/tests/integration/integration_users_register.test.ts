@@ -6,6 +6,7 @@ import {
 	createUser,
 	createUserWithRoleAndApiKey,
 	deleteUser,
+	userExists,
 } from "../helpers/dbHelpers.js";
 
 const registerPaths = ["/api/users/register", "/web/users/register"] as const;
@@ -51,11 +52,6 @@ const deleteValidCaseUser = async () => {
 	for (const { email } of validCases) {
 		await deleteUser(email);
 	}
-};
-
-const userExists = async (email: string) => {
-	const user = await prisma.user.findUnique({ where: { email } });
-	return !!user;
 };
 
 const postRegister = (path: string, body: object, unhashedApiKey: string) => {

@@ -72,3 +72,12 @@ export const shortenExpiration = async (token: string) => {
 		},
 	});
 };
+
+export const userExists = async (email: string) => {
+	return !!getUserByEmail(email);
+};
+
+export const getUserByEmail = async (email: string) => {
+	const user = await prisma.user.findUnique({ where: { email } });
+	return user;
+};
