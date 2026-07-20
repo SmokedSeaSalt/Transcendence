@@ -24,10 +24,8 @@ export default function DisplayNameForm() {
 			setFieldUpdated("");
 			return;
 		}
-		if (!fieldUpdated)
-			setFieldUpdated("Name set successfully!");
-		else
-			setFieldUpdated("Name updated successfully!");
+		setFieldUpdated("Name set successfully!");
+		setTimeout(() => setFieldUpdated(""), 2000);
 		setFieldErrors({});
 		await storeDisplayName(displayName);
 	};
