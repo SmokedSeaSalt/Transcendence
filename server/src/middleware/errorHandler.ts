@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
 	ForbiddenError,
+	NotFoundError,
 	HashError,
 	LoginInvalidCredentialsError,
 	PasswordValidationError,
@@ -30,6 +31,10 @@ export const errorHandler = (
 
 	if (error instanceof ForbiddenError) {
 		return res.status(403).json({ error: error.message });
+	}
+
+	if (error instanceof NotFoundError) {
+		return res.status(404).json({ error: error.message});
 	}
 
 	if (error instanceof HashError) {
