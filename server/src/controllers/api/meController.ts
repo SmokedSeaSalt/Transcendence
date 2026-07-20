@@ -61,3 +61,29 @@ export const putName = async (
 		}
 	}
 };
+
+export const deleteUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Invalid token"));
+		}
+		const { id } = req.user;
+		const count = await userServices.deleteUserById(id);
+
+		if (count == 0) {
+			res.status(404).send();
+		}
+
+		return res.status(204).send();
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next (new Error(String(error)));
+		}
+	}
+};
