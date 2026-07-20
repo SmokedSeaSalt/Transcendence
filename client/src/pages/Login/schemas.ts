@@ -19,3 +19,7 @@ export const loginSchema = z.object({
 	email: z.email("Invalid email address"),
 	password: z.string().min(1, "Password cannot be empty"),
 });
+
+export const setDisplayNameSchema = z.object({
+	displayName: z.string().min(1).max(100),
+});
