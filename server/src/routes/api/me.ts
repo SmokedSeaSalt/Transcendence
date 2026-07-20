@@ -82,6 +82,21 @@ apiRegistry.registerPath({
 });
 router.put("/", putNameValidation(), meController.putName);
 
+apiRegistry.registerPath({
+	method: "delete",
+	path: "/api/me",
+	tags: ["Api"],
+
+	request: {},
+
+	responses: {
+		204: { description: "User deleted" },
+
+		404: { description: "User not found" },
+	},
+});
+router.delete("/", meController.deleteUser);
+
 // router.put("/", meController.updateMyProfile);
 
 // router.get("/games", meController.getMyGameHistory);
