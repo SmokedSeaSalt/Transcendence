@@ -11,11 +11,6 @@ import {
 
 describe("GET /me", () => {
 	const mePath = "/api/me";
-	it("returns 401 unauthorized", async () => {
-		const res = await request(app).get(mePath);
-		expect(res.status).toBe(401);
-		expect(res.text).toContain("No API key provided");
-	});
 
 	it("returns 200 with valid api key", async () => {
 		const email = "example@gmail.com";

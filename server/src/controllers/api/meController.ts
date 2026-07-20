@@ -26,7 +26,33 @@ export const getMyProfile = async (
 			createdAt: user.createdAt.toISOString(),
 		});
 
-		res.status(200).json(response);
+		return res.status(200).json(response);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
+
+export const putName = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Invalid token"));
+		}
+		const { id } = req.user;
+		const user = await userServices.setUserNameById(id, req.body.name);
+
+		if (!user) {
+			return next(new NotFoundError("User not found"));
+		}
+
+		return res.status(204).send();
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
