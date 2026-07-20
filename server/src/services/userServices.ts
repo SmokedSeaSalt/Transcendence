@@ -131,9 +131,7 @@ export const setUserNameById = async (
 	return updatedUser;
 };
 
-export const deleteUserById = async (
-	id: number,
-): Promise<number> => {
+export const deleteUserById = async (id: number): Promise<number> => {
 	const deletedUser = await prisma.user.deleteMany({
 		where: {
 			id: id,
@@ -141,4 +139,4 @@ export const deleteUserById = async (
 	});
 
 	return deletedUser.count;
-}
+};

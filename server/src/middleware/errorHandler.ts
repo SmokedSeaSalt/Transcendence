@@ -3,9 +3,9 @@ import type { NextFunction, Request, Response } from "express";
 import {
 	EmailAlreadyExistsError,
 	ForbiddenError,
-	NotFoundError,
 	HashError,
 	LoginInvalidCredentialsError,
+	NotFoundError,
 	PasswordValidationError,
 	UnauthorizedError,
 } from "../errors/errorTypes.js";
@@ -34,7 +34,7 @@ export const errorHandler = (
 	}
 
 	if (error instanceof NotFoundError) {
-		return res.status(404).json({ error: error.message});
+		return res.status(404).json({ error: error.message });
 	}
 
 	if (error instanceof HashError) {

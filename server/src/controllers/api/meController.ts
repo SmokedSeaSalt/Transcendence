@@ -74,7 +74,7 @@ export const deleteUser = async (
 		const { id } = req.user;
 		const count = await userServices.deleteUserById(id);
 
-		if (count == 0) {
+		if (count === 0) {
 			return next(new NotFoundError("User not found"));
 		}
 
@@ -83,7 +83,7 @@ export const deleteUser = async (
 		if (error instanceof Error) {
 			next(error);
 		} else {
-			next (new Error(String(error)));
+			next(new Error(String(error)));
 		}
 	}
 };
