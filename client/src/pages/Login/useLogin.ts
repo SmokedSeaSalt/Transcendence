@@ -1,12 +1,13 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCurrentUserContext, userContextType } from "../../App";
-import { userAuth } from "../../hooks/userAuth";
+import { useAuthContext } from "../../components/AuthContext";
 
 export const useLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const nav = useNavigate();
+	const { updateLoggedinUser } = useAuthContext();
+
 	const login = async (payload: { email: string; password: string }) => {
 		setLoading(true);
 		setError(null);
@@ -18,7 +19,7 @@ export const useLogin = () => {
 			});
 			if (!res.ok)
 				throw new Error((await res.json()).message || "Registration failed");
-			// this would be where we check userAuth and set context
+			await updateLoggedinUser();
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
