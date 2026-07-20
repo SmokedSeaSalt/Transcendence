@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { io } from "socket.io-client";
 
-export default function LoginPage() {
+export default function GamePage() {
 	const [message, setMessage] = useState("");
+	useEffect(() => {
+		const socket = io({
+			withCredentials: true,
+			path: "/web/socket.io"
+		});
+		
+		socket.on("connect", () => {
+		console.log(socket.id);
+		setMessage(socket.id!);
+		});
+
+	return () => {
+		socket.disconnect();
+	};
+
+	}, []);
 
 	const handleClick = async () => {
 		const response = await fetch("/health");
