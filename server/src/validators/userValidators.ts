@@ -70,7 +70,7 @@ export const singleErrorSchema = z
 		error: z.string(),
 	})
 	.strict()
-	.openapi("SigleErrorSchemaError");
+	.openapi("SingleErrorSchemaError");
 
 //////////////
 // User login/
