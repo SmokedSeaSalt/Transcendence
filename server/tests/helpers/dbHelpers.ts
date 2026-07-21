@@ -73,8 +73,8 @@ export const shortenExpiration = async (token: string) => {
 	});
 };
 
-export const userExists = async (email: string) => {
-	return !!getUserByEmail(email);
+export const userExists = async (email: string): Promise<boolean> => {
+	return !!(await getUserByEmail(email));
 };
 
 export const getUserByEmail = async (email: string) => {
