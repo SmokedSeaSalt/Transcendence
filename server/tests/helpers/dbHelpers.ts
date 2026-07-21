@@ -58,7 +58,7 @@ export const createUserWithRoleAndApiKey = async (
 	return user;
 };
 
-export const userExists = async (email: string) : Promise<boolean> => {
+export const userExists = async (email: string): Promise<boolean> => {
 	return !!(await getUserByEmail(email));
 };
 

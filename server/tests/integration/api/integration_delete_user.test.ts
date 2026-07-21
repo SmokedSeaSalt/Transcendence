@@ -27,12 +27,13 @@ describe("DELETE /api/me to delete user", () => {
 		);
 	});
 
-	it("returns 204", async () => {
+	it("returns 204 and user is deleted", async () => {
 		const res = await request(app)
 			.delete(mePath)
 			.set("Authorization", unhashedApiKey);
 
 		expect(res.status).toBe(204);
+		expect(await userExists(email)).toBe(false);
 	});
 
 	afterAll(async () => {

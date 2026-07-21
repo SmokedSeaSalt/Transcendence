@@ -92,7 +92,14 @@ apiRegistry.registerPath({
 	responses: {
 		204: { description: "User deleted" },
 
-		404: { description: "User not found" },
+		404: {
+			description: "User not found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 	},
 });
 router.delete("/", meController.deleteUser);
