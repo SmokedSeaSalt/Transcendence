@@ -35,7 +35,7 @@ export const authenticate = async (
 			return next(new UnauthorizedError("Invalid API key"));
 		}
 
-		if (apiKey.expiresAt < Date.now()) {
+		if (apiKey.expiresAt.getTime() < Date.now()) {
 			return next(new UnauthorizedError("API key expired"));
 		}
 
