@@ -103,7 +103,6 @@ export const buildUserResponseFromSession = async (
 		return res.status(401).json({ error: "No session token found" });
 	}
 	try {
-		console.log(sessionToken);
 		const user = await userServices.getUserFromSession(sessionToken);
 
 		if (!user) {
