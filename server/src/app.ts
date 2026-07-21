@@ -15,14 +15,24 @@ import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 
 import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
-import { createServer } from "http";
+import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "./config/socket.js";
+import type {
+	ClientToServerEvents,
+	InterServerEvents,
+	ServerToClientEvents,
+	SocketData,
+} from "./config/socket.js";
 import { registerSocketHandlers } from "./socket/index.js";
 
 export const app = express();
 export const httpServer = createServer(app);
-export const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(httpServer, {path: "/web/socket.io"});
+export const io = new Server<
+	ClientToServerEvents,
+	ServerToClientEvents,
+	InterServerEvents,
+	SocketData
+>(httpServer, { path: "/web/socket.io" });
 
 registerSocketHandlers(io);
 
