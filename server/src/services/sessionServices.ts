@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import { prisma } from "../db.js";
+import { UnauthorizedError } from "../errors/errorTypes.js";
 
 export const updateSession = async (user: User): Promise<string> => {
 	const token = randomBytes(32).toString("hex");
@@ -50,10 +51,10 @@ export const getSessionExpirationDate = async (
 			return null;
 		}
 		return sessionWithToken.expiresAt;
-	} catch {
+	} catch (err) {
 		console.log(
 			"getSessionExpirationDate: threw error searching prisma sessions",
 		);
-		return null;
+		throw new Error("Error while getting session token from prisma search");
 	}
 };

@@ -32,9 +32,12 @@ export const checkCookieStatus = async (
 			});
 			return next(new UnauthorizedError("Expired session token."));
 		}
-	} catch (err) {
-		console.log("error checkCookieStatus: ", err);
-		return next(new UnauthorizedError("Invalid session token."));
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
 	}
 	return next();
 };
