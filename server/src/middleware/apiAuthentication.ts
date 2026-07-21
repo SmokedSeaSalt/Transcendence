@@ -27,6 +27,7 @@ export const authenticate = async (
 						role: true,
 					},
 				},
+				expiresAt: true,
 			},
 		});
 
