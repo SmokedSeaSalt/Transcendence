@@ -1,13 +1,14 @@
 import { createHash } from "node:crypto";
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { app } from "../../../src/app.js";
+import { app } from "../../../../src/app.js";
 import {
 	createApiKey,
 	createUser,
 	createUserWithRoleAndApiKey,
 	deleteUser,
-} from "../../helpers/dbHelpers.js";
+	shortenAPIKeyExpiration,
+} from "../../../helpers/dbHelpers.js";
 
 describe("authenticate middleware", () => {
 	const mePath = "/api/me";
@@ -49,6 +50,15 @@ describe("authenticate middleware", () => {
 			.set("Authorization", unhashedApiKey);
 
 		expect(res.status).toBe(200);
+	});
+
+	it("rejects expired API keys", async () => {
+		await shortenAPIKeyExpiration(unhashedApiKey);
+		const res = await request(app)
+			.get(mePath)
+			.set("Authorization", unhashedApiKey);
+
+		expect(res.status).toBe(401);
 	});
 
 	afterAll(async () => {

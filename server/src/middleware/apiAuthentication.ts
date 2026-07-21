@@ -31,11 +31,16 @@ export const authenticate = async (
 						role: true,
 					},
 				},
+				expiresAt: true,
 			},
 		});
 
 		if (!apiKey) {
 			return next(new UnauthorizedError("Invalid API key"));
+		}
+
+		if (apiKey.expiresAt.getTime() < Date.now()) {
+			return next(new UnauthorizedError("API key expired"));
 		}
 
 		// Attach decoded user info to request for later middleware
