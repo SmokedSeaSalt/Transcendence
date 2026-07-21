@@ -34,6 +34,10 @@ export const authenticate = async (
 			return next(new UnauthorizedError("Invalid API key"));
 		}
 
+		if (apiKey.expiresAt < Date.now()) {
+			return next(new UnauthorizedError("API key expired"));
+		}
+
 		// Attach decoded user info to request for later middleware
 		req.user = {
 			id: apiKey.user.id,
