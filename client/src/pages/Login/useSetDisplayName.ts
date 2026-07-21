@@ -9,7 +9,6 @@ export const useSetDisplayName = () => {
 		setError(null);
 		try {
 			localStorage.setItem("display_name", name);
-			console.log("Set name to: ", name);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
 			throw err;
