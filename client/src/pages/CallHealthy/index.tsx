@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import ProgressBar from "../Game/ProgressBar";
 
 export default function LoginPage() {
 	const [message, setMessage] = useState("");
@@ -17,6 +18,7 @@ export default function LoginPage() {
 				Call /health
 			</button>
 			{message ? <p>{message}</p> : null}
+			<div className="w-200"> <ProgressBar /> </div>
 		</main>
 	);
 }
