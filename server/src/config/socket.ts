@@ -33,7 +33,8 @@ export interface ClientToServerEvents {
 	leaveRoom: () => void;
 }
 
-export type InterServerEvents = undefined;
+//create a empty map to make typescript happy
+export type InterServerEvents = Record<string, never>;
 
 export interface SocketData {
 	userId: number | null;
