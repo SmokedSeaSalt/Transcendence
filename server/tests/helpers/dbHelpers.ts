@@ -68,7 +68,7 @@ export const shortenExpiration = async (token: string) => {
 	await prisma.session.update({
 		where: { hashedToken: hashedToken },
 		data: {
-			expiresAt: new Date(Date.now()),
+			expiresAt: new Date(Date.now() - 1),
 		},
 	});
 };
@@ -80,4 +80,14 @@ export const userExists = async (email: string): Promise<boolean> => {
 export const getUserByEmail = async (email: string) => {
 	const user = await prisma.user.findUnique({ where: { email } });
 	return user;
+};
+
+export const shortenAPIKeyExpiration = async (unhashedAPIKey: string) => {
+	const hashedKey = createHash("sha256").update(unhashedAPIKey).digest("hex");
+	await prisma.aPIKey.update({
+		where: { hashedKey: hashedKey },
+		data: {
+			expiresAt: new Date(Date.now() - 1),
+		},
+	});
 };
