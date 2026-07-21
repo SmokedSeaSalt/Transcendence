@@ -114,3 +114,31 @@ export const getUserFromSession = async (
 		return null;
 	}
 };
+
+export const setUserNameById = async (
+	id: number,
+	newName: string,
+): Promise<User | null> => {
+	const updatedUser = await prisma.user.update({
+		where: {
+			id: id,
+		},
+		data: {
+			name: newName,
+		},
+	});
+
+	return updatedUser;
+};
+
+/// If no user has been deleted, 0 will be returned.
+/// Otherwise returns 1 on success.
+export const deleteUserById = async (id: number): Promise<number> => {
+	const deletedUser = await prisma.user.deleteMany({
+		where: {
+			id: id,
+		},
+	});
+
+	return deletedUser.count;
+};

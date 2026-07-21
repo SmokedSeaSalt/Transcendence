@@ -8,7 +8,7 @@ describe("GET /web/users/me when guest", () => {
 	it("returns correct lack of user info", async () => {
 		const res = await request(app).get("/web/users/me");
 		expect(res.status).toBe(401);
-		expect(res.text).toContain('"error":"No session token found"');
+		expect(res.text).toContain('"error":"No session token found."');
 	});
 });
 
@@ -46,6 +46,6 @@ describe("register, then find /me", () => {
 			.get("/web/users/me")
 			.set("Cookie", "fake cookie")
 			.expect(401);
-		expect(res.text).toContain('"error":"No session token found"');
+		expect(res.text).toContain('"error":"No session token found."');
 	});
 });
