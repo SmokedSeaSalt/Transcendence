@@ -19,3 +19,14 @@ export const loginSchema = z.object({
 	email: z.email("Invalid email address"),
 	password: z.string().min(1, "Password cannot be empty"),
 });
+
+export const setDisplayNameSchema = z.object({
+	displayName: z
+		.string()
+		.min(1, "Use at least one character")
+		.max(100, "Name can't be more than 100 characters")
+		.regex(
+			/^[a-zA-Z0-9_-]*$/,
+			"Name can only contain letters, numbers, underscores and dashes",
+		),
+});

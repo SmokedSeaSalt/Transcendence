@@ -121,7 +121,7 @@ export const setUserNameById = async (
 ): Promise<User | null> => {
 	const updatedUser = await prisma.user.update({
 		where: {
-			id: id, // Replace with the specific user's ID or unique identifier
+			id: id,
 		},
 		data: {
 			name: newName,
@@ -129,4 +129,16 @@ export const setUserNameById = async (
 	});
 
 	return updatedUser;
+};
+
+/// If no user has been deleted, 0 will be returned.
+/// Otherwise returns 1 on success.
+export const deleteUserById = async (id: number): Promise<number> => {
+	const deletedUser = await prisma.user.deleteMany({
+		where: {
+			id: id,
+		},
+	});
+
+	return deletedUser.count;
 };

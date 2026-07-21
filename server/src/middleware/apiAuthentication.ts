@@ -49,8 +49,11 @@ export const authenticate = async (
 
 		return next();
 	} catch (error: unknown) {
-		console.log(error);
-		return next(new UnauthorizedError("Invalid API key"));
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
 	}
 };
 

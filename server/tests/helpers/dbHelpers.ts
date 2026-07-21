@@ -8,6 +8,11 @@ export const deleteUser = async (email: string) => {
 	await prisma.user.deleteMany({ where: { email } });
 };
 
+export const deleteSession = async (token: string) => {
+	const hashedToken = createHash("sha256").update(token).digest("hex");
+	await prisma.session.deleteMany({ where: { hashedToken } });
+};
+
 export const createUser = async (
 	email: string,
 	name: string,
@@ -58,8 +63,18 @@ export const createUserWithRoleAndApiKey = async (
 	return user;
 };
 
-export const userExists = async (email: string) => {
-	return !!getUserByEmail(email);
+export const shortenExpiration = async (token: string) => {
+	const hashedToken = createHash("sha256").update(token).digest("hex");
+	await prisma.session.update({
+		where: { hashedToken: hashedToken },
+		data: {
+			expiresAt: new Date(Date.now()),
+		},
+	});
+};
+
+export const userExists = async (email: string): Promise<boolean> => {
+	return !!(await getUserByEmail(email));
 };
 
 export const getUserByEmail = async (email: string) => {
