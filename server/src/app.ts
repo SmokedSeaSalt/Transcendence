@@ -16,7 +16,6 @@ import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
 import { createServer } from "node:http";
-import { instrument } from "@socket.io/admin-ui";
 import { Server } from "socket.io";
 import type {
 	ClientToServerEvents,
@@ -51,6 +50,8 @@ app.use(
 );
 
 if (isDev) {
+	//runtime import so this can be a dev dependency
+	const { instrument } = await import("@socket.io/admin-ui");
 	instrument(io, {
 		auth: false,
 		mode: "development",
