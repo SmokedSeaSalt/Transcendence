@@ -16,6 +16,7 @@ import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
 
 import { createServer } from "node:http";
+import { instrument } from "@socket.io/admin-ui";
 import { Server } from "socket.io";
 import type {
 	ClientToServerEvents,
@@ -24,7 +25,6 @@ import type {
 	SocketData,
 } from "./config/socket.js";
 import { registerSocketHandlers } from "./socket/index.js";
-import { instrument } from "@socket.io/admin-ui"
 
 export const app = express();
 export const httpServer = createServer(app);
@@ -35,10 +35,10 @@ export const io = new Server<
 	SocketData
 >(httpServer, {
 	path: "/web/socket.io",
-  cors: {
-    origin: ["http://localhost:5173", "https://admin.socket.io"],
-    credentials: true,
-  },
+	cors: {
+		origin: ["http://localhost:5173", "https://admin.socket.io"],
+		credentials: true,
+	},
 });
 registerSocketHandlers(io);
 
@@ -50,7 +50,7 @@ app.use(
 	swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()),
 );
 
-if (isDev){
+if (isDev) {
 	instrument(io, {
 		auth: false,
 		mode: "development",
@@ -60,7 +60,6 @@ if (isDev){
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
-
 
 app.use("/api", apiRoutes);
 app.use("/web", webRoutes);

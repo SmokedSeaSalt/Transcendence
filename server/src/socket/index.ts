@@ -1,7 +1,7 @@
 import type { Server } from "socket.io";
+import { roomStore } from "../services/roomStore.js";
 import { registerGameHandlers } from "./gameHandling.js";
 import { registerRoomHandlers } from "./roomHandling.js";
-import { roomStore } from "../services/roomStore.js";
 
 export function registerSocketHandlers(io: Server) {
 	io.on("connection", (socket) => {
@@ -20,7 +20,6 @@ export function registerSocketHandlers(io: Server) {
 		socket.on("disconnect", () => {
 			console.log(`Disconnected: ${socket.id}`);
 			//todo loop throuhg all users rooms. do a roomStore get, if defined delete user
-
 		});
 	});
 }

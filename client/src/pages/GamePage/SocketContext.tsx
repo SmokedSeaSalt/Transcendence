@@ -15,7 +15,10 @@ export interface SocketContextType {
 const SocketContext = createContext<SocketContextType | null>(null);
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-	const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
+	const [socket, setSocket] = useState<Socket<
+		ServerToClientEvents,
+		ClientToServerEvents
+	> | null>(null);
 	const [roomState, setRoomstate] = useState<RoomStatePayload | null>(null);
 
 	const value: SocketContextType = {

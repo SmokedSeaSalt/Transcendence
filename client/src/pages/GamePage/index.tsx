@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useSocket } from "./SocketContext";
-import { RoomStatePayload } from "./SocketTypes";
 import Button from "../../components/Button";
+import { useSocket } from "./SocketContext";
+import type { RoomStatePayload } from "./SocketTypes";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -14,19 +14,17 @@ export default function GamePage() {
 				setMessage("No valid socket.id");
 			} else {
 				setMessage(socket.id);
-			};
+			}
 
-			socket.on("roomState",( payload: RoomStatePayload) => {
+			socket.on("roomState", (payload: RoomStatePayload) => {
 				console.log("roomState received");
 				setRoomState(payload);
 			});
 		});
-	}, [socket]);
+	}, [socket, setRoomState]);
 
 	const handleClick = async () => {
-		socket?.emit("completedWord",
-			"test"
-		);
+		socket?.emit("completedWord", "test");
 	};
 
 	return (
