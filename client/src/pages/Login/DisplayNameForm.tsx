@@ -47,17 +47,12 @@ export default function DisplayNameForm() {
 							{fieldErrors.displayName}
 						</div>
 					)}
+					{fieldUpdated && (
+						<div role="alert" style={{ color: "green" }}>
+							{fieldUpdated}
+						</div>
+					)}
 				</div>
-				{error ? (
-					<div role="alert" style={{ color: "red" }}>
-						{error}
-					</div>
-				) : null}
-				{fieldUpdated ? (
-					<div role="alert" style={{ color: "green" }}>
-						{fieldUpdated}
-					</div>
-				) : null}
 				<SetNameButton loading={loading}>Set display name</SetNameButton>
 			</form>
 		</section>
