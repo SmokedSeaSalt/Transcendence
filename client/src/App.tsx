@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
+import { SocketProvider } from "./pages/GamePage/SocketContext";
 
 export default function App() {
 	return (
@@ -20,7 +21,8 @@ export default function App() {
 							<Route path="/profile" element={<Profile />} />
 							<Route path="/terms-of-service" element={<TermsOfService />} />
 							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-							<Route path="/" element={<GamePage />} />
+							<Route path="/" element={
+								<SocketProvider><GamePage /></SocketProvider>} />
 						</Routes>
 					</main>
 				</AuthProvider>

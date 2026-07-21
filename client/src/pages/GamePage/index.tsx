@@ -1,39 +1,42 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { io } from "socket.io-client";
+import { useSocket } from "./SocketContext";
+import { RoomStatePayload } from "./SocketTypes";
+import Button from "../../components/Button";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
+	const { socket, setRoomState, roomState } = useSocket();
 	useEffect(() => {
-		const socket = io({
-			withCredentials: true,
-			path: "/web/socket.io"
-		});
-		
-		socket.on("connect", () => {
-		console.log(socket.id);
-		setMessage(socket.id!);
-		});
+		socket?.on("connect", () => {
+			console.log(socket.id);
+			if (socket.id === undefined) {
+				setMessage("No valid socket.id");
+			} else {
+				setMessage(socket.id);
+			};
 
-	return () => {
-		socket.disconnect();
-	};
-
-	}, []);
+			socket.on("roomState",( payload: RoomStatePayload) => {
+				console.log("roomState received");
+				setRoomState(payload);
+			});
+		});
+	}, [socket]);
 
 	const handleClick = async () => {
-		const response = await fetch("/health");
-		const text = await response.text();
-		setMessage(text);
+		socket?.emit("completedWord",
+			"test"
+		);
 	};
 
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<h1>React + Express</h1>
-			<button type="button" onClick={handleClick}>
-				Call /health
-			</button>
+			<Button type="button" onClick={handleClick}>
+				send socket event "completedWord" with the word "test"
+			</Button>
 			{message ? <p>{message}</p> : null}
+			{roomState?.wordCount}
 		</main>
 	);
 }
