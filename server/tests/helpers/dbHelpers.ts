@@ -68,7 +68,7 @@ export const shortenExpiration = async (token: string) => {
 	await prisma.session.update({
 		where: { hashedToken: hashedToken },
 		data: {
-			expiresAt: new Date(Date.now()),
+			expiresAt: new Date(Date.now() - 1),
 		},
 	});
 };
