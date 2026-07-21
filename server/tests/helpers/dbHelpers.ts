@@ -67,7 +67,6 @@ export const getUserByEmail = async (email: string) => {
 	return user;
 };
 
-
 export const shortenAPIKeyExpiration = async (unhashedAPIKey: string) => {
 	const hashedKey = createHash("sha256").update(unhashedAPIKey).digest("hex");
 	await prisma.aPIKey.update({
