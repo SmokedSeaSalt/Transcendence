@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
+import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import type { RoomStatePayload } from "./SocketTypes";
-import ProgressField from "./ProgressField";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -36,7 +36,7 @@ export default function GamePage() {
 			</Button>
 			{message ? <p>{message}</p> : null}
 			{roomState?.wordCount}
-			<ProgressField />
+			<ProgressField roomState={roomState} />
 		</main>
 	);
 }

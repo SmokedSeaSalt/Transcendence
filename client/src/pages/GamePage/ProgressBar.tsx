@@ -5,7 +5,7 @@ interface ProgressBarProps {
 	barColour: string;
 	circleColour: string;
 	totalWords: number;
-	currentWords: number;
+	currentWords: number; // set this to | 0? 
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = (props) => {
@@ -13,10 +13,8 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 	// or add a finish line in the overall progress container and let it run off
 	let progress: number = (props.currentWords / props.totalWords) * 99;
 
-	// for error handling, but something would be very wrong before this happens
+	// for error handling, but something would be very wrong before this happens -> currently keep for testing
 	if (progress > 100) progress = 100;
-
-	console.log("progress:", progress);
 
 	// automatically updates distance from top when markerSize is updated so it's always centered
 	const markerSize = 80;
