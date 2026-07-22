@@ -21,7 +21,7 @@ export interface RoomData {
 const rooms = new Map<string, RoomData>();
 
 export const roomStore = {
-	create: (roomId: string, userId: string): RoomData => {
+	create: (roomId: string): RoomData => {
 		const room: RoomData = {
 			roomId: roomId,
 			roomLeader: "",
@@ -96,7 +96,9 @@ export const roomStore = {
 	setState: (roomId: string, state: RoomState): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
+		if (room.state == state) return;
 		room.state = state;
+
 		if (state === RoomState.IN_PROGRESS) room.startedAt = new Date();
 		if (state === RoomState.FINISHED) room.finishedAt = new Date();
 	},

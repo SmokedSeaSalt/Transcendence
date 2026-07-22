@@ -9,10 +9,14 @@ import {
 
 import { roomStore, RoomData } from "../../src/services/roomStore.js";
 import { RoomState } from "../../src/config/socket.js";
+import { DatabaseSync } from "node:sqlite";
 
 // check cookie expiration upon creation & over time
 describe("Room create(), get(), delete", () => {
 	const userId = "user1";
+	const displayName = "bob";
+	const databaseUserId = 123;
+
 	const roomId = "room1";
 
 	afterAll(async () => {
@@ -24,10 +28,17 @@ describe("Room create(), get(), delete", () => {
 	});
 
 	it("create room, get and delete", async () => {
-		const roomDataFromCreate: RoomData = roomStore.create(roomId, userId);
+		const roomDataFromCreate: RoomData = roomStore.create(roomId);
+		roomStore.addUser(roomId, userId, displayName, databaseUserId);
 		expect(roomDataFromCreate.roomId).toBe(roomId);
 		expect(roomDataFromCreate.roomLeader).toBe(userId);
-		expect(roomDataFromCreate.users).toEqual({});
+		expect(roomDataFromCreate.users).toEqual({
+			[userId]: {
+				databaseUserId,
+				progress: 0,
+				displayName,
+			},
+		});;
 		expect(roomDataFromCreate.state).toBe(RoomState.LOBBY);
 		expect(roomDataFromCreate.createdAt).toBeInstanceOf(Date);
 
@@ -35,7 +46,13 @@ describe("Room create(), get(), delete", () => {
 		expect(roomDataFromGet).toBeDefined();
 		expect(roomDataFromGet!.roomId).toBe(roomId);
 		expect(roomDataFromGet!.roomLeader).toBe(userId);
-		expect(roomDataFromGet!.users).toEqual({});
+		expect(roomDataFromGet!.users).toEqual({
+			[userId]: {
+				databaseUserId,
+				progress: 0,
+				displayName,
+			},
+		});;
 		expect(roomDataFromGet!.state).toBe(RoomState.LOBBY);
 		expect(roomDataFromGet!.createdAt).toBeInstanceOf(Date);
 
@@ -62,7 +79,8 @@ describe("Room addUser() and deleteUser()", () => {
 	
 
 	beforeEach(async () => {
-		roomStore.create(roomId, userId);
+		roomStore.create(roomId);
+
 	});
 
 	afterEach(async () => {
@@ -101,6 +119,8 @@ describe("Room addUser() and deleteUser()", () => {
 
 
 	it("should change roomLeader if current roomLeader leaves", async () => {
+		roomStore.addUser(roomId, userId, displayName, databaseUserId);
+		
 		const initialRoom = roomStore.get(roomId);
 		expect(initialRoom?.roomLeader).toEqual(userId);
 
@@ -143,7 +163,7 @@ describe("updateProgress", () => {
 	
 
 	beforeEach(async () => {
-		roomStore.create(roomId, userId);
+		roomStore.create(roomId);
 	});
 
 	afterEach(async () => {
@@ -151,6 +171,7 @@ describe("updateProgress", () => {
 	});
 
 	it("Increment user progress", async () => {
+		roomStore.addUser(roomId, userId, displayName, databaseUserId);
 		const room = roomStore.get(roomId);
 		console.log(room);
 		expect(room?.users[userId].progress).toEqual(0);
@@ -170,7 +191,37 @@ describe("updateProgress", () => {
 
 	});
 
+});
 
+describe("updateProgress", () => {
+	const userId = "user1";
+	const displayName = "bob";
+	const databaseUserId = 123;
 
+	const roomId = "room1";
+
+	
+
+	beforeEach(async () => {
+		roomStore.create(roomId);
+	});
+
+	afterEach(async () => {
+		roomStore.delete(roomId);
+	});
+
+	it("Changes states", async () => {
+		const room = roomStore.get(roomId);
+		expect(room?.state).toEqual(RoomState.LOBBY);
+
+		roomStore.setState(roomId, RoomState.COUNTDOWN);
+		expect(room?.state).toEqual(RoomState.COUNTDOWN);
+
+		roomStore.setState(roomId, RoomState.IN_PROGRESS);
+		expect(room?.state).toEqual(RoomState.IN_PROGRESS);
+
+		roomStore.setState(roomId, RoomState.FINISHED);
+		expect(room?.state).toEqual(RoomState.FINISHED);
+	});
 
 });
