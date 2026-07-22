@@ -1,10 +1,12 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import type { NextFunction, Request, Response } from "express";
 import {
+	BadRequestError,
 	EmailAlreadyExistsError,
 	ForbiddenError,
 	HashError,
 	LoginInvalidCredentialsError,
+	NotFoundError,
 	PasswordValidationError,
 	UnauthorizedError,
 } from "../errors/errorTypes.js";
@@ -17,7 +19,10 @@ export const errorHandler = (
 ) => {
 	console.error(`[${req.method}] ${req.originalUrl}`, error);
 
-	if (error instanceof PasswordValidationError) {
+	if (
+		error instanceof PasswordValidationError ||
+		error instanceof BadRequestError
+	) {
 		return res.status(400).json({ error: error.message });
 	}
 
@@ -30,6 +35,10 @@ export const errorHandler = (
 
 	if (error instanceof ForbiddenError) {
 		return res.status(403).json({ error: error.message });
+	}
+
+	if (error instanceof NotFoundError) {
+		return res.status(404).json({ error: error.message });
 	}
 
 	if (error instanceof HashError) {
