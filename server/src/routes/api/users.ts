@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as userController from "../../controllers/api/userControllers.js";
+import { isValidIdFormat } from "../../middleware/apiAuthentication.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserValidation } from "../../validators/userValidators.js";
 import {
@@ -57,5 +58,35 @@ apiRegistry.registerPath({
 	},
 });
 router.post("/register", createUserValidation(), userController.createUser);
+
+apiRegistry.registerPath({
+	method: "delete",
+	path: "/api/users/{id}",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		204: { description: "User deleted" },
+
+		400: {
+			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "User not found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.delete("/:id", isValidIdFormat, userController.deleteUser);
 
 export default router;
