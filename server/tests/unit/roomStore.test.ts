@@ -1,5 +1,13 @@
 import request from "supertest";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+} from "vitest";
 import { app } from "../../src/app.js";
 import {
 	deleteSession,
@@ -7,9 +15,9 @@ import {
 	shortenExpiration,
 } from "../helpers/dbHelpers.js";
 
-import { roomStore, RoomData } from "../../src/services/roomStore.js";
-import { RoomState } from "../../src/config/socket.js";
 import { DatabaseSync } from "node:sqlite";
+import { RoomState } from "../../src/config/socket.js";
+import { type RoomData, roomStore } from "../../src/services/roomStore.js";
 
 // check cookie expiration upon creation & over time
 describe("Room create(), get(), delete", () => {
@@ -19,9 +27,7 @@ describe("Room create(), get(), delete", () => {
 
 	const roomId = "room1";
 
-	afterAll(async () => {
-
-	});
+	afterAll(async () => {});
 
 	it("get invalid room", async () => {
 		expect(roomStore.get(roomId)).toBeUndefined();
@@ -38,23 +44,23 @@ describe("Room create(), get(), delete", () => {
 				progress: 0,
 				displayName,
 			},
-		});;
+		});
 		expect(roomDataFromCreate.state).toBe(RoomState.LOBBY);
 		expect(roomDataFromCreate.createdAt).toBeInstanceOf(Date);
 
 		const roomDataFromGet = roomStore.get(roomId);
 		expect(roomDataFromGet).toBeDefined();
-		expect(roomDataFromGet!.roomId).toBe(roomId);
-		expect(roomDataFromGet!.roomLeader).toBe(userId);
-		expect(roomDataFromGet!.users).toEqual({
+		expect(roomDataFromGet?.roomId).toBe(roomId);
+		expect(roomDataFromGet?.roomLeader).toBe(userId);
+		expect(roomDataFromGet?.users).toEqual({
 			[userId]: {
 				databaseUserId,
 				progress: 0,
 				displayName,
 			},
-		});;
-		expect(roomDataFromGet!.state).toBe(RoomState.LOBBY);
-		expect(roomDataFromGet!.createdAt).toBeInstanceOf(Date);
+		});
+		expect(roomDataFromGet?.state).toBe(RoomState.LOBBY);
+		expect(roomDataFromGet?.createdAt).toBeInstanceOf(Date);
 
 		roomStore.delete(roomId);
 		const roomDataFromGetAfterDelete = roomStore.get(roomId);
@@ -64,9 +70,7 @@ describe("Room create(), get(), delete", () => {
 	it("delete invalid room", async () => {
 		expect(() => roomStore.delete(roomId)).not.toThrow();
 	});
-
 });
-
 
 describe("Room addUser() and deleteUser()", () => {
 	const userId = "user1";
@@ -75,12 +79,10 @@ describe("Room addUser() and deleteUser()", () => {
 
 	const roomId = "room1";
 
-	const invalidRoomId = "invalidRoom"
-	
+	const invalidRoomId = "invalidRoom";
 
 	beforeEach(async () => {
 		roomStore.create(roomId);
-
 	});
 
 	afterEach(async () => {
@@ -88,7 +90,9 @@ describe("Room addUser() and deleteUser()", () => {
 	});
 
 	it("add user to invalid room", async () => {
-		expect(() => roomStore.addUser(invalidRoomId, userId, displayName, databaseUserId)).not.toThrow();
+		expect(() =>
+			roomStore.addUser(invalidRoomId, userId, displayName, databaseUserId),
+		).not.toThrow();
 	});
 
 	it("add user to valid room, then delete, then room should also be deleted", async () => {
@@ -117,10 +121,9 @@ describe("Room addUser() and deleteUser()", () => {
 		expect(roomAfterDelete).toBeUndefined();
 	});
 
-
 	it("should change roomLeader if current roomLeader leaves", async () => {
 		roomStore.addUser(roomId, userId, displayName, databaseUserId);
-		
+
 		const initialRoom = roomStore.get(roomId);
 		expect(initialRoom?.roomLeader).toEqual(userId);
 
@@ -128,13 +131,18 @@ describe("Room addUser() and deleteUser()", () => {
 		const secondUserId = "user999";
 		const secondDisplayName = "hello";
 		const secondDatabaseUserId = 444;
-		roomStore.addUser(roomId, secondUserId, secondDisplayName, secondDatabaseUserId);
+		roomStore.addUser(
+			roomId,
+			secondUserId,
+			secondDisplayName,
+			secondDatabaseUserId,
+		);
 
 		// Delete the leader
 		roomStore.deleteUser(roomId, userId);
 
 		// Expect user to be changed
-		expect(initialRoom?.roomLeader).toEqual(secondUserId)
+		expect(initialRoom?.roomLeader).toEqual(secondUserId);
 
 		// Check if only userId is present
 		const afterRoom = roomStore.get(roomId);
@@ -148,9 +156,6 @@ describe("Room addUser() and deleteUser()", () => {
 		const roomAfterDelete = roomStore.get(roomId);
 		expect(roomAfterDelete).toBeUndefined();
 	});
-
-
-
 });
 
 describe("updateProgress", () => {
@@ -159,8 +164,6 @@ describe("updateProgress", () => {
 	const databaseUserId = 123;
 
 	const roomId = "room1";
-
-	
 
 	beforeEach(async () => {
 		roomStore.create(roomId);
@@ -179,18 +182,20 @@ describe("updateProgress", () => {
 		const secondUserId = "user999";
 		const secondDisplayName = "hello";
 		const secondDatabaseUserId = 444;
-		roomStore.addUser(roomId, secondUserId, secondDisplayName, secondDatabaseUserId);
+		roomStore.addUser(
+			roomId,
+			secondUserId,
+			secondDisplayName,
+			secondDatabaseUserId,
+		);
 		expect(room?.users[secondUserId].progress).toEqual(0);
 
-		for (var i = 0; i < 10; i++) {
+		for (let i = 0; i < 10; i++) {
 			roomStore.updateProgress(roomId, userId);
 			expect(room?.users[userId].progress).toEqual(i + 1);
 			expect(room?.users[secondUserId].progress).toEqual(0);
 		}
-
-
 	});
-
 });
 
 describe("updateProgress", () => {
@@ -199,8 +204,6 @@ describe("updateProgress", () => {
 	const databaseUserId = 123;
 
 	const roomId = "room1";
-
-	
 
 	beforeEach(async () => {
 		roomStore.create(roomId);
@@ -223,5 +226,4 @@ describe("updateProgress", () => {
 		roomStore.setState(roomId, RoomState.FINISHED);
 		expect(room?.state).toEqual(RoomState.FINISHED);
 	});
-
 });

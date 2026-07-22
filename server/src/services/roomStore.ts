@@ -37,7 +37,6 @@ export const roomStore = {
 		return rooms.get(roomId);
 	},
 
-
 	addUser: (
 		roomId: string,
 		userId: string,
@@ -48,7 +47,7 @@ export const roomStore = {
 		if (!room) return;
 		if (Object.keys(room.users).length === 0) {
 			room.roomLeader = userId;
-			console.log(`ROOM LEADER :${room.roomLeader}`)
+			console.log(`ROOM LEADER :${room.roomLeader}`);
 		}
 		// add user to room
 		room.users[userId] = {
@@ -64,12 +63,14 @@ export const roomStore = {
 		//delete user
 		delete room.users[userId];
 
-		if (room.state == RoomState.IN_PROGRESS || room.state == RoomState.COUNTDOWN) {
-			// todo do other things so that user game history is updated 
+		if (
+			room.state === RoomState.IN_PROGRESS ||
+			room.state === RoomState.COUNTDOWN
+		) {
+			// todo do other things so that user game history is updated
 			return;
 		}
-		
-		
+
 		// if room is now empty, delete the room.
 		const roomAfter = rooms.get(roomId);
 		if (!roomAfter) return;
@@ -82,7 +83,6 @@ export const roomStore = {
 		if (roomAfter.roomLeader === userId) {
 			roomAfter.roomLeader = Object.keys(roomAfter.users)[0];
 		}
-
 	},
 
 	updateProgress: (roomId: string, userId: string): void => {
@@ -96,7 +96,7 @@ export const roomStore = {
 	setState: (roomId: string, state: RoomState): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
-		if (room.state == state) return;
+		if (room.state === state) return;
 		room.state = state;
 
 		if (state === RoomState.IN_PROGRESS) room.startedAt = new Date();
@@ -107,7 +107,7 @@ export const roomStore = {
 		rooms.delete(roomId);
 	},
 
-	// this should not be here but a seperate service that gets a room object. 
+	// this should not be here but a seperate service that gets a room object.
 	// we want to keep this inmemory only, this would need to be a async if this calls the database helper functions
 	saveToDatabase: (): void => {
 		// transform data
