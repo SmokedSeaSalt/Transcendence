@@ -1,7 +1,11 @@
 import { createHash } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
 import { prisma } from "../db.js";
-import { ForbiddenError, UnauthorizedError } from "../errors/errorTypes.js";
+import {
+	BadRequestError,
+	ForbiddenError,
+	UnauthorizedError,
+} from "../errors/errorTypes.js";
 
 // Gets the user from the provided api key and sets req.user so that next has access to it. If api key invalid, return error.
 export const authenticate = async (
@@ -64,6 +68,21 @@ export const requireAdmin = (
 ) => {
 	if (req.user?.role !== "admin") {
 		return next(new ForbiddenError("Admin access required"));
+	}
+
+	next();
+};
+
+export const isValidIdFormat = (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const INT32_MAX = 2 ** 31 - 1;
+
+	const number = Number(req.params.id);
+	if (!number || number >= INT32_MAX) {
+		next(new BadRequestError("Bad Request"));
 	}
 
 	next();
