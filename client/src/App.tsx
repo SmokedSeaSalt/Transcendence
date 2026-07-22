@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./components/AuthContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import CallHealth from "./pages/CallHealthy";
+import GamePage from "./pages/GamePage";
+import { SocketProvider } from "./pages/GamePage/SocketContext";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
@@ -20,7 +21,14 @@ export default function App() {
 							<Route path="/profile" element={<Profile />} />
 							<Route path="/terms-of-service" element={<TermsOfService />} />
 							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-							<Route path="/" element={<CallHealth />} />
+							<Route
+								path="/"
+								element={
+									<SocketProvider>
+										<GamePage />
+									</SocketProvider>
+								}
+							/>
 						</Routes>
 					</main>
 				</AuthProvider>
