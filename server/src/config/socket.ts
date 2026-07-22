@@ -6,9 +6,11 @@ export enum RoomState {
 }
 
 export interface RoomUser {
-	displayname: string;
+	displayName: string;
 	progress: number;
 }
+
+//dit is de socket type. dus dit is wat we willen verzenden over de socket bij de roomstate
 
 export interface RoomStatePayload {
 	roomId: string;
