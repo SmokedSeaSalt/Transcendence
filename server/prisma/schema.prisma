@@ -7,13 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum GameStatus {
-  WAITING
-  IN_PROGRESS
-  FINISHED
-  ABANDONED
-}
-
 model Session {
   hashedToken     String      @id
   userId          Int         @unique
@@ -45,14 +38,11 @@ model User {
 
 model GameSession {
   id         Int          @id @default(autoincrement())
-  status     GameStatus   @default(WAITING)
-  roomkey    String       @unique
   charCount  Int
   wordCount  Int
   textPrompt String
-  createdAt  DateTime     @default(now())
-  startedAt  DateTime?
-  finishedAt DateTime?
+  startedAt  DateTime
+  finishedAt DateTime
   results    GameResult[]
   players    User[]
 }

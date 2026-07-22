@@ -30,6 +30,7 @@
 		"zod-to-json-schema": "^3.25.2"
 	},
 	"devDependencies": {
+		"@socket.io/admin-ui": "^0.5.1",
 		"@types/bcrypt": "^6.0.0",
 		"@types/cookie-parser": "^1.4.10",
 		"@types/cors": "^2.8.17",
