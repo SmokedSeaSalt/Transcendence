@@ -9,7 +9,7 @@ export function registerSocketHandlers(io: Server) {
 
 		// temporary example/test code
 		if (roomStore.get("testRoom") === undefined)
-			roomStore.create("testRoom", socket.id);
+			roomStore.create("testRoom");
 		socket.join("testRoom");
 		roomStore.addUser("testRoom", socket.id, socket.id, null);
 		// end temporary example/test code
