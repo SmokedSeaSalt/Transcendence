@@ -3,9 +3,9 @@ import type React from "react";
 import type { RoomUser } from "./SocketTypes";
 
 interface ProgressBarProps {
-	colourPalette: [string, string];
+	colourPalette: [string, string]; // = bar colour (tailwind style), marker colour (hex code)
 	totalWords: number;
-	user: RoomUser | undefined; // = displayName & progress
+	user: RoomUser | undefined; // user = displayName & progress
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = (props) => {
