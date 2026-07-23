@@ -2,11 +2,13 @@ import type * as CSS from "csstype";
 import type React from "react";
 import ProgressBar from "./ProgressBar";
 import type { RoomStatePayload } from "./SocketTypes";
+import type { RoomUser } from "./SocketTypes";
 
 interface ProgressFieldProps {
 	roomState: RoomStatePayload | null;
 }
 
+// [bar colour, marker colour]
 const colourPalettes: [string, string][] = [
 	["bg-blue-400", "#1665ee"],
 	["bg-pink-400", "#bc4b8b"],
@@ -25,17 +27,23 @@ const ProgressField: React.FC<ProgressFieldProps> = (props) => {
 	// add one bar per user
 	const progressBars = [];
 	if (props.roomState?.users) {
-		// todo: maybe catch this outside and only make
+		// todo: might be nice to catch roomstate outside and only open progressfield if not null
 		let i = 0;
 		for (const [key, value] of Object.entries(props.roomState?.users)) {
 			const colourChoice = i % colourPalettes.length;
-			console.log("Making bar for user: ", key);
 			progressBars.push(
-				<ProgressBar
-					colourPalette={colourPalettes[colourChoice]}
-					totalWords={totalWords}
-					user={value}
-				/>,
+				<div className="flex">
+					<div className="w-10/100">
+						<p className="truncate">{value.displayname}</p>
+					</div>
+					<div className="w-100/100 pl-1">
+						<ProgressBar
+							colourPalette={colourPalettes[colourChoice]}
+							totalWords={totalWords}
+							user={value}
+						/>
+					</div>
+				</div>,
 			);
 			i++;
 		}

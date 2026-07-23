@@ -34,8 +34,7 @@ export default function GamePage() {
 			<Button type="button" onClick={handleClick}>
 				send socket event "completedWord" with the word "test"
 			</Button>
-			{message ? <p>{message}</p> : null}
-			{roomState?.wordCount}
+			{message ? <p>Socket id: {message}</p> : null}
 			<ProgressField roomState={roomState} />
 		</main>
 	);
