@@ -1,7 +1,6 @@
 import type * as CSS from "csstype";
 import type React from "react";
-import { RoomUser } from "./SocketTypes";
-
+import type { RoomUser } from "./SocketTypes";
 
 interface ProgressBarProps {
 	colourPalette: [string, string];
@@ -11,8 +10,7 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 	let currentWords = 0;
-	if (props.user)
-		currentWords = props.user.progress;
+	if (props.user) currentWords = props.user.progress;
 	let progress: number = (currentWords / props.totalWords) * 100;
 
 	// for error handling, but something would be very wrong before this happens -> currently keep for testing
