@@ -40,7 +40,7 @@ describe("test cookie expiration", () => {
 
 	it("/me after setting expiration to cookie", async () => {
 		currentCookie = fullCookieString[0].slice(8, 72);
-		shortenExpiration(currentCookie);
+		await shortenExpiration(currentCookie);
 		const res = await request(app)
 			.get("/web/users/me")
 			.set("Cookie", fullCookieString)

@@ -60,6 +60,36 @@ apiRegistry.registerPath({
 router.post("/register", createUserValidation(), userController.createUser);
 
 apiRegistry.registerPath({
+	method: "get",
+	path: "/api/users/{id}",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		200: { description: "User returned" },
+
+		400: {
+			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "User not found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.get("/:id", isValidIdFormat, userController.getUser);
+
+apiRegistry.registerPath({
 	method: "delete",
 	path: "/api/users/{id}",
 	tags: ["Api"],
