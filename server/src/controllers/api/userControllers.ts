@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { NotFoundError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
-import { deleteUserById } from "../../services/userServices.js";
+import { userResponseSchema } from "../../validators/userValidators.js";
 
 export const createUser = async (
 	req: Request,
@@ -12,6 +12,35 @@ export const createUser = async (
 		const { email, name, password } = req.body;
 		const user = await userServices.createUser(email, name, password);
 		res.status(201).json(user);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
+
+export const getUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const user = await userServices.getUserByID(Number(req.params.id));
+
+		if (!user) {
+			return next(new NotFoundError("User Not Found"));
+		}
+
+		const response = userResponseSchema.parse({
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			createdAt: user.createdAt.toISOString(),
+		});
+
+		res.status(200).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
