@@ -80,7 +80,6 @@ describe("GET /api/users/{id} to get user", () => {
 	});
 	it("Returns 200", async () => {
 		const user = await getUserByEmail(user_email);
-		console.log(user?.id);
 
 		const res = await request(app)
 			.get(`${userPath}/${user?.id}`)
