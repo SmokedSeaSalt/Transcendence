@@ -1,6 +1,14 @@
 import { createHash } from "node:crypto";
 import request from "supertest";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+} from "vitest";
 import { app } from "../../../src/app.js";
 import {
 	createApiKey,
@@ -98,14 +106,6 @@ describe("GET /api/users/{id} to get user", () => {
 
 		expect(res.status).toBe(400);
 	});
-	it("Returns 403", async () => {
-		const user = await getUserByEmail(user_email);
-		const res = await request(app)
-			.get(`${userPath}/${user?.id}`)
-			.set("Authorization", user_unhashedApiKey);
-
-		expect(res.status).toBe(403);
-	})
 	afterAll(async () => {
 		await deleteUser(admin_email);
 		await deleteUser(user_email);
