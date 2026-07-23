@@ -7,18 +7,38 @@ interface ProgressFieldProps {
 	roomState: RoomStatePayload | null;
 }
 
+const colourPalettes: [string, string][] = [
+	["bg-blue-400", "#1665ee"],
+	["bg-pink-400", "#bc4b8b"],
+	["bg-green-500", "#399856"],
+	["bg-orange-300", "#f3a90a"]
+];
+
 const ProgressField: React.FC<ProgressFieldProps> = (props) => {
-	// 1) some blanket roomstate != null check? or maybe catch that outside?
-	// 2) user count == amount of progress bars -> figure out a for loop?
-	// could make a progressBars = [], and use progressBars.push({...})
-
-	// 3) give each bar different colours -> from some dict somewhere?
-	// 4) give each bar correct values from context
-
 	// only grab once from room info
 	let totalWords = 1;
 	if (props.roomState?.wordCount !== undefined) {
 		totalWords = props.roomState.wordCount;
+	}
+
+	// add one bar per user
+	const progressBars = [];
+	if (props.roomState?.users) // todo: maybe catch this outside and only make 
+	{		
+		let i = 0;
+		for (const [key, value] of Object.entries(props.roomState?.users))
+		{
+			let colourChoice = i % colourPalettes.length;
+			console.log("Making bar for user: ", key);
+			progressBars.push(
+				<ProgressBar
+					colourPalette={colourPalettes[colourChoice]}
+					totalWords={totalWords}
+					user={value}
+				/>
+			);
+			i++;
+		}
 	}
 
 	return (
@@ -26,27 +46,10 @@ const ProgressField: React.FC<ProgressFieldProps> = (props) => {
 			{props.roomState?.users ? (
 				<p>User count: {Object.keys(props.roomState?.users).length}</p>
 			) : (
-				<p>No users or roomstate.</p>
+				<p>The room is loading.</p>
 			)}
 			<div className="w-100%">
-				<ProgressBar
-					barColour="bg-blue-400"
-					circleColour="#1665ee"
-					currentWords={10} // pass user instead?
-					totalWords={totalWords}
-				/>
-				<ProgressBar
-					barColour="bg-pink-400"
-					circleColour="#bc4b8b"
-					currentWords={29}
-					totalWords={totalWords}
-				/>
-				<ProgressBar
-					barColour="bg-green-500"
-					circleColour="#399856"
-					currentWords={41}
-					totalWords={totalWords}
-				/>
+				{progressBars}
 			</div>
 		</>
 	);

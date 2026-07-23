@@ -1,17 +1,19 @@
 import type * as CSS from "csstype";
 import type React from "react";
+import { RoomUser } from "./SocketTypes";
+
 
 interface ProgressBarProps {
-	barColour: string;
-	circleColour: string;
+	colourPalette: [string, string];
 	totalWords: number;
-	currentWords: number; // set this to | 0? 
+	user: RoomUser | undefined; // = displayName & progress
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = (props) => {
-	// todo: either change the final factor from 100 depending on width of container, width of marker
-	// or add a finish line in the overall progress container and let it run off
-	let progress: number = (props.currentWords / props.totalWords) * 99;
+	let currentWords = 0;
+	if (props.user)
+		currentWords = props.user.progress;
+	let progress: number = (currentWords / props.totalWords) * 100;
 
 	// for error handling, but something would be very wrong before this happens -> currently keep for testing
 	if (progress > 100) progress = 100;
@@ -23,16 +25,14 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 		height: `${markerSize}%`,
 		aspectRatio: 1 / 1,
 		position: "absolute",
-		backgroundColor: `${props.circleColour}`,
+		backgroundColor: `${props.colourPalette[1]}`,
 		left: `${progress}%`,
 		top: `${topDistance}%`,
 		borderRadius: "100%",
 	};
 
 	const containerStyle = "relative bottom-0 left-0 h-6 content-center";
-	// const containerStyle = "relative bg-gray-300 bottom-0 left-0 h-6 content-center";
-	const barStyle = `absolute ${props.barColour} h-2 w-100/100 rounded-sm bottom-2`;
-
+	const barStyle = `absolute ${props.colourPalette[0]} h-2 w-100/100 rounded-sm bottom-2`;
 	return (
 		<div className={containerStyle}>
 			<div className={barStyle} />
