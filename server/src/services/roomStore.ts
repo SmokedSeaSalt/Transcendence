@@ -60,16 +60,18 @@ export const roomStore = {
 	deleteUser: (roomId: string, userId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
-		//delete user
-		delete room.users[userId];
 
+		//don't delete user from roomStore in game was already started
 		if (
 			room.state === RoomState.IN_PROGRESS ||
-			room.state === RoomState.COUNTDOWN
+			room.state === RoomState.COUNTDOWN ||
+			room.state === RoomState.FINISHED
 		) {
-			// todo do other things so that user game history is updated
 			return;
 		}
+
+		//delete user
+		delete room.users[userId];
 
 		// if room is now empty, delete the room.
 		const roomAfter = rooms.get(roomId);
