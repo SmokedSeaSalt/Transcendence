@@ -108,7 +108,7 @@ export default function PrivacyPolicy() {
 
 			<footer style={{ marginTop: 24 }}>
 				<p>
-					Links: <a href="/terms">Terms of Service</a>
+					Links: <a href="/terms-of-service">Terms of Service</a>
 				</p>
 			</footer>
 		</main>
