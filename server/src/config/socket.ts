@@ -6,7 +6,7 @@ export enum RoomState {
 }
 
 export interface RoomUser {
-	displayname: string;
+	displayName: string;
 	progress: number;
 }
 

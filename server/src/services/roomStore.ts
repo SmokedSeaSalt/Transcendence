@@ -3,7 +3,7 @@ import { RoomState } from "../config/socket.js";
 export interface userInfo {
 	databaseUserId: number | null;
 	progress: number;
-	displayname: string;
+	displayName: string;
 }
 
 export interface RoomData {
@@ -21,10 +21,10 @@ export interface RoomData {
 const rooms = new Map<string, RoomData>();
 
 export const roomStore = {
-	create: (roomId: string, userId: string): RoomData => {
+	create: (roomId: string): RoomData => {
 		const room: RoomData = {
 			roomId: roomId,
-			roomLeader: userId,
+			roomLeader: "",
 			users: {},
 			state: RoomState.LOBBY,
 			createdAt: new Date(),
@@ -45,9 +45,13 @@ export const roomStore = {
 	): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
+		if (Object.keys(room.users).length === 0) {
+			room.roomLeader = userId;
+			console.log(`ROOM LEADER :${room.roomLeader}`);
+		}
 		// add user to room
 		room.users[userId] = {
-			displayname: name,
+			displayName: name,
 			progress: 0,
 			databaseUserId: databaseUserId,
 		};
@@ -56,23 +60,47 @@ export const roomStore = {
 	deleteUser: (roomId: string, userId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
+
+		//don't delete user from roomStore in game was already started
+		if (
+			room.state === RoomState.IN_PROGRESS ||
+			room.state === RoomState.COUNTDOWN ||
+			room.state === RoomState.FINISHED
+		) {
+			return;
+		}
+
 		//delete user
 		delete room.users[userId];
-		// TODO: check if user was roomleader, -> select new one -> if last user delete room
+
+		// if room is now empty, delete the room.
+		const roomAfter = rooms.get(roomId);
+		if (!roomAfter) return;
+		if (roomAfter.users && Object.keys(roomAfter.users).length === 0) {
+			roomStore.delete(roomId);
+			return;
+		}
+
+		// if room leader left, assign a new one
+		if (roomAfter.roomLeader === userId) {
+			roomAfter.roomLeader = Object.keys(roomAfter.users)[0];
+		}
 	},
 
 	updateProgress: (roomId: string, userId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
-		// TODO validate incomming word in gameService if word is correct
-		//increment progress
+		// TODO validate incomming word in gameService if word is correct before calling this funtion
+		// to increment progress
 		room.users[userId].progress += 1;
 	},
 
 	setState: (roomId: string, state: RoomState): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
+		if (room.state === state) return;
 		room.state = state;
+
 		if (state === RoomState.IN_PROGRESS) room.startedAt = new Date();
 		if (state === RoomState.FINISHED) room.finishedAt = new Date();
 	},
@@ -81,6 +109,8 @@ export const roomStore = {
 		rooms.delete(roomId);
 	},
 
+	// this should not be here but a seperate service that gets a room object.
+	// we want to keep this inmemory only, this would need to be a async if this calls the database helper functions
 	saveToDatabase: (): void => {
 		// transform data
 		// call functions in gameService to create the gameSession and GameResult database entries
