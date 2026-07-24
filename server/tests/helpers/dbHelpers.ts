@@ -82,6 +82,14 @@ export const getUserByEmail = async (email: string) => {
 	return user;
 };
 
+export const getUserWithApiKey = async (email: string) => {
+	const user = await prisma.user.findUnique({
+		where: { email },
+		include: { apiKey: true },
+	});
+	return user;
+};
+
 export const shortenAPIKeyExpiration = async (unhashedAPIKey: string) => {
 	const hashedKey = createHash("sha256").update(unhashedAPIKey).digest("hex");
 	await prisma.aPIKey.update({

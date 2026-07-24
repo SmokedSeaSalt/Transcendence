@@ -131,8 +131,10 @@ export const setUserNameById = async (
 	return updatedUser;
 };
 
-/// If no user has been deleted, 0 will be returned.
-/// Otherwise returns 1 on success.
+/**
+ * @param id id of the user
+ * @returns 1 on success, 0 if not found.
+ */
 export const deleteUserById = async (id: number): Promise<number> => {
 	const deletedUser = await prisma.user.deleteMany({
 		where: {
@@ -141,4 +143,18 @@ export const deleteUserById = async (id: number): Promise<number> => {
 	});
 
 	return deletedUser.count;
+};
+
+/**
+ * @param id id of the user
+ * @returns 1 on success, 0 if not found.
+ */
+export const deleteUserApiKeyById = async (id: number): Promise<number> => {
+	const deletedApiKey = await prisma.aPIKey.deleteMany({
+		where: {
+			userId: id,
+		},
+	});
+
+	return deletedApiKey.count;
 };

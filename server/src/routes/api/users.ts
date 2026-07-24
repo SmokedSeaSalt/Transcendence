@@ -119,4 +119,34 @@ apiRegistry.registerPath({
 });
 router.delete("/:id", isValidIdFormat, userController.deleteUser);
 
+apiRegistry.registerPath({
+	method: "delete",
+	path: "/api/users/{id}/api-key",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		204: { description: "Api-Key of the user deleted" },
+
+		400: {
+			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "User not found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.delete("/:id/api-key", isValidIdFormat, userController.deleteUserApiKey);
+
 export default router;

@@ -69,3 +69,27 @@ export const deleteUser = async (
 		}
 	}
 };
+
+export const deleteUserApiKey = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const count = await userServices.deleteUserApiKeyById(
+			Number(req.params.id),
+		);
+
+		if (count === 0) {
+			return next(new NotFoundError("User Not Found"));
+		}
+
+		res.status(204).send();
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
