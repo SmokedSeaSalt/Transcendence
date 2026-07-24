@@ -1,8 +1,12 @@
 import type { Socket } from "socket.io";
+import { joinRoom } from "../services/roomService.js";
 
 export function registerRoomHandlers(socket: Socket) {
 	socket.on("joinRoom", (roomId: string) => {
-		console.log(`joinRoom: ${roomId} request reveived from ${socket.id}`);
+		if (!joinRoom(roomId, socket.id, socket.data.name, socket.data.databaseUserId)) {
+			console.log(`${socket.id} failed to joinRoom: ${roomId}`);
+		}
+		console.log(`${socket.id} joinRoom sucessful: ${roomId}`);
 	});
 
 	socket.on("leaveRoom", () => {
