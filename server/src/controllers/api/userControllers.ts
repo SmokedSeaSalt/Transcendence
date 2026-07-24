@@ -11,7 +11,10 @@ export const createUser = async (
 	try {
 		const { email, name, password } = req.body;
 		const user = await userServices.createUser(email, name, password);
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);

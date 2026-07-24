@@ -27,7 +27,10 @@ export const createUser = async (
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
@@ -55,7 +58,10 @@ export const loginUser = async (
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
