@@ -4,5 +4,6 @@ import z from "zod";
 
 export type PublicUser = z.infer<typeof userResponseSchema>;
 
-export const toPublicUser = (user: User): PublicUser =>
-	userResponseSchema.parse(user);
+export const toPublicUser = (user: User): PublicUser => {
+	return userResponseSchema.parse(user);
+};
