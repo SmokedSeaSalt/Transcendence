@@ -1,6 +1,6 @@
-import { userResponseSchema } from "../validators/userValidators.js";
 import type { User } from "@prisma/client";
-import z from "zod";
+import type z from "zod";
+import { userResponseSchema } from "../validators/userValidators.js";
 
 export type PublicUser = z.infer<typeof userResponseSchema>;
 

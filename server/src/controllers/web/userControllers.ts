@@ -1,13 +1,13 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { toPublicUser } from "../../dto/user.mapper.js";
 import { updateAPIKey } from "../../services/apiKeyServices.js";
 import {
 	invalidateSession,
 	updateSession,
 } from "../../services/sessionServices.js";
 import * as userServices from "../../services/userServices.js";
-import { toPublicUser } from "../../dto/user.mapper.js";
 
 export const createUser = async (
 	req: Request,
@@ -117,7 +117,7 @@ export const buildUserResponseFromSession = async (
 		}
 
 		const response = toPublicUser(user);
-		
+
 		return res.status(200).json(response);
 	} catch (err) {
 		res.status(401).json({ error: "Something went wrong in findUnique" });

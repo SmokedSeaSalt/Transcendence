@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { toPublicUser } from "../../dto/user.mapper.js";
 import { NotFoundError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
-import { toPublicUser } from "../../dto/user.mapper.js";
 
 export const createUser = async (
 	req: Request,
