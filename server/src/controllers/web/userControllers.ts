@@ -7,6 +7,7 @@ import {
 	updateSession,
 } from "../../services/sessionServices.js";
 import * as userServices from "../../services/userServices.js";
+import { toPublicUser } from "../../dto/user.mapper.js";
 
 export const createUser = async (
 	req: Request,
@@ -108,11 +109,10 @@ export const buildUserResponseFromSession = async (
 		if (!user) {
 			return res.status(401).json({ error: "Not logged in" });
 		}
-		return res.status(200).json({
-			name: user.name,
-			email: user.email,
-			createdAt: user.createdAt,
-		});
+
+		const response = toPublicUser(user);
+		
+		return res.status(200).json(response);
 	} catch (err) {
 		res.status(401).json({ error: "Something went wrong in findUnique" });
 		console.log("error buildUserResponseFromSession: ", err);
