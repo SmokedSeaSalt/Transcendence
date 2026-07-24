@@ -8,8 +8,7 @@ export function registerSocketHandlers(io: Server) {
 		console.log(`Connected: ${socket.id}`);
 
 		// temporary example/test code
-		if (roomStore.get("testRoom") === undefined)
-			roomStore.create("testRoom", socket.id);
+		if (roomStore.get("testRoom") === undefined) roomStore.create("testRoom");
 		socket.join("testRoom");
 		roomStore.addUser("testRoom", socket.id, socket.id, null);
 		// end temporary example/test code
