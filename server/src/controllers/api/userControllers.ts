@@ -108,7 +108,7 @@ export const getAllUsers = async (
 			response.push(toPublicUser(users[idx]));
 		}
 
-		res.status(200).json(users);
+		res.status(200).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);

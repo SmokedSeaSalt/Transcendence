@@ -65,12 +65,18 @@ describe("GET /api/users to get a list of all users", () => {
 		);
 	});
 
-	it("returns 200 with all users in the database", async () => {
+	it("returns 200 with all users from the database", async () => {
 		const res = await request(app)
 			.get(usersPath)
 			.set("Authorization", admin_unhashedApiKey);
 		expect(res.status).toBe(200);
 		expect(res.body.length).toBe(4);
+	});
+	it("returns 403", async () => {
+		const res = await request(app)
+			.get(usersPath)
+			.set("Authorization", user1_unhashedApiKey);
+		expect(res.status).toBe(403);
 	});
 	afterAll(async () => {
 		await deleteUser(admin_email);
@@ -121,14 +127,6 @@ describe("GET /api/users/{id} to get user", () => {
 		expect(res.body.name).toBe(user_name);
 		expect(res.body.email).toBe(user_email);
 	});
-	it("Returns 404", async () => {
-		const user = await getUserByEmail(user_email);
-		const res = await request(app)
-			.get(`${userPath}/42424242`)
-			.set("Authorization", admin_unhashedApiKey);
-
-		expect(res.status).toBe(404);
-	});
 	it("Returns 400", async () => {
 		const user = await getUserByEmail(user_email);
 		const res = await request(app)
@@ -136,6 +134,23 @@ describe("GET /api/users/{id} to get user", () => {
 			.set("Authorization", admin_unhashedApiKey);
 
 		expect(res.status).toBe(400);
+	});
+	it("Returns 403", async () => {
+		const user = await getUserByEmail(user_email);
+
+		const res = await request(app)
+			.get(`${userPath}/${user?.id}`)
+			.set("Authorization", user_unhashedApiKey);
+
+		expect(res.status).toBe(403);
+	});
+	it("Returns 404", async () => {
+		const user = await getUserByEmail(user_email);
+		const res = await request(app)
+			.get(`${userPath}/42424242`)
+			.set("Authorization", admin_unhashedApiKey);
+
+		expect(res.status).toBe(404);
 	});
 	afterAll(async () => {
 		await deleteUser(admin_email);

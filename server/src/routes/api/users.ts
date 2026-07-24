@@ -47,6 +47,15 @@ apiRegistry.registerPath({
 			},
 		},
 
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		409: {
 			description: "User already exists with this email.",
 			content: {
@@ -67,6 +76,15 @@ apiRegistry.registerPath({
 	request: {},
 	responses: {
 		200: { description: "List of Users returned" },
+
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 	},
 });
 router.get("/", userController.getAllUsers);
@@ -82,6 +100,15 @@ apiRegistry.registerPath({
 
 		400: {
 			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		403: {
+			description: "Forbidden due to lacking priviledges",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -118,6 +145,14 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 
 		404: {
 			description: "User not found",
@@ -142,6 +177,14 @@ apiRegistry.registerPath({
 
 		400: {
 			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+		403: {
+			description: "Forbidden due to lacking priviledges",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
