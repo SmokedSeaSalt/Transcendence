@@ -24,17 +24,17 @@ const ProgressField: React.FC<ProgressFieldProps> = (props) => {
 		totalWords = props.roomState.wordCount;
 	}
 
-	// add one bar per user
-	// get scalable height set up here probably in outer div so it gets both names & bars
+	// adds one bar per user
 	const progressBars = [];
+	console.log("Resetting progress bars");
 	let i = 0;
 	for (const [key, value] of Object.entries(props.roomState.users)) {
 		progressBars.push(
 			<div className="flex h-10">
-				<div className="w-10/100 content-center">
-					<p className="truncate">{value.displayname}</p>
+				<div className="w-10/100 h-100/100 content-center">
+					<p className="truncate">{value.displayName}</p>
 				</div>
-				<div className="w-90/100 pl-1">
+				<div className="w-90/100 h-100/100 pl-1">
 					<ProgressBar
 						colourPalette={colourPalettes[i % colourPalettes.length]}
 						totalWords={totalWords}

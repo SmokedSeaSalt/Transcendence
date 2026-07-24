@@ -28,6 +28,12 @@ export default function GamePage() {
 		socket?.emit("completedWord", "test");
 	};
 
+	if (roomState)
+		console.log(
+			"Current user count in index: ",
+			Object.keys(roomState.users).length,
+		);
+
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<h1>React + Express</h1>

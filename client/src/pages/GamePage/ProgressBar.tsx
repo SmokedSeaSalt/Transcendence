@@ -20,7 +20,7 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 
 	// automatically updates distance from top when markerSize is updated so it's always centered
 	// note: 110 depends on the h- value set for containerStyle & the h- & bottom- values set for barStyle
-	const markerSize = 100;
+	const markerSize = 95;
 	const topDistance = (110 - markerSize) / 2;
 	const markerStyle: CSS.Properties = {
 		height: `${markerSize}%`,
@@ -35,7 +35,7 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 	};
 
 	const containerStyle = "relative bottom-0 left-0 h-100/100 content-center";
-	const barStyle = `absolute ${props.colourPalette[0]} h-3 w-100/100 rounded-sm bottom-3`;
+	const barStyle = `absolute ${props.colourPalette[0]} h-30/100 w-100/100 rounded-sm bottom-3/10`;
 	return (
 		<div className={containerStyle}>
 			<div className={barStyle} />
