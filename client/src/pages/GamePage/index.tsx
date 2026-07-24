@@ -35,7 +35,18 @@ export default function GamePage() {
 				send socket event "completedWord" with the word "test"
 			</Button>
 			{message ? <p>Socket id: {message}</p> : null}
-			<ProgressField roomState={roomState} />
+			<div className="max-h-screen">
+				{/* <div className="p-3 my-3 bg-orange-200 outline-double"> */}
+				<div className="p-3 my-3">
+					{roomState ? (
+						<ProgressField roomState={roomState} />
+					) : (
+						<h1>No room state.</h1>
+					)}
+				</div>
+				<div className="p-3 my-3">This is where the type area would be.</div>
+				{/* <div className="p-3 my-3 bg-orange-100 outline-double">This is where the type area would be.</div> */}
+			</div>
 		</main>
 	);
 }

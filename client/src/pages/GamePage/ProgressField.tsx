@@ -5,7 +5,7 @@ import type { RoomStatePayload } from "./SocketTypes";
 import type { RoomUser } from "./SocketTypes";
 
 interface ProgressFieldProps {
-	roomState: RoomStatePayload | null;
+	roomState: RoomStatePayload;
 }
 
 // [bar colour, marker colour]
@@ -25,37 +25,30 @@ const ProgressField: React.FC<ProgressFieldProps> = (props) => {
 	}
 
 	// add one bar per user
+	// get scalable height set up here probably in outer div so it gets both names & bars
 	const progressBars = [];
-	if (props.roomState?.users) {
-		// todo: might be nice to catch roomstate outside and only open progressfield if not null
-		let i = 0;
-		for (const [key, value] of Object.entries(props.roomState?.users)) {
-			const colourChoice = i % colourPalettes.length;
-			progressBars.push(
-				<div className="flex">
-					<div className="w-10/100">
-						<p className="truncate">{value.displayname}</p>
-					</div>
-					<div className="w-100/100 pl-1">
-						<ProgressBar
-							colourPalette={colourPalettes[colourChoice]}
-							totalWords={totalWords}
-							user={value}
-						/>
-					</div>
-				</div>,
-			);
-			i++;
-		}
+	let i = 0;
+	for (const [key, value] of Object.entries(props.roomState.users)) {
+		progressBars.push(
+			<div className="flex h-10">
+				<div className="w-10/100 content-center">
+					<p className="truncate">{value.displayname}</p>
+				</div>
+				<div className="w-90/100 pl-1">
+					<ProgressBar
+						colourPalette={colourPalettes[i % colourPalettes.length]}
+						totalWords={totalWords}
+						user={value}
+					/>
+				</div>
+			</div>,
+		);
+		i++;
 	}
 
 	return (
 		<>
-			{props.roomState?.users ? (
-				<p>User count: {Object.keys(props.roomState?.users).length}</p>
-			) : (
-				<p>The room is loading.</p>
-			)}
+			<p>User count: {Object.keys(props.roomState.users).length}</p>
 			<div className="w-100%">{progressBars}</div>
 		</>
 	);
