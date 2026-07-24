@@ -2,13 +2,24 @@ import type { Socket } from "socket.io";
 import { joinRoom } from "../services/roomService.js";
 
 export function registerRoomHandlers(socket: Socket) {
-	socket.on("joinRoom", (roomId: string) => {
-		if (
-			!joinRoom(roomId, socket.id, socket.data.name, socket.data.databaseUserId)
-		) {
-			console.log(`${socket.id} failed to joinRoom: ${roomId}`);
+	socket.on("joinRoom", (newRoomId: string, callback) => {
+		const oldRoomId = socket.data.roomId;
+		const success = joinRoom(
+			oldRoomId,
+			newRoomId,
+			socket.id,
+			socket.data.displayName,
+			socket.data.userId,
+		);
+		if (!success) {
+			callback(false, `Failed to join room ${newRoomId}. Room does not exist`);
+			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
+			return;
 		}
-		console.log(`${socket.id} joinRoom sucessful: ${roomId}`);
+		socket.data.roomId = newRoomId;
+		callback(true, `Joined room ${newRoomId}`);
+
+		console.log(`${socket.id} joinRoom sucessful: ${newRoomId}`);
 	});
 
 	socket.on("leaveRoom", () => {
