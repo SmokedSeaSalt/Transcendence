@@ -116,7 +116,7 @@ describe("DELETE /api/users/{id} to delete user as admin", () => {
 });
 
 describe("DELETE /api/users/{id}/api-key to delete a users api-key as admin", () => {
-	const mePath = "/api/me"
+	const mePath = "/api/me";
 	const userPath = "/api/users";
 
 	const admin_email = "admin@admin.op";
