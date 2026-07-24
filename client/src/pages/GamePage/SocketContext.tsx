@@ -31,6 +31,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 		const s = io({
 			path: "/web/socket.io",
 			withCredentials: true,
+			  auth: {
+				token: localStorage.getItem("display_name"),
+			},
 		});
 		setSocket(s);
 
