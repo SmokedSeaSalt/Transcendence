@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { toPublicUser } from "../../dto/user.mapper.js";
 import { NotFoundError, UnauthorizedError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
-import { userResponseSchema } from "../../validators/userValidators.js";
 
 export const getMyProfile = async (
 	req: Request,
@@ -19,12 +19,7 @@ export const getMyProfile = async (
 			return next(new NotFoundError("User not found"));
 		}
 
-		const response = userResponseSchema.parse({
-			id: user.id,
-			name: user.name,
-			email: user.email,
-			createdAt: user.createdAt.toISOString(),
-		});
+		const response = toPublicUser(user);
 
 		return res.status(200).json(response);
 	} catch (error: unknown) {

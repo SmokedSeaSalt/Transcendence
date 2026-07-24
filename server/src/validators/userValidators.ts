@@ -48,9 +48,8 @@ export const userResponseSchema = z
 		id: z.number(),
 		name: z.string(),
 		email: emailSchema,
-		createdAt: z.iso.datetime(),
+		createdAt: z.date(),
 	})
-	.strict()
 	.openapi("CreateUserResponse");
 
 export const zodValidationErrorSchema = z

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
+import { toPublicUser } from "../../dto/user.mapper.js";
 import { NotFoundError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
-import { userResponseSchema } from "../../validators/userValidators.js";
 
 export const createUser = async (
 	req: Request,
@@ -11,7 +11,10 @@ export const createUser = async (
 	try {
 		const { email, name, password } = req.body;
 		const user = await userServices.createUser(email, name, password);
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
@@ -33,12 +36,7 @@ export const getUser = async (
 			return next(new NotFoundError("User Not Found"));
 		}
 
-		const response = userResponseSchema.parse({
-			id: user.id,
-			name: user.name,
-			email: user.email,
-			createdAt: user.createdAt.toISOString(),
-		});
+		const response = toPublicUser(user);
 
 		res.status(200).json(response);
 	} catch (error: unknown) {
