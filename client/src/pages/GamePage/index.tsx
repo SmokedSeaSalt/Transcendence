@@ -45,7 +45,7 @@ export default function GamePage() {
 				{/* <div className="p-3 my-3 bg-orange-200 outline-double"> */}
 				<div className="p-3 my-3">
 					{roomState ? (
-						<ProgressField roomState={roomState} />
+						<ProgressField/>
 					) : (
 						<h1>No room state.</h1>
 					)}
