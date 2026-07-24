@@ -10,6 +10,7 @@ export function registerSocketHandlers(io: Server) {
 		// temporary example/test code
 		if (roomStore.get("testRoom") === undefined) roomStore.create("testRoom");
 		socket.join("testRoom");
+		socket.data.roomId = "testRoom";
 		roomStore.addUser("testRoom", socket.id, socket.id, null);
 		// end temporary example/test code
 
@@ -19,6 +20,7 @@ export function registerSocketHandlers(io: Server) {
 		socket.on("disconnect", () => {
 			console.log(`Disconnected: ${socket.id}`);
 			//todo loop throuhg all users rooms. do a roomStore get, if defined delete user
+			roomStore.deleteUser(socket.data.roomId, socket.id);
 		});
 	});
 }
