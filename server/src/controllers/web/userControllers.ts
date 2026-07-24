@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { toPublicUser } from "../../dto/user.mapper.js";
 import { updateAPIKey } from "../../services/apiKeyServices.js";
 import {
 	invalidateSession,
@@ -26,7 +27,10 @@ export const createUser = async (
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
@@ -54,7 +58,10 @@ export const loginUser = async (
 			sameSite: "strict",
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
-		res.status(201).json(user);
+
+		const response = toPublicUser(user);
+
+		res.status(201).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
@@ -108,11 +115,10 @@ export const buildUserResponseFromSession = async (
 		if (!user) {
 			return res.status(401).json({ error: "Not logged in" });
 		}
-		return res.status(200).json({
-			name: user.name,
-			email: user.email,
-			createdAt: user.createdAt,
-		});
+
+		const response = toPublicUser(user);
+
+		return res.status(200).json(response);
 	} catch (err) {
 		res.status(401).json({ error: "Something went wrong in findUnique" });
 		console.log("error buildUserResponseFromSession: ", err);
