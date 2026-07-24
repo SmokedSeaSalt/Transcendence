@@ -28,15 +28,27 @@ export default function GamePage() {
 		socket?.emit("completedWord", "test");
 	};
 
+	if (roomState)
+		console.log(
+			"Current user count in index: ",
+			Object.keys(roomState.users).length,
+		);
+
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<h1>React + Express</h1>
 			<Button type="button" onClick={handleClick}>
 				send socket event "completedWord" with the word "test"
 			</Button>
-			{message ? <p>{message}</p> : null}
-			{roomState?.wordCount}
-			<ProgressField roomState={roomState} />
+			{message ? <p>Socket id: {message}</p> : null}
+			<div className="max-h-screen">
+				{/* <div className="p-3 my-3 bg-orange-200 outline-double"> */}
+				<div className="p-3 my-3">
+					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
+				</div>
+				<div className="p-3 my-3">This is where the type area would be.</div>
+				{/* <div className="p-3 my-3 bg-orange-100 outline-double">This is where the type area would be.</div> */}
+			</div>
 		</main>
 	);
 }

@@ -19,7 +19,7 @@ export function registerGameHandlers(socket: Socket) {
 		if (room === undefined) {
 			return;
 		}
-		if (room?.wordCount === undefined) room.wordCount = 100; // set this somewhere else
+		if (room?.wordCount === undefined) room.wordCount = 200; // set this somewhere else
 
 		console.log("Trying to update socket id:", socket.id);
 		roomStore.updateProgress(room.roomId, socket.id);
