@@ -26,7 +26,7 @@ export function validateIncommingWord(
 	if (typedWord === room.prompt[user.progress]) {
 		roomStore.updateProgress(roomId, userId);
 	} else {
-		console.log(`user: ${userId}, sent an invalid word in room: ${roomId}`)
+		console.log(`user: ${userId}, sent an invalid word in room: ${roomId}`);
 		return;
 	}
 
@@ -44,7 +44,6 @@ export function validateIncommingWord(
 	if (shouldTerminate) {
 		roomStore.setState(roomId, RoomState.FINISHED);
 	}
-
 
 	return room;
 }
