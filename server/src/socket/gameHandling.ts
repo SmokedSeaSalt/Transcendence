@@ -1,33 +1,22 @@
 import type { Socket } from "socket.io";
 import { io } from "../app.js";
+import { validateIncommingWord } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 
 export function registerGameHandlers(socket: Socket) {
-	socket.on("completedWord", (word: string) => {
-		// console.log(`completedWord: ${word} reveived from ${socket.id}`);
+	socket.on("completedWord", (typedWord: string) => {
+		console.log(`completedWord: ${typedWord} reveived from ${socket.id}`);
 
-		// temporary example/test code
-		// const room = roomStore.get("testRoom");
-		// if (room === undefined) {
-		// 	return;
-		// }
-		// if (room?.wordCount === undefined) room.wordCount = 1;
-		// else room.wordCount += 1;
+		const room = validateIncommingWord(
+			socket.data.roomId,
+			socket.id,
+			typedWord,
+		);
 
-		// temporary test code for progress bar checks
-		const room = roomStore.get("testRoom");
-		if (room === undefined) {
+		if (!room) {
 			return;
 		}
-		if (room?.wordCount === undefined) room.wordCount = 200; // set this somewhere else
 
-		console.log("Trying to update socket id:", socket.id);
-		roomStore.updateProgress(room.roomId, socket.id);
-
-		// console.log(`current wordCount for room testRoom = ${room.wordCount}`);
-		io.to("testRoom").emit("roomState", room);
-		//todo dont emit the full room object, it has database user references.
-		//todo we should create a Data Transfer Object to filter extra info out.
-		// end temporary example/test code
+		io.to(socket.data.roomId).emit("roomState", room);
 	});
 }
