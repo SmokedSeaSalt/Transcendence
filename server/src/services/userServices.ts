@@ -158,3 +158,9 @@ export const deleteUserApiKeyById = async (id: number): Promise<number> => {
 
 	return deletedApiKey.count;
 };
+
+export const getAllUsers = async () => {
+	const users = await prisma.user.findMany();
+
+	return users;
+};

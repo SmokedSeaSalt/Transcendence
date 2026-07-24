@@ -61,6 +61,18 @@ router.post("/register", createUserValidation(), userController.createUser);
 
 apiRegistry.registerPath({
 	method: "get",
+	path: "/api/users",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		200: { description: "List of Users returned" },
+	},
+});
+router.get("/", userController.getAllUsers);
+
+apiRegistry.registerPath({
+	method: "get",
 	path: "/api/users/{id}",
 	tags: ["Api"],
 

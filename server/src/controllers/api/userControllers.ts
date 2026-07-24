@@ -93,3 +93,27 @@ export const deleteUserApiKey = async (
 		}
 	}
 };
+
+export const getAllUsers = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const users = await userServices.getAllUsers();
+
+		const response = [];
+
+		for (let idx = 0; idx < users.length; idx += 1) {
+			response.push(toPublicUser(users[idx]));
+		}
+
+		res.status(200).json(users);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};

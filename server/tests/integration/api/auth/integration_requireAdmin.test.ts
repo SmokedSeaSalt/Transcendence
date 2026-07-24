@@ -47,6 +47,8 @@ describe("requireAdmin middleware", () => {
 			.send({ email: "new@gmail.com", name: "jon", password: "Password1!" });
 
 		expect(res.status).toBe(201);
+
+		await deleteUser("new@gmail.com");
 	});
 
 	afterEach(async () => {
