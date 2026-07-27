@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
 import GamePageHeader from "./GamePageHeader";
+import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import type { RoomStatePayload } from "./SocketTypes";
@@ -48,7 +49,9 @@ export default function GamePage() {
 				<div className="p-3 my-3">
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
-				<div className="p-3 my-3">This is where the type area would be.</div>
+				<div className="p-3 my-3">
+					<GameTextField />
+				</div>
 				{/* <div className="p-3 my-3 bg-orange-100 outline-double">This is where the type area would be.</div> */}
 			</div>
 		</main>
