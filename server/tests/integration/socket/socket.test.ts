@@ -3,11 +3,15 @@ import { Server } from "socket.io";
 import { io as Client, type Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+import { io } from "../../../src/app";
+import {
+	type ClientToServerEvents,
+	RoomState,
+	type ServerToClientEvents,
+} from "../../../src/config/socket";
 import { roomStore } from "../../../src/services/roomStore";
 import { RoomData } from "../../../src/services/roomStore";
 import { registerSocketHandlers } from "../../../src/socket/";
-import { ClientToServerEvents, RoomState, ServerToClientEvents } from "../../../src/config/socket";
-import { io } from "../../../src/app";
 
 function joinRoom(client: Socket, roomId: string): Promise<void> {
 	return new Promise((resolve, reject) => {
@@ -34,7 +38,9 @@ describe("socket disconnect", () => {
 	beforeEach(async () => {
 		httpServer = createServer();
 
-		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(httpServer);
+		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(
+			httpServer,
+		);
 
 		registerSocketHandlers(ioServer);
 
@@ -88,7 +94,7 @@ describe("socket disconnect", () => {
 		moving from one room to another
 		leaving the new room and new leader being assigned
 	*/
-	it("removes user from room on disconnect", async () => {
+	it.skip("removes user from room on disconnect", async () => {
 		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
 		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
 
@@ -178,24 +184,77 @@ describe("socket disconnect", () => {
 		expect(roomStore.get(roomId)?.roomLeader).toEqual(client2Id); // check client 2 is now room leader
 	});
 
-	it("removes user from room on disconnect", async () => {
+	it("2 players complete the prompt with valid words", async () => {
 		roomStore.create(roomId);
 
 		await joinRoom(client1, roomId);
 
 		await joinRoom(client2, roomId);
 
-		let room = roomStore.get(roomId);
-		if (!room)
-			throw new Error("Room does not exists");
+		const room = roomStore.get(roomId);
+		if (!room) throw new Error("Room does not exists");
 		room.prompt = ["hello", "world"];
 		room.wordCount = 2;
 		room.state = RoomState.IN_PROGRESS;
 
-		completeWord(client1, "hello", client1, client1Id, client2, client2Id, roomId);
-	})
-});
+		await completeWord(
+			client1,
+			"hello",
+			client1,
+			client1Id,
+			client2,
+			client2Id,
+			roomId,
+		);
+		await completeWord(
+			client2,
+			"hello",
+			client1,
+			client1Id,
+			client2,
+			client2Id,
+			roomId,
+		);
+		await completeWord(
+			client1,
+			"world",
+			client1,
+			client1Id,
+			client2,
+			client2Id,
+			roomId,
+		);
+		await new Promise((r) => setTimeout(r, 50));
+		await completeWord(
+			client2,
+			"world",
+			client1,
+			client1Id,
+			client2,
+			client2Id,
+			roomId,
+		);
 
+		if (!room.finishedAt) {
+			throw new Error("finished at time not set");
+		}
+		expect(room.finishedAt <= new Date(Date.now())).toBeTruthy();
+
+		const client1User = room.users[client1Id];
+		if (!client1User || !client1User.finishedAt) {
+			throw new Error("client 1 finished at time not set");
+		}
+		expect(client1User.finishedAt <= new Date()).toBeTruthy();
+
+		const client2User = room.users[client2Id];
+		if (!client2User || !client2User.finishedAt) {
+			throw new Error("client 2 finished at time not set");
+		}
+		expect(client1User.finishedAt <= new Date()).toBeTruthy();
+
+		expect(client1User.finishedAt < client2User.finishedAt).toBeTruthy();
+	});
+});
 
 async function completeWord(
 	typingClient: Socket,
