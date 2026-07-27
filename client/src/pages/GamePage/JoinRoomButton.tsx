@@ -2,21 +2,22 @@ import { useState } from "react";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import { chooseRoomIdSchema } from "./schemas";
+import { useConnectToRoom } from "./useConnectToRoom";
 
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [roomId, setRoomId] = useState<string>("");
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const [fieldUpdated, setFieldUpdated] = useState("");
-	// const { storeRoomId, loading, error } = useConnectToRoom();
+	const { storeRoomId, loading, error } = useConnectToRoom();
 
 	const clickJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault(); // prevent default page reload
+		e.preventDefault();
 		setOpen(true);
 	};
 
 	const submit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-		e.preventDefault(); // prevent default page reload
+		e.preventDefault();
 		const result = chooseRoomIdSchema.safeParse({ roomId });
 		if (!result.success) {
 			const errors: Record<string, string> = {};
@@ -28,13 +29,11 @@ export default function JoinRoomButton() {
 			setFieldUpdated("");
 			return;
 		}
-		// todo: TRY CONNECTION HERE!
 		setFieldUpdated("Connected!");
 		setTimeout(() => setFieldUpdated(""), 2000);
 		setFieldErrors({});
-		// await setRoomId(roomId);
+		await storeRoomId(roomId);
 	};
-
 
 	return (
 		<div style={{ padding: "1em" }}>
@@ -47,6 +46,9 @@ export default function JoinRoomButton() {
 					onSubmit={submit}
 					style={{ display: "flex", flexDirection: "column", gap: 8 }}
 				>
+					<h3 className="text-gray-200">
+						Warning: you will leave your current room!
+					</h3>
 					<div>
 						<input
 							value={roomId}
@@ -65,8 +67,7 @@ export default function JoinRoomButton() {
 							</div>
 						)}
 					</div>
-					{/* <Button loading={loading}>Connect</Button> */}
-					<Button>Connect</Button>
+					<Button loading={loading}>Connect</Button>
 				</form>
 			</Popup>
 		</div>
