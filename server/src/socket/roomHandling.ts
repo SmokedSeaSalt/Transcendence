@@ -16,6 +16,13 @@ export function registerRoomHandlers(socket: Socket) {
 			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
 			return;
 		}
+
+		if (oldRoomId) {
+			socket.leave(oldRoomId);
+		}
+
+		socket.join(newRoomId);
+
 		socket.data.roomId = newRoomId;
 		callback(true, `Joined room ${newRoomId}`);
 
