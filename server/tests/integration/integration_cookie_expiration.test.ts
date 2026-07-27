@@ -30,7 +30,7 @@ describe("test cookie expiration", () => {
 
 	it("returns /me info immediately after logging in", async () => {
 		const res = await request(app)
-			.get("/web/users/me")
+			.get("/web/me")
 			.set("Cookie", fullCookieString)
 			.expect(200);
 		expect(res.text).toContain(`"name":"${name}"`);
@@ -42,7 +42,7 @@ describe("test cookie expiration", () => {
 		currentCookie = fullCookieString[0].slice(8, 72);
 		await shortenExpiration(currentCookie);
 		const res = await request(app)
-			.get("/web/users/me")
+			.get("/web/me")
 			.set("Cookie", fullCookieString)
 			.expect(401);
 		expect(res.text).toContain('"error":"Expired session token."');
