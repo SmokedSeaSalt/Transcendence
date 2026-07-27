@@ -7,7 +7,8 @@ export default function GameTextField() {
 	const prompt =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 	// to be replaced with { roomState?.prompt } when active -> needs to be joined
-	// const prompt = "Lorem ipsum dolor sit amet.";
+
+	const [cheating, setCheating] = useState<boolean>(false);
 
 	const [typedText, setTypedText] = useState<string>("");
 	// complete contains words that should no longer be touched; incomplete is everything else
@@ -17,16 +18,6 @@ export default function GameTextField() {
 	const [promptTyped, setPromptTyped] = useState<string>("");
 	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
-
-	// const logValues = () => {
-	// 	console.log(
-	// 		"COMPLETE: ",
-	// 		promptComplete,
-	// 		"\nINCOMPLETE: ",
-	// 		promptIncomplete,
-	// 	);
-	// 	console.log("TYPED: ", promptTyped, "\nUNTYPED: ", promptUntyped);
-	// };
 
 	const compare = async (currentPrompt: string, typed: string) => {
 		// console.log("Going to compare prompt with ", typed);
@@ -50,8 +41,7 @@ export default function GameTextField() {
 				return;
 			}
 		}
-		if (promptIncomplete.length === typed.length)
-		{
+		if (promptIncomplete.length === typed.length) {
 			socket?.emit("completedWord", typed);
 			console.log("GAME OVER!");
 			setPromptComplete(prompt);
@@ -59,7 +49,7 @@ export default function GameTextField() {
 			setPromptUntyped("");
 			setPromptTyped("");
 			setPromptTypedWrong("");
-			return ;
+			return;
 		}
 		setPromptUntyped(promptIncomplete.substring(typed.length));
 		setPromptTyped(promptIncomplete.substring(0, typed.length));
@@ -71,6 +61,13 @@ export default function GameTextField() {
 		compare(promptIncomplete, e.target.value);
 	};
 
+	const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+		console.log("CHEATING ATTEMPT");
+		e.preventDefault();
+		setCheating(true);
+		setTimeout(() => setCheating(false), 1000);
+	};
+
 	return (
 		<>
 			<div className="outline-double relative">
@@ -78,15 +75,23 @@ export default function GameTextField() {
 					<p className="bg-green-500 inline">{promptComplete}</p>
 					<p className="bg-green-300 inline">{promptTyped}</p>
 					<p className="bg-red-300 inline">{promptTypedWrong}</p>
-					<p className="text-gray-500 inline">{promptUntyped}</p>
+					<p className="text-gray-600 inline">{promptUntyped}</p>
 				</div>
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 					<input
-					value={typedText}
-					onChange={handleChange}
-					className="w-100/100 h-100/100"
-				/>
+						value={typedText}
+						onChange={handleChange}
+						className="w-100/100 h-100/100"
+						onPaste={handlePaste}
+					/>
 				</div>
+				{cheating ? (
+					<div className="absolute top-0 h-100/100 w-100/100 bg-red-800 text-white text-8xl text-center align-middle">
+						NO CHEATING
+					</div>
+				) : (
+					""
+				)}
 			</div>
 		</>
 	);
