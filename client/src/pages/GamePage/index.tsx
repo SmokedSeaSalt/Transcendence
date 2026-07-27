@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import type { RoomStatePayload } from "./SocketTypes";
+import GamePageHeader from "./GamePageHeader";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -36,6 +37,7 @@ export default function GamePage() {
 
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+			<GamePageHeader />
 			<h1>React + Express</h1>
 			<Button type="button" onClick={handleClick}>
 				send socket event "completedWord" with the word "test"
