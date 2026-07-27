@@ -57,6 +57,7 @@ export function registerSocketHandlers(io: Server) {
 		socket.on("disconnect", () => {
 			console.log(`Disconnected: ${socket.id}`);
 			//todo loop throuhg all users rooms. do a roomStore get, if defined delete user
+			roomStore.deleteUser(socket.data.roomId, socket.id);
 		});
 	});
 }
