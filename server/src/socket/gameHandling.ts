@@ -4,7 +4,6 @@ import { roomStore } from "../services/roomStore.js";
 
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", (typedWord: string) => {
-
 		const room = validateIncommingWord(
 			socket.data.roomId,
 			socket.id,

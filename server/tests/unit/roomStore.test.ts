@@ -131,12 +131,7 @@ describe("Room addUser() and deleteUser()", () => {
 		const secondsocketId = "user999";
 		const secondDisplayName = "hello";
 		const seconduserId = 444;
-		roomStore.addUser(
-			roomId,
-			secondsocketId,
-			secondDisplayName,
-			seconduserId,
-		);
+		roomStore.addUser(roomId, secondsocketId, secondDisplayName, seconduserId);
 
 		// Delete the leader
 		roomStore.deleteUser(roomId, socketId);
@@ -182,12 +177,7 @@ describe("updateProgress", () => {
 		const secondsocketId = "user999";
 		const secondDisplayName = "hello";
 		const seconduserId = 444;
-		roomStore.addUser(
-			roomId,
-			secondsocketId,
-			secondDisplayName,
-			seconduserId,
-		);
+		roomStore.addUser(roomId, secondsocketId, secondDisplayName, seconduserId);
 		expect(room?.users[secondsocketId].progress).toEqual(0);
 
 		for (let i = 0; i < 10; i++) {

@@ -1,6 +1,6 @@
 import type { Server, Socket } from "socket.io";
-import { transferRoom } from "../services/roomService.js";
 import { createUniqueRoom } from "../services/gameService.js";
+import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 
 export function registerRoomHandlers(io: Server, socket: Socket) {
@@ -45,7 +45,13 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			return;
 		}
 
-		const newRoom = transferRoom(oldRoomId, success.roomId, socket.id, socket.data.displayName, socket.data.userId);
+		const newRoom = transferRoom(
+			oldRoomId,
+			success.roomId,
+			socket.id,
+			socket.data.displayName,
+			socket.data.userId,
+		);
 		if (!newRoom) {
 			console.log(`${socket.id} failed to transfer to new room`);
 			socket.disconnect();
