@@ -85,5 +85,4 @@ export const createPrompt = (): string[] => {
 	const prompt = getRandomWords(15);
 
 	return prompt;
-
-}
+};

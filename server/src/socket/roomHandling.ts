@@ -1,10 +1,10 @@
+import { setTimeout as wait } from "node:timers/promises";
 import type { Socket } from "socket.io";
-import { transferRoom } from "../services/roomService.js";
-import { createPrompt, createUniqueRoom } from "../services/gameService.js";
-import { roomStore } from "../services/roomStore.js";
 import { io } from "../app.js";
 import { RoomState } from "../config/socket.js";
-import { setTimeout as wait } from "node:timers/promises";
+import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import { transferRoom } from "../services/roomService.js";
+import { roomStore } from "../services/roomStore.js";
 
 export function registerRoomHandlers(socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
@@ -48,7 +48,13 @@ export function registerRoomHandlers(socket: Socket) {
 			return;
 		}
 
-		const newRoom = transferRoom(oldRoomId, success.roomId, socket.id, socket.data.displayName, socket.data.userId);
+		const newRoom = transferRoom(
+			oldRoomId,
+			success.roomId,
+			socket.id,
+			socket.data.displayName,
+			socket.data.userId,
+		);
 		if (!newRoom) {
 			console.log(`${socket.id} failed to transfer to new room`);
 			socket.disconnect();
@@ -72,10 +78,8 @@ export function registerRoomHandlers(socket: Socket) {
 
 	socket.on("startGame", async () => {
 		const room = roomStore.get(socket.data.roomId);
-		if (!room)
-			return;
-		if (socket.id !== room.roomLeader)
-			return;
+		if (!room) return;
+		if (socket.id !== room.roomLeader) return;
 		console.log(`startGame received from ${socket.id}`);
 
 		room.prompt = createPrompt();
@@ -88,6 +92,5 @@ export function registerRoomHandlers(socket: Socket) {
 
 		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
 		io.to(room.roomId).emit("roomState", room);
-
 	});
 }
