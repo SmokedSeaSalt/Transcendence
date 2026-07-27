@@ -69,8 +69,8 @@ export function registerSocketHandlers(io: Server) {
 		room.wordCount = 15;
 		// end of tempororay test code
 
-		registerRoomHandlers(socket);
-		registerGameHandlers(socket);
+		registerRoomHandlers(io, socket);
+		registerGameHandlers(io, socket);
 
 		//to update client frontend
 		io.to(room.roomId).emit("roomState", room);

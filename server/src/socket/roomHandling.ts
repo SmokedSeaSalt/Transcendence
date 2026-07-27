@@ -1,7 +1,7 @@
-import type { Socket } from "socket.io";
+import type { Server, Socket } from "socket.io";
 import { joinRoom } from "../services/roomService.js";
 
-export function registerRoomHandlers(socket: Socket) {
+export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
 		const oldRoomId = socket.data.roomId;
 		const success = joinRoom(

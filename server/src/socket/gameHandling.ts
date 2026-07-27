@@ -1,11 +1,9 @@
-import type { Socket } from "socket.io";
-import { io } from "../app.js";
+import type { Server, Socket } from "socket.io";
 import { validateIncommingWord } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 
-export function registerGameHandlers(socket: Socket) {
+export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", (typedWord: string) => {
-		console.log(`completedWord: ${typedWord} reveived from ${socket.id}`);
 
 		const room = validateIncommingWord(
 			socket.data.roomId,
