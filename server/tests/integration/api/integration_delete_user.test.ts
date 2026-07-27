@@ -90,14 +90,6 @@ describe("DELETE /api/users/{id} to delete user as admin", () => {
 		expect(res.status).toBe(204);
 		expect(await userExists(user_email)).toBe(false);
 	});
-	it("returns 404 if user id does not exist", async () => {
-		const res = await request(app)
-			.delete(`${userPath}/42424242`)
-			.set("Authorization", admin_unhashedApiKey);
-
-		expect(res.status).toBe(404);
-		expect(await userExists(user_email)).toBe(true);
-	});
 	it("returns 400 if with trailing chars", async () => {
 		const user = await getUserByEmail(user_email);
 		const res = await request(app)
@@ -105,6 +97,24 @@ describe("DELETE /api/users/{id} to delete user as admin", () => {
 			.set("Authorization", admin_unhashedApiKey);
 
 		expect(res.status).toBe(400);
+		expect(await userExists(user_email)).toBe(true);
+	});
+	it("returns 403 for non-admins and user still exists", async () => {
+		let user = await getUserByEmail(user_email);
+		const res = await request(app)
+			.delete(`${userPath}/${user?.id}`)
+			.set("Authorization", user_unhashedApiKey);
+
+		expect(res.status).toBe(403);
+		user = await getUserByEmail(user_email);
+		expect(user).toBeTruthy;
+	});
+	it("returns 404 if user id does not exist", async () => {
+		const res = await request(app)
+			.delete(`${userPath}/42424242`)
+			.set("Authorization", admin_unhashedApiKey);
+
+		expect(res.status).toBe(404);
 		expect(await userExists(user_email)).toBe(true);
 	});
 	afterEach(async () => {
@@ -162,13 +172,6 @@ describe("DELETE /api/users/{id}/api-key to delete a users api-key as admin", ()
 			.set("Authorization", user_unhashedApiKey);
 		expect(res.status).toBe(401);
 	});
-	it("returns 404 if user id does not exist", async () => {
-		const res = await request(app)
-			.delete(`${userPath}/42424242/api-key`)
-			.set("Authorization", admin_unhashedApiKey);
-
-		expect(res.status).toBe(404);
-	});
 	it("returns 400 for non-number argument", async () => {
 		const user = await getUserByEmail(user_email);
 		const res = await request(app)
@@ -176,6 +179,23 @@ describe("DELETE /api/users/{id}/api-key to delete a users api-key as admin", ()
 			.set("Authorization", admin_unhashedApiKey);
 
 		expect(res.status).toBe(400);
+	});
+	it("returns 403 for a non-admin and the api-key still exists", async () => {
+		let user = await getUserWithApiKey(user_email);
+		const res = await request(app)
+			.delete(`${userPath}/${user?.id}/api-key`)
+			.set("Authorization", user_unhashedApiKey);
+		expect(res.status).toBe(403);
+
+		user = await getUserWithApiKey(user_email);
+		expect(user?.apiKey).toBeTruthy();
+	});
+	it("returns 404 if user id does not exist", async () => {
+		const res = await request(app)
+			.delete(`${userPath}/42424242/api-key`)
+			.set("Authorization", admin_unhashedApiKey);
+
+		expect(res.status).toBe(404);
 	});
 	afterEach(async () => {
 		await deleteUser(user_email);
