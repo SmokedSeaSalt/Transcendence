@@ -49,15 +49,31 @@ export function registerSocketHandlers(io: Server) {
 		socket.data.roomId = room.roomId;
 
 		// todo Temporary test code
-		room.prompt = ["test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"];
+		room.prompt = [
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+			"test",
+		];
 		room.wordCount = 15;
 		// end of tempororay test code
 
-		//to update client frontend
-		io.to(room.roomId).emit("roomState", room);
-
 		registerRoomHandlers(socket);
 		registerGameHandlers(socket);
+
+		//to update client frontend
+		io.to(room.roomId).emit("roomState", room);
 
 		socket.on("disconnect", () => {
 			console.log(`Disconnected: ${socket.id}`);
