@@ -13,7 +13,7 @@ describe("socket disconnect", () => {
 	let client1: Socket;
 	let client2: Socket;
 	let url: string;
-	const roomId = "testRoom";
+	const roomId = "thisIsADifferentRoom";
 
 	beforeEach(async () => {
 		httpServer = createServer();
@@ -33,6 +33,9 @@ describe("socket disconnect", () => {
 		}
 
 		url = `http://localhost:${address.port}`;
+
+		if (roomStore.get("testRoom") === undefined) roomStore.create("testRoom");
+
 	});
 
 	afterEach(() => {
@@ -54,20 +57,55 @@ describe("socket disconnect", () => {
 			new Promise<void>((resolve) => client2.on("connect", resolve)),
 		]);
 
-		client1.emit("joinRoom", roomId);
-		client2.emit("joinRoom", roomId);
+		const client1Id = client1.id;
+		const client2Id = client2.id;
+
+		if (!client1Id || !client2Id) {
+			throw new Error("Clients did not connect");
+		}
+
+		roomStore.create(roomId);
+
+		await Promise.all([
+			new Promise<void>((resolve) => {
+				client1.emit("joinRoom", roomId, (success: boolean) => {
+					expect(success).toBe(true);
+					resolve();
+				});
+			}),
+			new Promise<void>((resolve) => {
+				client2.emit("joinRoom", roomId, (success: boolean) => {
+					expect(success).toBe(true);
+					resolve();
+				});
+			}),
+		]);
 
 		// wait for events to process
 		await new Promise((r) => setTimeout(r, 50));
 
-		expect(roomStore.get(roomId)?.users).toHaveLength(2);
+		let users = roomStore.get(roomId)!.users
+
+		expect(Object.keys(users)).toHaveLength(2);
+
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)).toBe(true);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)).toBe(true);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.size).toBe(2);
+
+
 
 		client1.disconnect();
 
 		await new Promise((r) => setTimeout(r, 50));
 
-		expect(roomStore.get(roomId)?.users).toHaveLength(1);
+		users = roomStore.get(roomId)!.users
 
-		expect(roomStore.get(roomId)?.users).not.toContain(client1.id);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)).toBe(false);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)).toBe(true);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.size).toBe(1);
+
+		expect(Object.keys(users)).toHaveLength(1);
+
+		expect(Object.keys(users)).not.toContain(client1.id);
 	});
 });
