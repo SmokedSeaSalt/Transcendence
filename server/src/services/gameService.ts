@@ -1,9 +1,7 @@
-//validateIncommingWord(roomId, userId, typedWord);
-
+import { RoomState } from "../config/socket.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
-
 export const createUniqueRoom = (): RoomData | null => {
 	let roomId = makeid(6);
 	let tries = 0;
@@ -26,8 +24,6 @@ function makeid(length: number) {
 	}
 	return result;
 }
-import { RoomState } from "../config/socket.js";
-import { roomStore } from "./roomStore.js";
 
 export function validateIncommingWord(
 	roomId: string,
@@ -57,9 +53,10 @@ export function validateIncommingWord(
 		return;
 	}
 
-	let shouldTerminate = true;
+	let shouldTerminate = false;
 	// If the user typed the final word, check if all others are done as well
 	if (user.progress === room.wordCount) {
+		shouldTerminate = true;
 		for (const user of Object.values(room.users)) {
 			if (user.progress !== room.wordCount) {
 				shouldTerminate = false;
