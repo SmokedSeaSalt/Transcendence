@@ -3,9 +3,9 @@ import { roomStore } from "./roomStore.js";
 export function transferRoom(
 	oldRoomId: string,
 	newRoomId: string,
-	userId: string,
+	socketId: string,
 	name: string,
-	databaseUserId: number | null,
+	userId: number | null,
 ) {
 	const room = roomStore.get(newRoomId);
 
@@ -13,8 +13,8 @@ export function transferRoom(
 		return null;
 	}
 
-	roomStore.deleteUser(oldRoomId, userId);
-	roomStore.addUser(newRoomId, userId, name, databaseUserId);
+	roomStore.deleteUser(oldRoomId, socketId);
+	roomStore.addUser(newRoomId, socketId, name, userId);
 
 	return room;
 }

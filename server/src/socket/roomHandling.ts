@@ -41,7 +41,7 @@ export function registerRoomHandlers(socket: Socket) {
 			return;
 		}
 
-		const newRoom = transferRoom(oldRoomId, success.roomId, socket.id, socket.data.displayName, socket.data.databaseUserId);
+		const newRoom = transferRoom(oldRoomId, success.roomId, socket.id, socket.data.displayName, socket.data.userId);
 		if (!newRoom) {
 			console.log(`${socket.id} failed to transfer to new room`);
 			socket.disconnect();
