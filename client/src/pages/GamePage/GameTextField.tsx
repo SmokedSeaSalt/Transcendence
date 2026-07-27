@@ -11,35 +11,59 @@ export default function GameTextField() {
 	const [promptTyped, setPromptTyped] = useState<string>("");
 	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
+	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
+	const [promptComplete, setPromptComplete] = useState<string>("");
 
-	const compare = async (prompt: string, typed: string) => {
-		console.log("Going to compare prompt with ", typed);
+	const logValues = () => {
+		console.log(
+			"COMPLETE: ",
+			promptComplete,
+			"\nINCOMPLETE: ",
+			promptIncomplete,
+		);
+		console.log("TYPED: ", promptTyped, "\nUNTYPED: ", promptUntyped);
+	};
+
+	const compare = async (currentPrompt: string, typed: string) => {
+		// console.log("Going to compare prompt with ", typed);
 		for (let i = 0; i < typed.length; i++) {
-			console.log("Comparing ", typed[i], " with ", prompt[i]);
-			if (typed[i] !== prompt[i]) {
+			// console.log("Comparing ", typed[i], " with ", prompt[i]);
+			// logValues();
+			if (typed[i] !== currentPrompt[i]) {
 				console.log("mismatch at i: ", i);
-				setPromptUntyped(prompt.substring(typed.length));
-				setPromptTypedWrong(prompt.substring(i, typed.length));
-				setPromptTyped(prompt.substring(0, i));
+				setPromptUntyped(currentPrompt.substring(typed.length));
+				setPromptTypedWrong(currentPrompt.substring(i, typed.length));
+				setPromptTyped(currentPrompt.substring(0, i));
 				return;
 			}
+			if (typed[i] === " ") {
+				console.log("space found!");
+				socket?.emit("completedWord", typed);
+				const completeLength = promptComplete.length;
+				setPromptComplete(prompt.substring(0, completeLength + typed.length));
+				setPromptTyped("XYZ");
+				setPromptTypedWrong("");
+				setPromptIncomplete(prompt.substring(completeLength + typed.length));
+				setPromptUntyped(promptIncomplete);
+				setTypedText("");
+				logValues();
+			}
 		}
-		console.log("No mismatch!");
-		setPromptUntyped(prompt.substring(typed.length));
-		setPromptTyped(prompt.substring(0, typed.length));
+		// console.log("No mismatch!");
+		setPromptUntyped(promptIncomplete.substring(typed.length));
+		setPromptTyped(promptIncomplete.substring(0, typed.length));
 		setPromptTypedWrong("");
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTypedText(e.target.value);
-		// console.log("e target value: ", e.target.value);
-		// console.log("typed text now set to: ", typedText);
-		compare(prompt, e.target.value); // typedtext is not up-to-date with useState, lags behind 1
+		compare(promptIncomplete, e.target.value); // typedtext is not up-to-date with useState, lags behind 1
 	};
 
 	return (
 		<>
 			<div className="outline-double">
+				<p className="bg-green-500 inline">{promptComplete}</p>
 				<p className="bg-green-300 inline">{promptTyped}</p>
 				<p className="bg-red-300 inline">{promptTypedWrong}</p>
 				<p className="text-gray-500 inline">{promptUntyped}</p>
