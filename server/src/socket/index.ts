@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server } from "socket.io";
-import { createUniqueRoom } from "../services/gameService.js";
+import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
@@ -49,24 +49,27 @@ export function registerSocketHandlers(io: Server) {
 		socket.data.roomId = room.roomId;
 
 		// todo Temporary test code
-		room.prompt = [
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
-		];
-		room.wordCount = 15;
+		//room.prompt = [
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//	"test",
+		//];
+		//room.wordCount = 15;
+
+		room.prompt = createPrompt();
+		room.wordCount = room.prompt.length;
 		// end of tempororay test code
 
 		registerRoomHandlers(socket);

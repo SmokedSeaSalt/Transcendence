@@ -1,4 +1,5 @@
 import { RoomState } from "../config/socket.js";
+import { WORD_LIST } from "../config/wordList.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
@@ -70,4 +71,19 @@ export function validateIncommingWord(
 	}
 
 	return room;
+}
+
+function getRandomWords(size: number): string[] {
+	const result: string[] = [];
+	for (let i = 0; i < size; i++) {
+		result.push(WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)]);
+	}
+	return result;
+}
+
+export const createPrompt = (): string[] => {
+	const prompt = getRandomWords(15);
+
+	return prompt;
+
 }

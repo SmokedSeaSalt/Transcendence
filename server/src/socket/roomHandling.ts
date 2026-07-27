@@ -1,8 +1,10 @@
 import type { Socket } from "socket.io";
 import { transferRoom } from "../services/roomService.js";
-import { createUniqueRoom } from "../services/gameService.js";
+import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { io } from "../app.js";
+import { RoomState } from "../config/socket.js";
+import { setTimeout as wait } from "node:timers/promises";
 
 export function registerRoomHandlers(socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
@@ -68,7 +70,24 @@ export function registerRoomHandlers(socket: Socket) {
 		console.log(`${socket.id} leaveRoom sucessful: ${newRoom.roomId}`);
 	});
 
-	socket.on("startGame", () => {
+	socket.on("startGame", async () => {
+		const room = roomStore.get(socket.data.roomId);
+		if (!room)
+			return;
+		if (socket.id !== room.roomLeader)
+			return;
 		console.log(`startGame received from ${socket.id}`);
+
+		room.prompt = createPrompt();
+		room.wordCount = room.prompt.length;
+
+		roomStore.setState(room.roomId, RoomState.COUNTDOWN);
+		io.to(room.roomId).emit("roomState", room);
+
+		await wait(5000);
+
+		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
+		io.to(room.roomId).emit("roomState", room);
+
 	});
 }
