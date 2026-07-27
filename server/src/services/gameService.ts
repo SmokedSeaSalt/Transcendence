@@ -56,6 +56,7 @@ export function validateIncommingWord(
 	let shouldTerminate = false;
 	// If the user typed the final word, check if all others are done as well
 	if (user.progress === room.wordCount) {
+		user.finishedAt = new Date(Date.now());
 		shouldTerminate = true;
 		for (const user of Object.values(room.users)) {
 			if (user.progress !== room.wordCount) {

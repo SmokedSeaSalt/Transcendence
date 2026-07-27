@@ -6,6 +6,20 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { roomStore } from "../../../src/services/roomStore";
 import { RoomData } from "../../../src/services/roomStore";
 import { registerSocketHandlers } from "../../../src/socket/";
+import { ClientToServerEvents, RoomState, ServerToClientEvents } from "../../../src/config/socket";
+import { io } from "../../../src/app";
+
+function joinRoom(client: Socket, roomId: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		client.emit("joinRoom", roomId, (success: boolean, message?: string) => {
+			if (!success) {
+				reject(new Error(message));
+				return;
+			}
+			resolve();
+		});
+	});
+}
 
 describe("socket disconnect", () => {
 	let httpServer: HttpServer;
@@ -20,7 +34,7 @@ describe("socket disconnect", () => {
 	beforeEach(async () => {
 		httpServer = createServer();
 
-		ioServer = new Server(httpServer);
+		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(httpServer);
 
 		registerSocketHandlers(ioServer);
 
@@ -44,18 +58,16 @@ describe("socket disconnect", () => {
 			new Promise<void>((resolve) => client2.on("connect", resolve)),
 		]);
 
-		if (!client1 ||!client2) {
+		await new Promise((r) => setTimeout(r, 50));
+
+		if (!client1 || !client2) {
 			throw new Error("client is null");
 		}
 
-		if (client1.id)
-			client1Id = client1.id;
-		else
-			throw new Error("Clients did not connect");
-		if (client2.id)
-			client2Id = client2.id;
-		else
-			throw new Error("Clients did not connect");
+		if (client1.id) client1Id = client1.id;
+		else throw new Error("Clients did not connect");
+		if (client2.id) client2Id = client2.id;
+		else throw new Error("Clients did not connect");
 
 		if (!client1Id || !client2Id) {
 			throw new Error("Clients did not connect");
@@ -77,8 +89,6 @@ describe("socket disconnect", () => {
 		leaving the new room and new leader being assigned
 	*/
 	it("removes user from room on disconnect", async () => {
-
-
 		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
 		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
 
@@ -108,21 +118,10 @@ describe("socket disconnect", () => {
 
 		// have the 2 users join the new room
 		roomStore.create(roomId);
-		await new Promise<void>((resolve) => {
-			client1.emit("joinRoom", roomId, (success: boolean) => {
-				expect(success).toBe(true);
-				resolve();
-			});
-		});
 
-		await new Promise<void>((resolve) => {
-			client2.emit("joinRoom", roomId, (success: boolean) => {
-				expect(success).toBe(true);
-				resolve();
-			});
-		});
-		// wait for events to process
-		await new Promise((r) => setTimeout(r, 50));
+		await joinRoom(client1, roomId);
+
+		await joinRoom(client2, roomId);
 
 		let newRoomUsers = roomStore.get(roomId)?.users;
 		if (!newRoomUsers) {
@@ -178,4 +177,52 @@ describe("socket disconnect", () => {
 
 		expect(roomStore.get(roomId)?.roomLeader).toEqual(client2Id); // check client 2 is now room leader
 	});
+
+	it("removes user from room on disconnect", async () => {
+		roomStore.create(roomId);
+
+		await joinRoom(client1, roomId);
+
+		await joinRoom(client2, roomId);
+
+		let room = roomStore.get(roomId);
+		if (!room)
+			throw new Error("Room does not exists");
+		room.prompt = ["hello", "world"];
+		room.wordCount = 2;
+		room.state = RoomState.IN_PROGRESS;
+
+		completeWord(client1, "hello", client1, client1Id, client2, client2Id, roomId);
+	})
 });
+
+
+async function completeWord(
+	typingClient: Socket,
+	word: string,
+	client1: Socket,
+	client1Id: string,
+	client2: Socket,
+	client2Id: string,
+	roomId: string,
+) {
+	const client1RoomState = new Promise<void>((resolve) => {
+		client1.once("roomState", (room) => {
+			expect(room.roomId).toBe(roomId);
+			expect(room.users[client1Id]).toBeDefined();
+			resolve();
+		});
+	});
+
+	const client2RoomState = new Promise<void>((resolve) => {
+		client2.once("roomState", (room) => {
+			expect(room.roomId).toBe(roomId);
+			expect(room.users[client2Id]).toBeDefined();
+			resolve();
+		});
+	});
+
+	typingClient.emit("completedWord", word);
+
+	await Promise.all([client1RoomState, client2RoomState]);
+}

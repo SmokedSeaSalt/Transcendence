@@ -4,6 +4,7 @@ export interface userInfo {
 	databaseUserId: number | null;
 	progress: number;
 	displayName: string;
+	finishedAt?: Date;
 }
 
 export interface RoomData {
