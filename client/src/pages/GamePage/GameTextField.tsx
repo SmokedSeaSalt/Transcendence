@@ -6,50 +6,61 @@ export default function GameTextField() {
 	const { socket, setRoomState, roomState } = useSocket();
 	const prompt =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-	// to be replaced with { roomState?.prompt } when active
+	// to be replaced with { roomState?.prompt } when active -> needs to be joined
+	// const prompt = "Lorem ipsum dolor sit amet.";
+
 	const [typedText, setTypedText] = useState<string>("");
+	// complete contains words that should no longer be touched; incomplete is everything else
+	// typed & untyped & typedWrong are for marking what the player is doing with incomplete
+	const [promptComplete, setPromptComplete] = useState<string>("");
+	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
 	const [promptTyped, setPromptTyped] = useState<string>("");
 	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
-	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
-	const [promptComplete, setPromptComplete] = useState<string>("");
 
-	const logValues = () => {
-		console.log(
-			"COMPLETE: ",
-			promptComplete,
-			"\nINCOMPLETE: ",
-			promptIncomplete,
-		);
-		console.log("TYPED: ", promptTyped, "\nUNTYPED: ", promptUntyped);
-	};
+	// const logValues = () => {
+	// 	console.log(
+	// 		"COMPLETE: ",
+	// 		promptComplete,
+	// 		"\nINCOMPLETE: ",
+	// 		promptIncomplete,
+	// 	);
+	// 	console.log("TYPED: ", promptTyped, "\nUNTYPED: ", promptUntyped);
+	// };
 
 	const compare = async (currentPrompt: string, typed: string) => {
 		// console.log("Going to compare prompt with ", typed);
 		for (let i = 0; i < typed.length; i++) {
-			// console.log("Comparing ", typed[i], " with ", prompt[i]);
-			// logValues();
 			if (typed[i] !== currentPrompt[i]) {
-				console.log("mismatch at i: ", i);
+				// console.log("mismatch at i: ", i);
 				setPromptUntyped(currentPrompt.substring(typed.length));
 				setPromptTypedWrong(currentPrompt.substring(i, typed.length));
 				setPromptTyped(currentPrompt.substring(0, i));
 				return;
 			}
 			if (typed[i] === " ") {
-				console.log("space found!");
 				socket?.emit("completedWord", typed);
-				const completeLength = promptComplete.length;
-				setPromptComplete(prompt.substring(0, completeLength + typed.length));
-				setPromptTyped("XYZ");
-				setPromptTypedWrong("");
-				setPromptIncomplete(prompt.substring(completeLength + typed.length));
-				setPromptUntyped(promptIncomplete);
 				setTypedText("");
-				logValues();
+				const completeLength = promptComplete.length + typed.length;
+				setPromptComplete(prompt.substring(0, completeLength));
+				setPromptIncomplete(prompt.substring(completeLength));
+				setPromptTyped("");
+				setPromptTypedWrong("");
+				setPromptUntyped(prompt.substring(completeLength));
+				return;
 			}
 		}
-		// console.log("No mismatch!");
+		if (promptIncomplete.length === typed.length)
+		{
+			socket?.emit("completedWord", typed);
+			console.log("GAME OVER!");
+			setPromptComplete(prompt);
+			setPromptIncomplete("");
+			setPromptUntyped("");
+			setPromptTyped("");
+			setPromptTypedWrong("");
+			return ;
+		}
 		setPromptUntyped(promptIncomplete.substring(typed.length));
 		setPromptTyped(promptIncomplete.substring(0, typed.length));
 		setPromptTypedWrong("");
@@ -57,7 +68,7 @@ export default function GameTextField() {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTypedText(e.target.value);
-		compare(promptIncomplete, e.target.value); // typedtext is not up-to-date with useState, lags behind 1
+		compare(promptIncomplete, e.target.value);
 	};
 
 	return (
