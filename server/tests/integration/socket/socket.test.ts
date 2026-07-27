@@ -12,6 +12,8 @@ describe("socket disconnect", () => {
 	let ioServer: Server;
 	let client1: Socket;
 	let client2: Socket;
+	let client1Id: string;
+	let client2Id: string;
 	let url: string;
 	const roomId = "thisIsADifferentRoom";
 
@@ -34,7 +36,30 @@ describe("socket disconnect", () => {
 
 		url = `http://localhost:${address.port}`;
 
-		if (roomStore.get("testRoom") === undefined) roomStore.create("testRoom");
+		client1 = Client(url);
+		client2 = Client(url);
+
+		await Promise.all([
+			new Promise<void>((resolve) => client1.on("connect", resolve)),
+			new Promise<void>((resolve) => client2.on("connect", resolve)),
+		]);
+
+		if (!client1 ||!client2) {
+			throw new Error("client is null");
+		}
+
+		if (client1.id)
+			client1Id = client1.id;
+		else
+			throw new Error("Clients did not connect");
+		if (client2.id)
+			client2Id = client2.id;
+		else
+			throw new Error("Clients did not connect");
+
+		if (!client1Id || !client2Id) {
+			throw new Error("Clients did not connect");
+		}
 	});
 
 	afterEach(() => {
@@ -52,20 +77,7 @@ describe("socket disconnect", () => {
 		leaving the new room and new leader being assigned
 	*/
 	it("removes user from room on disconnect", async () => {
-		client1 = Client(url);
-		client2 = Client(url);
 
-		await Promise.all([
-			new Promise<void>((resolve) => client1.on("connect", resolve)),
-			new Promise<void>((resolve) => client2.on("connect", resolve)),
-		]);
-
-		const client1Id = client1.id;
-		const client2Id = client2.id;
-
-		if (!client1Id || !client2Id) {
-			throw new Error("Clients did not connect");
-		}
 
 		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
 		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
