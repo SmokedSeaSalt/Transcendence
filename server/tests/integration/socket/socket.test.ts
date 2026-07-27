@@ -1,4 +1,4 @@
-import { type Server as HttpServer, createServer } from "http";
+import { type Server as HttpServer, createServer } from "node:http";
 import { Server } from "socket.io";
 import { io as Client, type Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
