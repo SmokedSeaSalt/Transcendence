@@ -40,7 +40,7 @@ export interface ClientToServerEvents {
 export type InterServerEvents = Record<string, never>;
 
 export interface SocketData {
-	userId: number | null;
+	userId: number | undefined;
 	roomId: string;
 	displayName: string;
 }

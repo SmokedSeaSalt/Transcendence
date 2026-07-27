@@ -26,7 +26,7 @@ export function registerSocketHandlers(io: Server) {
 			socket.data.userId = user.id;
 			socket.data.displayName = user.name;
 		} else {
-			socket.data.userId = null;
+			socket.data.userId = undefined;
 			if (displayName) socket.data.displayName = displayName;
 			else socket.data.displayName = "Guest";
 		}
@@ -48,6 +48,11 @@ export function registerSocketHandlers(io: Server) {
 		socket.join(room.roomId);
 		socket.data.roomId = room.roomId;
 
+		// todo Temporary test code
+		room.prompt = ["test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"];
+		room.wordCount = 15;
+		// end of tempororay test code
+
 		//to update client frontend
 		io.to(room.roomId).emit("roomState", room);
 
@@ -56,7 +61,6 @@ export function registerSocketHandlers(io: Server) {
 
 		socket.on("disconnect", () => {
 			console.log(`Disconnected: ${socket.id}`);
-			//todo loop throuhg all users rooms. do a roomStore get, if defined delete user
 			roomStore.deleteUser(socket.data.roomId, socket.id);
 		});
 	});
