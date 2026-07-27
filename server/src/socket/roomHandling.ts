@@ -2,6 +2,7 @@ import type { Socket } from "socket.io";
 import { transferRoom } from "../services/roomService.js";
 import { createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
+import { io } from "../app.js";
 
 export function registerRoomHandlers(socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
@@ -21,12 +22,16 @@ export function registerRoomHandlers(socket: Socket) {
 
 		if (oldRoomId) {
 			socket.leave(oldRoomId);
+			const oldRoom = roomStore.get(oldRoomId);
+			if (oldRoom) {
+				io.to(oldRoomId).emit("roomState", oldRoom);
+			}
 		}
 
 		socket.join(newRoomId);
-
 		socket.data.roomId = newRoomId;
 		callback(true, `Joined room ${newRoomId}`);
+		io.to(success.roomId).emit("roomState", success);
 
 		console.log(`${socket.id} joinRoom sucessful: ${newRoomId}`);
 	});
@@ -50,10 +55,15 @@ export function registerRoomHandlers(socket: Socket) {
 
 		if (oldRoomId) {
 			socket.leave(oldRoomId);
+			const oldRoom = roomStore.get(oldRoomId);
+			if (oldRoom) {
+				io.to(oldRoomId).emit("roomState", oldRoom);
+			}
 		}
 
 		socket.join(newRoom.roomId);
 		socket.data.roomId = newRoom.roomId;
+		io.to(success.roomId).emit("roomState", success);
 
 		console.log(`${socket.id} leaveRoom sucessful: ${newRoom.roomId}`);
 	});
