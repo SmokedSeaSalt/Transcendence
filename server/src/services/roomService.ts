@@ -1,6 +1,6 @@
 import { roomStore } from "./roomStore.js";
 
-export function joinRoom(
+export function transferRoom(
 	oldRoomId: string,
 	newRoomId: string,
 	userId: string,
