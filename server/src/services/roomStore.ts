@@ -1,7 +1,7 @@
 import { RoomState } from "../config/socket.js";
 
 export interface userInfo {
-	databaseUserId: number | null;
+	userId: number | null;
 	progress: number;
 	displayName: string;
 }
@@ -39,25 +39,25 @@ export const roomStore = {
 
 	addUser: (
 		roomId: string,
-		userId: string,
+		socketId: string,
 		name: string,
-		databaseUserId: number | null,
+		userId: number | null,
 	): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
 		if (Object.keys(room.users).length === 0) {
-			room.roomLeader = userId;
+			room.roomLeader = socketId;
 			console.log(`ROOM LEADER :${room.roomLeader}`);
 		}
 		// add user to room
-		room.users[userId] = {
+		room.users[socketId] = {
 			displayName: name,
 			progress: 0,
-			databaseUserId: databaseUserId,
+			userId: userId,
 		};
 	},
 
-	deleteUser: (roomId: string, userId: string): void => {
+	deleteUser: (roomId: string, socketId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
 
@@ -71,7 +71,7 @@ export const roomStore = {
 		}
 
 		//delete user
-		delete room.users[userId];
+		delete room.users[socketId];
 
 		// if room is now empty, delete the room.
 		const roomAfter = rooms.get(roomId);
@@ -82,17 +82,17 @@ export const roomStore = {
 		}
 
 		// if room leader left, assign a new one
-		if (roomAfter.roomLeader === userId) {
+		if (roomAfter.roomLeader === socketId) {
 			roomAfter.roomLeader = Object.keys(roomAfter.users)[0];
 		}
 	},
 
-	updateProgress: (roomId: string, userId: string): void => {
+	updateProgress: (roomId: string, socketId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
 		// TODO validate incomming word in gameService if word is correct before calling this funtion
 		// to increment progress
-		room.users[userId].progress += 1;
+		room.users[socketId].progress += 1;
 	},
 
 	setState: (roomId: string, state: RoomState): void => {
