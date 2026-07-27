@@ -48,8 +48,9 @@ export function validateIncommingWord(
 
 	if (typedWord === room.prompt[user.progress]) {
 		roomStore.updateProgress(roomId, userId);
+		console.log(`user: ${userId} typed "${typedWord}" correctly in room: ${roomId}`);
 	} else {
-		console.log(`user: ${userId}, sent an invalid word in room: ${roomId}`);
+		console.log(`user: ${userId}, sent an invalid word "${typedWord}" in room: ${roomId}`);
 		return;
 	}
 
@@ -60,6 +61,7 @@ export function validateIncommingWord(
 		shouldTerminate = true;
 		for (const user of Object.values(room.users)) {
 			if (user.progress !== room.wordCount) {
+				console.log(`${user.progress} !== ${room.wordCount}`)
 				shouldTerminate = false;
 				break;
 			}
