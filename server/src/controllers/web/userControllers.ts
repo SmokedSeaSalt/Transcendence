@@ -2,6 +2,7 @@ import { createHash, randomBytes } from "node:crypto";
 import type { User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import { toPublicUser } from "../../dto/user.mapper.js";
+import { UnauthorizedError } from "../../errors/errorTypes.js";
 import { updateAPIKey } from "../../services/apiKeyServices.js";
 import {
 	invalidateSession,
@@ -105,15 +106,15 @@ export const buildUserResponseFromSession = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	const sessionToken = req.cookies.session;
-	if (!sessionToken) {
-		return res.status(401).json({ error: "No session token found" });
-	}
 	try {
-		const user = await userServices.getUserFromSession(sessionToken);
+		if (!req.user) {
+			return next(new UnauthorizedError("Unauthorized error"));
+		}
+
+		const user = await userServices.getUserByID(req.user.id);
 
 		if (!user) {
-			return res.status(401).json({ error: "Not logged in" });
+			return next(new UnauthorizedError("Unauthorized error"));
 		}
 
 		const response = toPublicUser(user);

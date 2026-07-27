@@ -4,9 +4,9 @@ import { app } from "../../src/app.js";
 import { deleteUser } from "../helpers/dbHelpers.js";
 
 // when not logged in
-describe("GET /web/users/me when guest", () => {
+describe("GET /web/me when guest", () => {
 	it("returns correct lack of user info", async () => {
-		const res = await request(app).get("/web/users/me");
+		const res = await request(app).get("/web/me");
 		expect(res.status).toBe(401);
 		expect(res.text).toContain('"error":"No session token found."');
 	});
@@ -33,7 +33,7 @@ describe("register, then find /me", () => {
 
 	it("returns /me info while logged in", async () => {
 		const res = await request(app)
-			.get("/web/users/me")
+			.get("/web/me")
 			.set("Cookie", currentCookie)
 			.expect(200);
 		expect(res.text).toContain(`"name":"${name}"`);
@@ -43,7 +43,7 @@ describe("register, then find /me", () => {
 
 	it("returns /me when using a non-existent cookie", async () => {
 		const res = await request(app)
-			.get("/web/users/me")
+			.get("/web/me")
 			.set("Cookie", "fake cookie")
 			.expect(401);
 		expect(res.text).toContain('"error":"No session token found."');

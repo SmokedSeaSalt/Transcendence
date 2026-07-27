@@ -15,11 +15,11 @@ export const userAuth = () => {
 	const fetchData = useCallback(async () => {
 		setLoading(true);
 		try {
-			const response = await fetch("/web/users/me");
+			const response = await fetch("/web/me");
 			if (!response.ok) setData(null);
 			else {
 				const jsonData = await response.json();
-				console.log("json data from /web/users/me: ", jsonData);
+				console.log("json data from /web/me: ", jsonData);
 				setData(jsonData);
 			}
 		} catch (error) {
