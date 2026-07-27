@@ -73,17 +73,20 @@ export default function GameTextField() {
 
 	return (
 		<>
-			<div className="outline-double">
-				<p className="bg-green-500 inline">{promptComplete}</p>
-				<p className="bg-green-300 inline">{promptTyped}</p>
-				<p className="bg-red-300 inline">{promptTypedWrong}</p>
-				<p className="text-gray-500 inline">{promptUntyped}</p>
-				<input
+			<div className="outline-double relative">
+				<div className="top-0 h-100/100 ">
+					<p className="bg-green-500 inline">{promptComplete}</p>
+					<p className="bg-green-300 inline">{promptTyped}</p>
+					<p className="bg-red-300 inline">{promptTypedWrong}</p>
+					<p className="text-gray-500 inline">{promptUntyped}</p>
+				</div>
+				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
+					<input
 					value={typedText}
 					onChange={handleChange}
-					placeholder="Type here"
-					className="w-100/100"
+					className="w-100/100 h-100/100"
 				/>
+				</div>
 			</div>
 		</>
 	);
