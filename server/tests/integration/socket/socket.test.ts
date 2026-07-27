@@ -4,7 +4,8 @@ import { io as Client, type Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { registerSocketHandlers } from "../../../src/socket/";
-import { roomStore } from "../src/roomStore";
+import { roomStore } from "../../../src/services/roomStore";
+import { RoomData } from "../../../src/services/roomStore";
 
 describe("socket disconnect", () => {
 	let httpServer: HttpServer;
@@ -12,6 +13,7 @@ describe("socket disconnect", () => {
 	let client1: Socket;
 	let client2: Socket;
 	let url: string;
+	const roomId = "testRoom";
 
 	beforeEach(async () => {
 		httpServer = createServer();
@@ -40,7 +42,7 @@ describe("socket disconnect", () => {
 		ioServer.close();
 		httpServer.close();
 
-		roomStore.clear();
+		roomStore.delete(roomId);
 	});
 
 	it("removes user from room on disconnect", async () => {
@@ -52,20 +54,20 @@ describe("socket disconnect", () => {
 			new Promise<void>((resolve) => client2.on("connect", resolve)),
 		]);
 
-		client1.emit("join-room", "testRoom");
-		client2.emit("join-room", "testRoom");
+		client1.emit("joinRoom", roomId);
+		client2.emit("joinRoom", roomId);
 
 		// wait for events to process
 		await new Promise((r) => setTimeout(r, 50));
 
-		expect(roomStore.getUsers("testRoom")).toHaveLength(2);
+		expect(roomStore.get(roomId)?.users).toHaveLength(2);
 
 		client1.disconnect();
 
 		await new Promise((r) => setTimeout(r, 50));
 
-		expect(roomStore.getUsers("testRoom")).toHaveLength(1);
+		expect(roomStore.get(roomId)?.users).toHaveLength(1);
 
-		expect(roomStore.getUsers("testRoom")).not.toContain(client1.id);
+		expect(roomStore.get(roomId)?.users).not.toContain(client1.id);
 	});
 });
