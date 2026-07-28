@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../../errors/errorTypes.js";
+import type { NextFunction, Request, Response } from "express";
 import { toPublicUser } from "../../dto/user.mapper.js";
+import { UnauthorizedError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
 
 export const buildUserResponseFromSession = async (
@@ -33,7 +33,7 @@ export const buildUserResponseFromSession = async (
 export async function getGameResults(
 	req: Request,
 	res: Response,
-	next: NextFunction
+	next: NextFunction,
 ) {
 	try {
 		if (!req.user) {
