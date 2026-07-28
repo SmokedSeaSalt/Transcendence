@@ -36,6 +36,9 @@ export function validateIncommingWord(
 	if (!room) {
 		return null;
 	}
+	if (room.state !== RoomState.IN_PROGRESS) {
+		return null;
+	}
 	if (!room.prompt || !room.wordCount) {
 		return null;
 	}
