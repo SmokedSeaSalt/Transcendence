@@ -47,6 +47,15 @@ apiRegistry.registerPath({
 			},
 		},
 
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		409: {
 			description: "User already exists with this email.",
 			content: {
@@ -61,6 +70,27 @@ router.post("/register", createUserValidation(), userController.createUser);
 
 apiRegistry.registerPath({
 	method: "get",
+	path: "/api/users",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		200: { description: "List of Users returned" },
+
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.get("/", userController.getAllUsers);
+
+apiRegistry.registerPath({
+	method: "get",
 	path: "/api/users/{id}",
 	tags: ["Api"],
 
@@ -70,6 +100,15 @@ apiRegistry.registerPath({
 
 		400: {
 			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		403: {
+			description: "Forbidden due to lacking priviledges",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -106,6 +145,14 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 
 		404: {
 			description: "User not found",
@@ -118,5 +165,43 @@ apiRegistry.registerPath({
 	},
 });
 router.delete("/:id", isValidIdFormat, userController.deleteUser);
+
+apiRegistry.registerPath({
+	method: "delete",
+	path: "/api/users/{id}/api-key",
+	tags: ["Api"],
+
+	request: {},
+	responses: {
+		204: { description: "Api-Key of the user deleted" },
+
+		400: {
+			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+		403: {
+			description: "Forbidden due to lacking priviledges",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "User not found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.delete("/:id/api-key", isValidIdFormat, userController.deleteUserApiKey);
 
 export default router;

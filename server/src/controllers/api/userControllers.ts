@@ -69,3 +69,51 @@ export const deleteUser = async (
 		}
 	}
 };
+
+export const deleteUserApiKey = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const count = await userServices.deleteUserApiKeyById(
+			Number(req.params.id),
+		);
+
+		if (count === 0) {
+			return next(new NotFoundError("User Not Found"));
+		}
+
+		res.status(204).send();
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};
+
+export const getAllUsers = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const users = await userServices.getAllUsers();
+
+		const response = [];
+
+		for (let idx = 0; idx < users.length; idx += 1) {
+			response.push(toPublicUser(users[idx]));
+		}
+
+		res.status(200).json(response);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+};

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../errors/errorTypes.js";
+import { NotFoundError, UnauthorizedError } from "../errors/errorTypes.js";
 import {
-	getSessionExpirationDate,
+	getUserSession,
 	invalidateSession,
 } from "../services/sessionServices.js";
 
@@ -17,12 +17,12 @@ export const checkCookieStatus = async (
 		return next(new UnauthorizedError("No session token found."));
 	}
 	try {
-		const expirationDate = await getSessionExpirationDate(sessionToken);
-		if (!expirationDate) {
+		const userSession = await getUserSession(sessionToken);
+		if (!userSession) {
 			return next(new UnauthorizedError("Invalid session token."));
 		}
 		const currentDate = new Date(Date.now());
-		if (currentDate > expirationDate) {
+		if (currentDate > userSession.expiresAt) {
 			console.log("Cookie is expired.");
 			invalidateSession(sessionToken);
 			res.clearCookie("session", {
@@ -32,12 +32,18 @@ export const checkCookieStatus = async (
 			});
 			return next(new UnauthorizedError("Expired session token."));
 		}
+
+		req.user = {
+			id: userSession.user.id,
+			email: userSession.user.email,
+			role: userSession.user.role,
+		};
+
+		return next();
 	} catch (error: unknown) {
 		if (error instanceof Error) {
-			next(error);
-		} else {
-			next(new Error(String(error)));
+			return next(error);
 		}
+		return next(new Error(String(error)));
 	}
-	return next();
 };
