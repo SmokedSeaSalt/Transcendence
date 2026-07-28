@@ -358,5 +358,19 @@ describe("socket disconnect", () => {
 	});
 
 
+
+	it("startGame can only be called by the room leader", async () => {
+			roomStore.create(roomId);
+
+			await joinRoom(client1, roomId);
+
+			await joinRoom(client2, roomId);
+
+			expect(roomStore.get(roomId)?.roomLeader).toEqual(client1Id); // check client 1 is room leader
+
+
+			client2.emit("leaveRoom");
+			await new Promise((r) => setTimeout(r, 50));
+	});
 });
 
