@@ -343,7 +343,18 @@ describe("socket disconnect", () => {
 			expect(Object.keys(initialRoom.users)).toHaveLength(1);
 			expect(Object.keys(initialRoom.users)[0]).toBe(client2Id);
 
-			
+			client2.emit("leaveRoom");
+			await new Promise((r) => setTimeout(r, 50));
+
+			// initial room doesnt exist in socketio anymore
+			expect(
+				ioServer.sockets.adapter.rooms.get(roomId)
+			).toBeUndefined();
+			// initial room doenst exist in memory anymore
+			expect(
+				roomStore.get(roomId)
+			).toBeUndefined();
+
 	});
 
 
