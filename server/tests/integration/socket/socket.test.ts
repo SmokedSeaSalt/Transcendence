@@ -55,7 +55,6 @@ async function completeWord(
 	await Promise.all([client1RoomState, client2RoomState]);
 }
 
-
 describe("socket disconnect", () => {
 	let httpServer: HttpServer;
 	let ioServer: Server;
@@ -286,132 +285,120 @@ describe("socket disconnect", () => {
 		expect(client1User.finishedAt < client2User.finishedAt).toBeTruthy();
 	});
 
-
 	it("2 players in a room, one leaves and they are in separate rooms", async () => {
-			roomStore.create(roomId);
+		roomStore.create(roomId);
 
-			await joinRoom(client1, roomId);
+		await joinRoom(client1, roomId);
 
-			await joinRoom(client2, roomId);
+		await joinRoom(client2, roomId);
 
-			const initialRoom = roomStore.get(roomId);
-			const initialRoomUsers = initialRoom?.users;
-			if (!initialRoomUsers) {
-				throw new Error("initialRoomUsers undefined")
-			}
+		const initialRoom = roomStore.get(roomId);
+		const initialRoomUsers = initialRoom?.users;
+		if (!initialRoomUsers) {
+			throw new Error("initialRoomUsers undefined");
+		}
 
-			expect(Object.keys(initialRoomUsers)).toHaveLength(2);
+		expect(Object.keys(initialRoomUsers)).toHaveLength(2);
 
-			expect(
-				ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)
-			).toBe(true);
-			expect(
-				ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)
-			).toBe(true);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)).toBe(
+			true,
+		);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)).toBe(
+			true,
+		);
 
-			client1.emit("leaveRoom");
-			await new Promise((r) => setTimeout(r, 50));
+		client1.emit("leaveRoom");
+		await new Promise((r) => setTimeout(r, 50));
 
+		const serverSocket1 = ioServer.sockets.sockets.get(client1Id);
 
-			
-			const serverSocket1 = ioServer.sockets.sockets.get(client1Id);
+		expect(serverSocket1).toBeDefined();
+		const newRoomId = serverSocket1?.data.roomId;
+		const newRoom = roomStore.get(newRoomId);
+		const newRoomUsers = newRoom?.users;
+		if (!newRoomUsers) {
+			throw new Error("newRoomUsers undefined");
+		}
 
-			expect(serverSocket1).toBeDefined();
-			const newRoomId = serverSocket1?.data.roomId;
-			const newRoom = roomStore.get(newRoomId);
-			const newRoomUsers = newRoom?.users;
-			if (!newRoomUsers) {
-				throw new Error("newRoomUsers undefined")
-			}
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)).toBe(
+			false,
+		);
+		expect(ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)).toBe(
+			true,
+		);
+		expect(ioServer.sockets.adapter.rooms.get(newRoomId)?.has(client1Id)).toBe(
+			true,
+		);
 
-			expect(
-				ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)
-			).toBe(false);
-			expect(
-				ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)
-			).toBe(true);
-			expect(
-				ioServer.sockets.adapter.rooms.get(newRoomId)?.has(client1Id)
-			).toBe(true);
+		expect(roomId).not.toBe(newRoomId);
 
-			expect(roomId).not.toBe(newRoomId);
+		expect(Object.keys(newRoom.users)).toHaveLength(1);
+		console.log(newRoom.users);
+		expect(Object.keys(newRoom.users)[0]).toBe(client1Id);
 
-			expect(Object.keys(newRoom.users)).toHaveLength(1);
-			console.log(newRoom.users)
-			expect(Object.keys(newRoom.users)[0]).toBe(client1Id);
-	
-			expect(Object.keys(initialRoom.users)).toHaveLength(1);
-			expect(Object.keys(initialRoom.users)[0]).toBe(client2Id);
+		expect(Object.keys(initialRoom.users)).toHaveLength(1);
+		expect(Object.keys(initialRoom.users)[0]).toBe(client2Id);
 
-			client2.emit("leaveRoom");
-			await new Promise((r) => setTimeout(r, 50));
+		client2.emit("leaveRoom");
+		await new Promise((r) => setTimeout(r, 50));
 
-			// initial room doesnt exist in socketio anymore
-			expect(
-				ioServer.sockets.adapter.rooms.get(roomId)
-			).toBeUndefined();
-			// initial room doenst exist in memory anymore
-			expect(
-				roomStore.get(roomId)
-			).toBeUndefined();
-
+		// initial room doesnt exist in socketio anymore
+		expect(ioServer.sockets.adapter.rooms.get(roomId)).toBeUndefined();
+		// initial room doenst exist in memory anymore
+		expect(roomStore.get(roomId)).toBeUndefined();
 	});
 
-
-
 	it("startGame can only be called by the room leader, and complete word only works when IN_PROGRESS", async () => {
-			roomStore.create(roomId);
+		roomStore.create(roomId);
 
-			await joinRoom(client1, roomId);
+		await joinRoom(client1, roomId);
 
-			await joinRoom(client2, roomId);
+		await joinRoom(client2, roomId);
 
-			const room = roomStore.get(roomId);
-			if (!room) {
-				throw new Error("room is undefined");
-			}
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
 
-			expect(room.roomLeader).toEqual(client1Id); // check client 1 is room leader
+		expect(room.roomLeader).toEqual(client1Id); // check client 1 is room leader
 
-			client2.emit("completedWord", "hello");
-			await new Promise((r) => setTimeout(r, 50));
+		client2.emit("completedWord", "hello");
+		await new Promise((r) => setTimeout(r, 50));
 
-			client2.emit("startGame");
-			await new Promise((r) => setTimeout(r, 50));
+		client2.emit("startGame");
+		await new Promise((r) => setTimeout(r, 50));
 
-			client2.emit("completedWord", "hello");
-			await new Promise((r) => setTimeout(r, 50));
+		client2.emit("completedWord", "hello");
+		await new Promise((r) => setTimeout(r, 50));
 
-			const user1 = room.users[client1Id];
-			if (!user1) {
-				throw new Error("user1 is undefined");
-			}
-			const user2 = room.users[client2Id];
-			if (!user2) {
-				throw new Error("user1 is undefined");
-			}
-			expect(user2.progress === 0).toBeTruthy();
+		const user1 = room.users[client1Id];
+		if (!user1) {
+			throw new Error("user1 is undefined");
+		}
+		const user2 = room.users[client2Id];
+		if (!user2) {
+			throw new Error("user1 is undefined");
+		}
+		expect(user2.progress === 0).toBeTruthy();
 
-			expect(room.state === RoomState.LOBBY).toBeTruthy();
-			expect(room.prompt).toBeUndefined();
+		expect(room.state === RoomState.LOBBY).toBeTruthy();
+		expect(room.prompt).toBeUndefined();
 
+		client1.emit("startGame");
+		await new Promise((r) => setTimeout(r, 50));
+		expect(room.state === RoomState.COUNTDOWN).toBeTruthy(); // check client 1 is room leader
+		expect(room.prompt).toBeDefined(); // check client 1 is room leader
 
-			client1.emit("startGame");
-			await new Promise((r) => setTimeout(r, 50));
-			expect(room.state === RoomState.COUNTDOWN).toBeTruthy(); // check client 1 is room leader
-			expect(room.prompt).toBeDefined(); // check client 1 is room leader
+		await new Promise((r) => setTimeout(r, 5050));
+		expect(room.state === RoomState.IN_PROGRESS).toBeTruthy(); // check client 1 is room leader
 
-			await new Promise((r) => setTimeout(r, 5050));
-			expect(room.state === RoomState.IN_PROGRESS).toBeTruthy(); // check client 1 is room leader
-			
-
-			const prompt = room.prompt;
-			if (!prompt || !prompt.length) {
-				throw new Error("prompt is undefined");
-			}
-			client2.emit("completedWord", prompt[0]);
-			await new Promise((r) => setTimeout(r, 50));
-			expect(user2.progress === 1).toBeTruthy();
+		const prompt = room.prompt;
+		if (!prompt || !prompt.length) {
+			throw new Error("prompt is undefined");
+		}
+		client2.emit("completedWord", prompt[0]);
+		await new Promise((r) => setTimeout(r, 50));
+		expect(user2.progress === 1).toBeTruthy();
 	}, 10_000);
 
 	it("two tabs logged into the same account cannot join a game more than once", async () => {
@@ -437,7 +424,6 @@ describe("socket disconnect", () => {
 		user1.userId = 123;
 
 		console.log("client2");
-		console.log(ioServer.sockets.sockets.get(client1Id)!.data);
 
 		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
 		if (!serverSocketUser2) {
@@ -457,10 +443,7 @@ describe("socket disconnect", () => {
 
 		user2.userId = 123;
 		console.log("client2");
-		console.log(ioServer.sockets.sockets.get(client2Id)!.data);
 		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 		// await joinRoom(client2, roomId);
-
 	});
 });
-
