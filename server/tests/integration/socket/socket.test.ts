@@ -25,6 +25,37 @@ function joinRoom(client: Socket, roomId: string): Promise<void> {
 	});
 }
 
+async function completeWord(
+	typingClient: Socket,
+	word: string,
+	client1: Socket,
+	client1Id: string,
+	client2: Socket,
+	client2Id: string,
+	roomId: string,
+) {
+	const client1RoomState = new Promise<void>((resolve) => {
+		client1.once("roomState", (room) => {
+			expect(room.roomId).toBe(roomId);
+			expect(room.users[client1Id]).toBeDefined();
+			resolve();
+		});
+	});
+
+	const client2RoomState = new Promise<void>((resolve) => {
+		client2.once("roomState", (room) => {
+			expect(room.roomId).toBe(roomId);
+			expect(room.users[client2Id]).toBeDefined();
+			resolve();
+		});
+	});
+
+	typingClient.emit("completedWord", word);
+
+	await Promise.all([client1RoomState, client2RoomState]);
+}
+
+
 describe("socket disconnect", () => {
 	let httpServer: HttpServer;
 	let ioServer: Server;
@@ -94,7 +125,7 @@ describe("socket disconnect", () => {
 		moving from one room to another
 		leaving the new room and new leader being assigned
 	*/
-	it.skip("removes user from room on disconnect", async () => {
+	it("removes user from room on disconnect", async () => {
 		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
 		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
 
@@ -254,34 +285,50 @@ describe("socket disconnect", () => {
 
 		expect(client1User.finishedAt < client2User.finishedAt).toBeTruthy();
 	});
+
+
+	it("2 players in a room, one leaves and they are in separate rooms", async () => {
+			roomStore.create(roomId);
+
+			await joinRoom(client1, roomId);
+
+			await joinRoom(client2, roomId);
+
+			const initialRoom = roomStore.get(roomId);
+			const initialRoomUsers = initialRoom?.users;
+			if (!initialRoomUsers) {
+				throw new Error("initialRoomUsers undefined")
+			}
+
+			expect(Object.keys(initialRoomUsers)).toHaveLength(2);
+
+			const client1User = initialRoom.users[0];
+
+			client1.emit("leaveRoom");
+			await new Promise((r) => setTimeout(r, 50));
+
+			const serverSocket1 = ioServer.sockets.sockets.get(client1Id);
+
+			expect(serverSocket1).toBeDefined();
+			const newRoomId = serverSocket1?.data.roomId;
+			const newRoom = roomStore.get(newRoomId);
+			const newRoomUsers = newRoom?.users;
+			if (!newRoomUsers) {
+				throw new Error("newRoomUsers undefined")
+			}
+
+			expect(roomId).not.toBe(newRoomId);
+
+			expect(Object.keys(newRoom.users)).toHaveLength(1);
+			console.log(newRoom.users)
+			expect(Object.keys(newRoom.users)[0]).toBe(client1Id);
+	
+			expect(Object.keys(initialRoom.users)).toHaveLength(1);
+			expect(Object.keys(initialRoom.users)[0]).toBe(client2Id);
+
+			
+	});
+
+
 });
 
-async function completeWord(
-	typingClient: Socket,
-	word: string,
-	client1: Socket,
-	client1Id: string,
-	client2: Socket,
-	client2Id: string,
-	roomId: string,
-) {
-	const client1RoomState = new Promise<void>((resolve) => {
-		client1.once("roomState", (room) => {
-			expect(room.roomId).toBe(roomId);
-			expect(room.users[client1Id]).toBeDefined();
-			resolve();
-		});
-	});
-
-	const client2RoomState = new Promise<void>((resolve) => {
-		client2.once("roomState", (room) => {
-			expect(room.roomId).toBe(roomId);
-			expect(room.users[client2Id]).toBeDefined();
-			resolve();
-		});
-	});
-
-	typingClient.emit("completedWord", word);
-
-	await Promise.all([client1RoomState, client2RoomState]);
-}
