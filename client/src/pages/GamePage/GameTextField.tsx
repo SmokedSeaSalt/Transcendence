@@ -1,3 +1,4 @@
+import type * as CSS from "csstype";
 import { useState } from "react";
 import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";
@@ -5,11 +6,82 @@ import { RoomState } from "./SocketTypes";
 export default function GameTextField() {
 	const { socket, setRoomState, roomState } = useSocket();
 
-	const prompt_arr = ["this", "is", "the", "word", "array"];
+	const prompt_arr = [
+		"this",
+		"is",
+		"the",
+		"wor.d",
+		"array",
+		"and",
+		"more",
+		"wor.ds.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+		"this",
+		"is",
+		"the",
+		"word",
+		"array",
+		"and",
+		"more",
+		"words.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+		"this",
+		"is",
+		"the",
+		"word",
+		"array",
+		"and",
+		"more",
+		"words.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+		"this",
+		"is",
+		"the",
+		"word",
+		"array",
+		"and",
+		"more",
+		"words.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+		"this",
+		"is",
+		"the",
+		"word",
+		"array",
+		"and",
+		"more",
+		"words.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+		"this",
+		"is",
+		"the",
+		"word",
+		"array",
+		"and",
+		"more",
+		"words.",
+		"lorem",
+		"ipsum",
+		"dolor.",
+	];
+
+	// const prompt_arr = ["this", "is", "the", "word", "array", "and", "more", "words.", "lorem", "ipsum", "dolor.", "this", "is", "the", "word", "array", "and", "more", "words.", "lorem"];
+
 	// to be replaced with { roomState?.prompt } when active
 	const prompt = prompt_arr.join(" ");
 
 	const [cheating, setCheating] = useState<boolean>(false);
+	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
 	const [typedText, setTypedText] = useState<string>("");
 	// complete contains words that should no longer be touched; incomplete is everything else
@@ -64,30 +136,39 @@ export default function GameTextField() {
 		console.log("CHEATING ATTEMPT");
 		e.preventDefault();
 		setCheating(true);
-		setTimeout(() => setCheating(false), 1000);
+		setTimeout(() => setCheating(false), 2000);
 	};
+
+	// make it clear whether the type box is in focus or not
+	let outerClassName = "outline-double outline-orange-200 relative";
+	if (isInputFocused) {
+		outerClassName = "outline-solid relative bg-orange-100";
+	}
 
 	return (
 		<>
-			<div className="outline-double relative">
+			<div className={outerClassName}>
 				<div className="top-0 h-100/100 ">
 					<p className="bg-green-500 inline">{promptComplete}</p>
 					<p className="bg-green-300 inline">{promptTyped}</p>
 					<p className="bg-red-300 inline">{promptTypedWrong}</p>
+					<p className="inline animate-pulse">|</p>
 					<p className="text-gray-600 inline">{promptUntyped}</p>
 				</div>
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 					<input
-						autoFocus
+						// autoFocus // linter doesn't like it
 						value={typedText}
 						onChange={handleChange}
 						className="w-100/100 h-100/100"
 						onPaste={handlePaste}
+						onFocus={() => setIsInputFocused(true)}
+						onBlur={() => setIsInputFocused(false)}
 					/>
 				</div>
 				{cheating ? (
-					<div className="absolute top-0 h-100/100 w-100/100 bg-red-800 text-white text-8xl text-center align-middle">
-						NO CHEATING
+					<div className="absolute flex items-center justify-center top-0 h-100/100 w-100/100 bg-red-800 text-white">
+						<p style={{ fontSize: "3vh" }}>NO CHEATING</p>
 					</div>
 				) : (
 					""
