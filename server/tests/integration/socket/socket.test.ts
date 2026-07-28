@@ -413,5 +413,54 @@ describe("socket disconnect", () => {
 			await new Promise((r) => setTimeout(r, 50));
 			expect(user2.progress === 1).toBeTruthy();
 	}, 10_000);
+
+	it("two tabs logged into the same account cannot join a game more than once", async () => {
+		roomStore.create(roomId);
+
+		await joinRoom(client1, roomId);
+
+		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
+		if (!serverSocketUser1) {
+			throw new Error("serverSocketUser1 undefined");
+		}
+		const user1InitialRoomId = serverSocketUser1?.data.roomId;
+		const user1InitialRoom = roomStore.get(user1InitialRoomId);
+		if (!user1InitialRoom) {
+			throw new Error("user1InitialRoom undefined");
+		}
+		const user1 = user1InitialRoom.users[client1Id];
+		if (!user1) {
+			throw new Error("user1 undefined");
+		}
+		serverSocketUser1.data.userId = 123;
+
+		user1.userId = 123;
+
+		console.log("client2");
+		console.log(ioServer.sockets.sockets.get(client1Id)!.data);
+
+		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
+		if (!serverSocketUser2) {
+			throw new Error("serverSocketUser2 undefined");
+		}
+		const user2InitialRoomId = serverSocketUser2?.data.roomId;
+		const user2InitialRoom = roomStore.get(user2InitialRoomId);
+		if (!user2InitialRoom) {
+			throw new Error("user2InitialRoom undefined");
+		}
+		const user2 = user2InitialRoom.users[client2Id];
+		if (!user2) {
+			throw new Error("user2InitialRoom undefined");
+		}
+
+		serverSocketUser2.data.userId = 123;
+
+		user2.userId = 123;
+		console.log("client2");
+		console.log(ioServer.sockets.sockets.get(client2Id)!.data);
+		await expect(joinRoom(client2, roomId)).rejects.toThrow();
+		// await joinRoom(client2, roomId);
+
+	});
 });
 
