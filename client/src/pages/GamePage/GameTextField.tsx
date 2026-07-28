@@ -92,7 +92,6 @@ export default function GameTextField() {
 	}
 
 	let spaceFromSide = (promptComplete.length + promptTyped.length + promptTypedWrong.length) * 12 - 5;
-	// let spaceFromSide = 99;
 	let spaceFromTop = 0;
 
 	const caretStyle: CSS.Properties = {
@@ -107,17 +106,20 @@ export default function GameTextField() {
 		fontFamily: "monospace"
 	};
 
+	const untypedStyle: CSS.Properties = {
+		display: "inline",
+		boxShadow: "-3px 0px 0px 0px #000000",
+		color: "#393636"
+	}
+
 	return (
 		<>
 			<div className={outerClassName}>
-				{/* <div className="top-0"> */}
-				<div style={{fontSize: "20px", fontFamily: "monospace"}}>
-					{!promptComplete && !promptTyped ? (<span className="bg-green-500 border-r-1 border-black inline">{promptComplete}</span>) : (<span className="bg-green-500 inline">{promptComplete}</span>)}
-					{/* <span className="bg-green-500 border-r-1 border-black inline">{promptComplete}</span> */}
-					{!promptTypedWrong ? (<span className="bg-green-300 border-r-1 border-black inline">{promptTyped}</span>) : (<span className="bg-green-300 inline">{promptTyped}</span>)}
-					{/* <span className="bg-green-300 border-r-1 border-black inline">{promptTyped}</span> */}
-					<span className="bg-red-300 border-r-1 border-black inline">{promptTypedWrong}</span>
-					<span className="text-gray-600 inline">{promptUntyped}</span>
+				<div style={{fontSize: "20px", fontFamily: "monospace", boxSizing: "border-box"}}>
+					<span className="bg-green-500 inline">{promptComplete}</span>
+					<span className="bg-green-300 inline">{promptTyped}</span>
+					<span className="bg-red-300 inline">{promptTypedWrong}</span>
+					<span style={untypedStyle}>{promptUntyped}</span>
 				</div>
 				{/* <div style={caretStyle}>|</div> */}
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
