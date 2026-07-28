@@ -48,29 +48,10 @@ export function registerSocketHandlers(io: Server) {
 		socket.join(room.roomId);
 		socket.data.roomId = room.roomId;
 
-		// todo Temporary test code
-		//room.prompt = [
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//	"test",
-		//];
-		//room.wordCount = 15;
-
+		//todo temporary fill prompt at room creation
 		room.prompt = createPrompt();
 		room.wordCount = room.prompt.length;
-		// end of tempororay test code
+		// end of temporary fill prompt at room creation
 
 		registerRoomHandlers(socket);
 		registerGameHandlers(socket);
