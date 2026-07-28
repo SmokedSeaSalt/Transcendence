@@ -4,12 +4,10 @@ import { RoomState } from "./SocketTypes";
 
 export default function GameTextField() {
 	const { socket, setRoomState, roomState } = useSocket();
-	// const prompt =
-		// "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-	// to be replaced with { roomState?.prompt } when active -> needs to be joined
 
 	const prompt_arr = ["this", "is", "the", "word", "array"];
-	const prompt = prompt_arr.join(' ');
+	// to be replaced with { roomState?.prompt } when active
+	const prompt = prompt_arr.join(" ");
 
 	const [cheating, setCheating] = useState<boolean>(false);
 
@@ -23,7 +21,6 @@ export default function GameTextField() {
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
 
 	const compare = async (currentPrompt: string, typed: string) => {
-		// console.log("Going to compare prompt with ", typed);
 		for (let i = 0; i < typed.length; i++) {
 			if (typed[i] !== currentPrompt[i]) {
 				setPromptUntyped(currentPrompt.substring(typed.length));
@@ -81,6 +78,7 @@ export default function GameTextField() {
 				</div>
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 					<input
+						autoFocus
 						value={typedText}
 						onChange={handleChange}
 						className="w-100/100 h-100/100"
