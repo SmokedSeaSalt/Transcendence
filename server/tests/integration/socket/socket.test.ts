@@ -302,11 +302,18 @@ describe("socket disconnect", () => {
 
 			expect(Object.keys(initialRoomUsers)).toHaveLength(2);
 
-			const client1User = initialRoom.users[0];
+			expect(
+				ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)
+			).toBe(true);
+			expect(
+				ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)
+			).toBe(true);
 
 			client1.emit("leaveRoom");
 			await new Promise((r) => setTimeout(r, 50));
 
+
+			
 			const serverSocket1 = ioServer.sockets.sockets.get(client1Id);
 
 			expect(serverSocket1).toBeDefined();
@@ -316,6 +323,16 @@ describe("socket disconnect", () => {
 			if (!newRoomUsers) {
 				throw new Error("newRoomUsers undefined")
 			}
+
+			expect(
+				ioServer.sockets.adapter.rooms.get(roomId)?.has(client1Id)
+			).toBe(false);
+			expect(
+				ioServer.sockets.adapter.rooms.get(roomId)?.has(client2Id)
+			).toBe(true);
+			expect(
+				ioServer.sockets.adapter.rooms.get(newRoomId)?.has(client1Id)
+			).toBe(true);
 
 			expect(roomId).not.toBe(newRoomId);
 
