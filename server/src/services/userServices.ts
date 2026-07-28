@@ -169,19 +169,31 @@ export const getAllUsers = async () => {
  * @param id id of the user
  * @returns An array of gameResults
  */
-export async function getAllGameResultsById(id: number) {
-	const user = await prisma.user.findUnique({
+export async function getGameHistoryById(id: number) {
+	const gameHistory = await prisma.user.findUnique({
 		where: {
 			id: id,
 		},
-		include: {
-			gameResults: true,
+		select: {
+			gameResults: {
+				include: {
+					session: {
+						include: {
+							players: {
+								select: {
+									name: true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	});
 
-	if (!user) {
+	if (!gameHistory) {
 		return [];
 	}
 
-	return user.gameResults;
+	return gameHistory;
 }

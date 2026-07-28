@@ -30,7 +30,7 @@ export const buildUserResponseFromSession = async (
 	}
 };
 
-export async function getGameResults(
+export async function getGameHistory(
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -40,9 +40,9 @@ export async function getGameResults(
 			return next(new UnauthorizedError("Unauthorized"));
 		}
 
-		const gameResults = await userServices.getAllGameResultsById(req.user.id);
+		const gameHistory = await userServices.getGameHistoryById(req.user.id);
 
-		return res.status(200).json(gameResults);
+		return res.status(200).json(gameHistory);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);

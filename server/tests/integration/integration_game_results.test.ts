@@ -8,7 +8,7 @@ import {
 } from "../helpers/dbHelpers.js";
 
 describe("/web/me/gameResults", async () => {
-	const gameResultsPath = "/web/me/gameResults";
+	const gameResultsPath = "/web/me/gameHistory";
 	const email = "test@example.com";
 	const name = "Test User";
 	const password = "ValidPassword123!";
@@ -28,7 +28,7 @@ describe("/web/me/gameResults", async () => {
 			.set("Cookie", currentCookie);
 
 		expect(res.status).toBe(200);
-		expect(res.body).toStrictEqual([]);
+		expect(res.body).toStrictEqual({ gameResults: [] });
 	});
 	it("Returns 200 with an entry", async () => {
 		const user = await prisma.user.findUniqueOrThrow({
@@ -71,8 +71,8 @@ describe("/web/me/gameResults", async () => {
 			.set("Cookie", currentCookie);
 
 		expect(res.status).toBe(200);
-		expect(res.body).toHaveLength(1);
-		expect(res.body[0]).toMatchObject({
+		expect(res.body.gameResults).toHaveLength(1);
+		expect(res.body.gameResults[0]).toMatchObject({
 			score: 100,
 			wpm: 60,
 			cpm: 300,
@@ -80,6 +80,12 @@ describe("/web/me/gameResults", async () => {
 			timeMs: 12000,
 			placement: 1,
 			finished: true,
+			session: {
+				charCount: 11,
+				wordCount: 2,
+				textPrompt: "Hello World",
+				players: [{ name }],
+			},
 		});
 	});
 	afterAll(async () => {

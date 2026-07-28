@@ -7,6 +7,6 @@ const router = Router();
 router.use(checkCookieStatus);
 
 router.get("/", meController.buildUserResponseFromSession);
-router.get("/gameResults", meController.getGameResults);
+router.get("/gameHistory", meController.getGameHistory);
 
 export default router;
