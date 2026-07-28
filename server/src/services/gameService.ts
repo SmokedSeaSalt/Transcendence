@@ -69,7 +69,6 @@ export function validateIncommingWord(
 		shouldTerminate = true;
 		for (const user of Object.values(room.users)) {
 			if (user.progress !== room.wordCount) {
-				console.log(`${user.progress} !== ${room.wordCount}`);
 				shouldTerminate = false;
 				break;
 			}
