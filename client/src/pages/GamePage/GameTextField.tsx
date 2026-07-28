@@ -5,7 +5,6 @@ import { RoomState } from "./SocketTypes";
 
 export default function GameTextField() {
 	const { socket, setRoomState, roomState } = useSocket();
-
 	const prompt_arr = [
 		"this",
 		"is",
@@ -23,60 +22,7 @@ export default function GameTextField() {
 		"the",
 		"word",
 		"array",
-		"and",
-		"more",
-		"words.",
-		"lorem",
-		"ipsum",
-		"dolor.",
-		"this",
-		"is",
-		"the",
-		"word",
-		"array",
-		"and",
-		"more",
-		"words.",
-		"lorem",
-		"ipsum",
-		"dolor.",
-		"this",
-		"is",
-		"the",
-		"word",
-		"array",
-		"and",
-		"more",
-		"words.",
-		"lorem",
-		"ipsum",
-		"dolor.",
-		"this",
-		"is",
-		"the",
-		"word",
-		"array",
-		"and",
-		"more",
-		"words.",
-		"lorem",
-		"ipsum",
-		"dolor.",
-		"this",
-		"is",
-		"the",
-		"word",
-		"array",
-		"and",
-		"more",
-		"words.",
-		"lorem",
-		"ipsum",
-		"dolor.",
 	];
-
-	// const prompt_arr = ["this", "is", "the", "word", "array", "and", "more", "words.", "lorem", "ipsum", "dolor.", "this", "is", "the", "word", "array", "and", "more", "words.", "lorem"];
-
 	// to be replaced with { roomState?.prompt } when active
 	const prompt = prompt_arr.join(" ");
 
@@ -133,28 +79,47 @@ export default function GameTextField() {
 	};
 
 	const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-		console.log("CHEATING ATTEMPT");
+		console.log("cheating attempt");
 		e.preventDefault();
 		setCheating(true);
 		setTimeout(() => setCheating(false), 2000);
 	};
 
 	// make it clear whether the type box is in focus or not
-	let outerClassName = "outline-double outline-orange-200 relative";
+	let outerClassName = "outline-double outline-orange-200 relative max-h-50/100";
 	if (isInputFocused) {
-		outerClassName = "outline-solid relative bg-orange-100";
+		outerClassName = "outline-solid relative bg-orange-100 max-h-50/100 ";
 	}
+
+	let spaceFromSide = (promptComplete.length + promptTyped.length + promptTypedWrong.length) * 12 - 5;
+	// let spaceFromSide = 99;
+	let spaceFromTop = 0;
+
+	const caretStyle: CSS.Properties = {
+		position: "absolute",
+		width: "2px",
+		background: "#00000",
+		borderRadius: "4px",
+		left: `${spaceFromSide}px`,
+		// left: `${spaceFromSide}%`,
+		top: `${spaceFromTop}px`,
+		fontSize: "20px",
+		fontFamily: "monospace"
+	};
 
 	return (
 		<>
 			<div className={outerClassName}>
-				<div className="top-0 h-100/100 ">
-					<p className="bg-green-500 inline">{promptComplete}</p>
-					<p className="bg-green-300 inline">{promptTyped}</p>
-					<p className="bg-red-300 inline">{promptTypedWrong}</p>
-					<p className="inline animate-pulse">|</p>
-					<p className="text-gray-600 inline">{promptUntyped}</p>
+				{/* <div className="top-0"> */}
+				<div style={{fontSize: "20px", fontFamily: "monospace"}}>
+					{!promptComplete && !promptTyped ? (<span className="bg-green-500 border-r-1 border-black inline">{promptComplete}</span>) : (<span className="bg-green-500 inline">{promptComplete}</span>)}
+					{/* <span className="bg-green-500 border-r-1 border-black inline">{promptComplete}</span> */}
+					{!promptTypedWrong ? (<span className="bg-green-300 border-r-1 border-black inline">{promptTyped}</span>) : (<span className="bg-green-300 inline">{promptTyped}</span>)}
+					{/* <span className="bg-green-300 border-r-1 border-black inline">{promptTyped}</span> */}
+					<span className="bg-red-300 border-r-1 border-black inline">{promptTypedWrong}</span>
+					<span className="text-gray-600 inline">{promptUntyped}</span>
 				</div>
+				{/* <div style={caretStyle}>|</div> */}
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 					<input
 						// autoFocus // linter doesn't like it
