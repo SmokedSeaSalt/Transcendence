@@ -48,8 +48,8 @@ export function registerSocketHandlers(io: Server) {
 		socket.join(room.roomId);
 		socket.data.roomId = room.roomId;
 
-		registerRoomHandlers(socket);
-		registerGameHandlers(socket);
+		registerRoomHandlers(io, socket);
+		registerGameHandlers(io, socket);
 
 		//to update client frontend
 		io.to(room.roomId).emit("roomState", room);

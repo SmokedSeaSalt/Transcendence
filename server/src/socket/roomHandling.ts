@@ -1,12 +1,11 @@
 import { setTimeout as wait } from "node:timers/promises";
-import type { Socket } from "socket.io";
-import { io } from "../app.js";
+import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
 import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 
-export function registerRoomHandlers(socket: Socket) {
+export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
 		//check if user is already in newRoomId
 		const newRoom = roomStore.get(newRoomId);
