@@ -8,6 +8,30 @@ import { roomStore } from "../services/roomStore.js";
 
 export function registerRoomHandlers(socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
+		//check if user is already in newRoomId
+		const newRoom = roomStore.get(newRoomId);
+		if (!newRoom) {
+			callback(false, `Failed to join room ${newRoomId}. Room does not exist`);
+			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
+			return;
+		}
+
+		if (socket.data.userId) {
+			for (const [socketId, userInfo] of Object.entries(newRoom.users)) {
+				if (socket.data.userId === userInfo.userId) {
+					callback(
+						false,
+						`Failed to join room ${newRoomId}. User already in Room`,
+					);
+					console.log(
+						`${socket.id} failed to joinRoom: ${newRoomId}. User already in Room`,
+					);
+					return;
+				}
+			}
+		}
+
+		//move user to new room
 		const oldRoomId = socket.data.roomId;
 		const success = transferRoom(
 			oldRoomId,
