@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server } from "socket.io";
-import { createUniqueRoom } from "../services/gameService.js";
+import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";

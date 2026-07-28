@@ -1,5 +1,7 @@
+import { setTimeout as wait } from "node:timers/promises";
 import type { Server, Socket } from "socket.io";
-import { createUniqueRoom } from "../services/gameService.js";
+import { RoomState } from "../config/socket.js";
+import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 
@@ -73,7 +75,22 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 		console.log(`${socket.id} leaveRoom sucessful: ${newRoom.roomId}`);
 	});
 
-	socket.on("startGame", () => {
+	socket.on("startGame", async () => {
+		const room = roomStore.get(socket.data.roomId);
+		if (!room) return;
+		if (socket.id !== room.roomLeader) return;
+		if (room.state !== RoomState.LOBBY) return;
 		console.log(`startGame received from ${socket.id}`);
+
+		room.prompt = createPrompt();
+		room.wordCount = room.prompt.length;
+
+		roomStore.setState(room.roomId, RoomState.COUNTDOWN);
+		io.to(room.roomId).emit("roomState", room);
+
+		await wait(5000);
+
+		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
+		io.to(room.roomId).emit("roomState", room);
 	});
 }
