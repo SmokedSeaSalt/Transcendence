@@ -10,7 +10,6 @@ import {
 describe("/web/me/gameResults", async () => {
 	const gameResultsPath = "/web/me/gameResults";
 	const email = "test@example.com";
-	const other = "test1@example.com"
 	const name = "Test User";
 	const password = "ValidPassword123!";
 	let currentCookie: string;
