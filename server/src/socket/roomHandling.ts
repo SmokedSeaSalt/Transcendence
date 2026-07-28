@@ -80,6 +80,7 @@ export function registerRoomHandlers(socket: Socket) {
 		const room = roomStore.get(socket.data.roomId);
 		if (!room) return;
 		if (socket.id !== room.roomLeader) return;
+		if (room.state !== RoomState.LOBBY) return;
 		console.log(`startGame received from ${socket.id}`);
 
 		room.prompt = createPrompt();
