@@ -127,6 +127,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onPaste={handlePaste}
 							onFocus={() => setIsInputFocused(true)}
 							onBlur={() => setIsInputFocused(false)}
+							maxLength={promptIncomplete.length}
 						/>
 					</div>
 					{cheating ? (
