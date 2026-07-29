@@ -26,10 +26,6 @@ export default function GamePage() {
 		});
 	}, [socket, setRoomState]);
 
-	const handleClick = async () => {
-		socket?.emit("completedWord", "test");
-	};
-
 	if (roomState)
 		console.log(
 			"Current user count in index: ",
@@ -39,10 +35,6 @@ export default function GamePage() {
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<GamePageHeader />
-			<h1>React + Express</h1>
-			<Button type="button" onClick={handleClick}>
-				send socket event "completedWord" with the word "test"
-			</Button>
 			{message ? <p>Socket id: {message}</p> : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
