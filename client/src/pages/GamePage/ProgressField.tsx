@@ -44,11 +44,6 @@ export default function ProgressField() {
 
 	return (
 		<>
-			{roomState ? (
-				<p>User count: {Object.keys(roomState.users).length}</p>
-			) : (
-				<p>No room state.</p>
-			)}
 			<div className="w-100%">{progressBars}</div>
 		</>
 	);
