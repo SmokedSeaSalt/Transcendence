@@ -1,31 +1,14 @@
 import type * as CSS from "csstype";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";
 
-export default function GameTextField() {
-	const { socket, setRoomState, roomState } = useSocket();
-	const prompt_arr = [
-		"this",
-		"is",
-		"the",
-		"wor.d",
-		"array",
-		"and",
-		"more",
-		"wor.ds.",
-		"lorem",
-		"ipsum",
-		"dolor.",
-		"this",
-		"is",
-		"the",
-		"word",
-		"array",
-	];
-	// to be replaced with { roomState?.prompt } when active
-	const prompt = prompt_arr.join(" ");
+interface TextFieldProps {
+	prompt: string[];
+}
 
+const GameTextField: React.FC<TextFieldProps> = (props) => {
+	const { socket, setRoomState, roomState } = useSocket();
 	const [cheating, setCheating] = useState<boolean>(false);
 	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
@@ -33,6 +16,15 @@ export default function GameTextField() {
 	// complete contains words that should no longer be touched; incomplete is everything else
 	// typed & untyped & typedWrong are for marking what the player is doing with incomplete
 	const [promptComplete, setPromptComplete] = useState<string>("");
+	// if (props.prompt === undefined)
+	// {
+	// 	console.log("No prompt");
+	// 	return (<div>Waiting for game to start...</div>);
+	// }
+	// const prompt = props.prompt.join(" ");
+
+	const prompt = props.prompt.join(" ");
+
 	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
 	const [promptTyped, setPromptTyped] = useState<string>("");
 	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
@@ -47,7 +39,8 @@ export default function GameTextField() {
 				return;
 			}
 			if (typed[i] === " ") {
-				socket?.emit("completedWord", typed);
+				socket?.emit("completedWord", typed.substring(0, typed.length - 1));
+				console.log(typed.substring(0, typed.length));
 				setTypedText("");
 				const completeLength = promptComplete.length + typed.length;
 				setPromptComplete(prompt.substring(0, completeLength));
@@ -86,7 +79,8 @@ export default function GameTextField() {
 	};
 
 	// make it clear whether the type box is in focus or not
-	let outerClassName = "outline-double outline-orange-200 relative max-h-50/100";
+	let outerClassName =
+		"outline-double outline-orange-200 relative max-h-50/100";
 	if (isInputFocused) {
 		outerClassName = "outline-solid relative bg-orange-100 max-h-50/100 ";
 	}
@@ -94,37 +88,49 @@ export default function GameTextField() {
 	const untypedStyle: CSS.Properties = {
 		display: "inline",
 		boxShadow: "-3px 0px 0px 0px #000000",
-		color: "#393636"
-	}
+		color: "#393636",
+	};
 
 	return (
 		<>
-			<div className={outerClassName}>
-				<div style={{fontSize: "20px", fontFamily: "monospace", boxSizing: "border-box"}}>
-					<span className="bg-green-500 inline">{promptComplete}</span>
-					<span className="bg-green-300 inline">{promptTyped}</span>
-					<span className="bg-red-300 inline">{promptTypedWrong}</span>
-					<span style={untypedStyle}>{promptUntyped}</span>
-				</div>
-				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
-					<input
-						// autoFocus // linter doesn't like it
-						value={typedText}
-						onChange={handleChange}
-						className="w-100/100 h-100/100"
-						onPaste={handlePaste}
-						onFocus={() => setIsInputFocused(true)}
-						onBlur={() => setIsInputFocused(false)}
-					/>
-				</div>
-				{cheating ? (
-					<div className="absolute flex items-center justify-center top-0 h-100/100 w-100/100 bg-red-800 text-white">
-						<p style={{ fontSize: "3vh" }}>NO CHEATING</p>
+			{roomState?.state === RoomState.COUNTDOWN ? (
+				<div>COUNTING DOWN!</div>
+			) : (
+				<div className={outerClassName}>
+					<div
+						style={{
+							fontSize: "20px",
+							fontFamily: "monospace",
+							boxSizing: "border-box",
+						}}
+					>
+						<span className="bg-green-500 inline">{promptComplete}</span>
+						<span className="bg-green-300 inline">{promptTyped}</span>
+						<span className="bg-red-300 inline">{promptTypedWrong}</span>
+						<span style={untypedStyle}>{promptUntyped}</span>
 					</div>
-				) : (
-					""
-				)}
-			</div>
+					<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
+						<input
+							// autoFocus // linter doesn't like it
+							value={typedText}
+							onChange={handleChange}
+							className="w-100/100 h-100/100"
+							onPaste={handlePaste}
+							onFocus={() => setIsInputFocused(true)}
+							onBlur={() => setIsInputFocused(false)}
+						/>
+					</div>
+					{cheating ? (
+						<div className="absolute flex items-center justify-center top-0 h-100/100 w-100/100 bg-red-800 text-white">
+							<p style={{ fontSize: "3vh" }}>NO CHEATING</p>
+						</div>
+					) : (
+						""
+					)}
+				</div>
+			)}
 		</>
 	);
-}
+};
+
+export default GameTextField;
