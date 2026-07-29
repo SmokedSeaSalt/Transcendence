@@ -28,15 +28,13 @@ export default function JoinRoomButton() {
 			return;
 		}
 		const { success, message } = await emitJoinRoom(roomId);
-		if (loading)
-			return;
+		if (loading) return;
 		if (!success) {
 			const errors: Record<string, string> = {};
-			errors["roomId"] = message;
+			errors.roomId = message;
 			setFieldErrors(errors);
 			console.log("joinroom fail");
-		}
-		else {
+		} else {
 			setFieldErrors({});
 			setOpen(false);
 			console.log("joinroom success");
