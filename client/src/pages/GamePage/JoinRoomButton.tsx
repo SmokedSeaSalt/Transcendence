@@ -8,8 +8,7 @@ export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [roomId, setRoomId] = useState<string>("");
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-	const [fieldUpdated, setFieldUpdated] = useState("");
-	const { storeRoomId, loading, error } = useConnectToRoom();
+	const { emitJoinRoom, loading, error } = useConnectToRoom();
 
 	const clickJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -26,13 +25,23 @@ export default function JoinRoomButton() {
 				errors[field] = err.message;
 			});
 			setFieldErrors(errors);
-			setFieldUpdated("");
 			return;
 		}
-		setFieldUpdated("Connected!");
-		setTimeout(() => setFieldUpdated(""), 2000);
-		setFieldErrors({});
-		await storeRoomId(roomId);
+		const { success, message } = await emitJoinRoom(roomId);
+		if (loading)
+			return;
+		if (!success) {
+			const errors: Record<string, string> = {};
+			errors["roomId"] = message;
+			setFieldErrors(errors);
+			console.log("joinroom fail");
+		}
+		else {
+			setFieldErrors({});
+			setOpen(false);
+			console.log("joinroom success");
+			return;
+		}
 	};
 
 	return (
@@ -59,11 +68,6 @@ export default function JoinRoomButton() {
 						{fieldErrors.roomId && (
 							<div role="alert" style={{ color: "red" }}>
 								{fieldErrors.roomId}
-							</div>
-						)}
-						{fieldUpdated && (
-							<div role="alert" style={{ color: "green" }}>
-								{fieldUpdated}
 							</div>
 						)}
 					</div>
