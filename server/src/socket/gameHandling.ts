@@ -1,10 +1,10 @@
 import type { Server, Socket } from "socket.io";
-import { validateIncommingWord } from "../services/gameService.js";
+import { validateIncomingWord } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", (typedWord: string) => {
-		const room = validateIncommingWord(
+		const room = validateIncomingWord(
 			socket.data.roomId,
 			socket.id,
 			typedWord,

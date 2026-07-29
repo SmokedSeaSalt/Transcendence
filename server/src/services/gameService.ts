@@ -26,7 +26,7 @@ function makeid(length: number) {
 	return result;
 }
 
-export function validateIncommingWord(
+export function validateIncomingWord(
 	roomId: string,
 	userId: string,
 	typedWord: string,

@@ -91,8 +91,6 @@ export const roomStore = {
 	updateProgress: (roomId: string, socketId: string): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
-		// TODO validate incomming word in gameService if word is correct before calling this funtion
-		// to increment progress
 		room.users[socketId].progress += 1;
 	},
 
