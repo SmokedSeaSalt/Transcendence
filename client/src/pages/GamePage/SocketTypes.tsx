@@ -28,7 +28,10 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
 	completedWord: (word: string) => void;
-	joinRoom: (roomId: string) => void;
+	joinRoom: (
+		roomId: string,
+		callback: (success: boolean, message?: string) => void,
+	) => void;
 	startGame: () => void;
 	leaveRoom: () => void;
 }
