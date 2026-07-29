@@ -68,6 +68,13 @@ export const saveGameSession = async (
 					...results
 					],
 				},
+				players: {
+					connect: Object.values(roomData.users)
+						.filter((user): user is typeof user & { userId: number } => user.userId !== undefined)
+						.map((user) => ({
+							id: user.userId,
+						})),
+				},
 			},
 			include: {
 			results: true,
