@@ -1,5 +1,6 @@
 import { setTimeout as wait } from "node:timers/promises";
 import type { Server, Socket } from "socket.io";
+import { maxRoomSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { transferRoom } from "../services/roomService.js";
@@ -10,8 +11,25 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 		//check if user is already in newRoomId
 		const newRoom = roomStore.get(newRoomId);
 		if (!newRoom) {
-			callback(false, `Failed to join room ${newRoomId}. Room does not exist`);
+			callback(false, `Failed to join room ${newRoomId}. Room does not exist.`);
 			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
+			return;
+		}
+
+		if (newRoom.state !== RoomState.LOBBY) {
+			callback(
+				false,
+				`Failed to join room ${newRoomId}. Room already in progress.`,
+			);
+			console.log(
+				`${socket.id} failed to joinRoom: ${newRoomId}. Room already in progress.`,
+			);
+			return;
+		}
+
+		if (Object.keys(newRoom.users).length >= maxRoomSize) {
+			callback(false, `Failed to join room ${newRoomId}. Room full.`);
+			console.log(`${socket.id} failed to joinRoom: ${newRoomId}. Room full.`);
 			return;
 		}
 
@@ -20,10 +38,10 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 				if (socket.data.userId === userInfo.userId) {
 					callback(
 						false,
-						`Failed to join room ${newRoomId}. User already in Room`,
+						`Failed to join room ${newRoomId}. User already in Room.`,
 					);
 					console.log(
-						`${socket.id} failed to joinRoom: ${newRoomId}. User already in Room`,
+						`${socket.id} failed to joinRoom: ${newRoomId}. User already in Room.`,
 					);
 					return;
 				}
