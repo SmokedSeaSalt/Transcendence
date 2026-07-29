@@ -21,9 +21,9 @@ import { type RoomData, roomStore } from "../../src/services/roomStore.js";
 
 // check cookie expiration upon creation & over time
 describe("Room create(), get(), delete", () => {
-	const userId = "user1";
+	const socketId = "user1";
 	const displayName = "bob";
-	const databaseUserId = 123;
+	const userId = 123;
 
 	const roomId = "room1";
 
@@ -35,12 +35,12 @@ describe("Room create(), get(), delete", () => {
 
 	it("create room, get and delete", async () => {
 		const roomDataFromCreate: RoomData = roomStore.create(roomId);
-		roomStore.addUser(roomId, userId, displayName, databaseUserId);
+		roomStore.addUser(roomId, socketId, displayName, userId);
 		expect(roomDataFromCreate.roomId).toBe(roomId);
-		expect(roomDataFromCreate.roomLeader).toBe(userId);
+		expect(roomDataFromCreate.roomLeader).toBe(socketId);
 		expect(roomDataFromCreate.users).toEqual({
-			[userId]: {
-				databaseUserId,
+			[socketId]: {
+				userId,
 				progress: 0,
 				displayName,
 			},
@@ -51,10 +51,10 @@ describe("Room create(), get(), delete", () => {
 		const roomDataFromGet = roomStore.get(roomId);
 		expect(roomDataFromGet).toBeDefined();
 		expect(roomDataFromGet?.roomId).toBe(roomId);
-		expect(roomDataFromGet?.roomLeader).toBe(userId);
+		expect(roomDataFromGet?.roomLeader).toBe(socketId);
 		expect(roomDataFromGet?.users).toEqual({
-			[userId]: {
-				databaseUserId,
+			[socketId]: {
+				userId,
 				progress: 0,
 				displayName,
 			},
@@ -73,9 +73,9 @@ describe("Room create(), get(), delete", () => {
 });
 
 describe("Room addUser() and deleteUser()", () => {
-	const userId = "user1";
+	const socketId = "user1";
 	const displayName = "bob";
-	const databaseUserId = 123;
+	const userId = 123;
 
 	const roomId = "room1";
 
@@ -91,7 +91,7 @@ describe("Room addUser() and deleteUser()", () => {
 
 	it("add user to invalid room", async () => {
 		expect(() =>
-			roomStore.addUser(invalidRoomId, userId, displayName, databaseUserId),
+			roomStore.addUser(invalidRoomId, socketId, displayName, userId),
 		).not.toThrow();
 	});
 
@@ -101,20 +101,20 @@ describe("Room addUser() and deleteUser()", () => {
 		expect(roomBeforeAdd?.users).toEqual({});
 
 		// Add a user to room
-		roomStore.addUser(roomId, userId, displayName, databaseUserId);
+		roomStore.addUser(roomId, socketId, displayName, userId);
 
 		// Check room has one user
 		const roomAfterAdd = roomStore.get(roomId);
 		expect(roomAfterAdd?.users).toEqual({
-			[userId]: {
-				databaseUserId,
+			[socketId]: {
+				userId,
 				progress: 0,
 				displayName,
 			},
 		});
 
 		// Delete the user from the room
-		roomStore.deleteUser(roomId, userId);
+		roomStore.deleteUser(roomId, socketId);
 
 		// Check room is delete after last user is deleted
 		const roomAfterDelete = roomStore.get(roomId);
@@ -122,35 +122,30 @@ describe("Room addUser() and deleteUser()", () => {
 	});
 
 	it("should change roomLeader if current roomLeader leaves", async () => {
-		roomStore.addUser(roomId, userId, displayName, databaseUserId);
+		roomStore.addUser(roomId, socketId, displayName, userId);
 
 		const initialRoom = roomStore.get(roomId);
-		expect(initialRoom?.roomLeader).toEqual(userId);
+		expect(initialRoom?.roomLeader).toEqual(socketId);
 
 		// add the second user
-		const secondUserId = "user999";
+		const secondsocketId = "user999";
 		const secondDisplayName = "hello";
-		const secondDatabaseUserId = 444;
-		roomStore.addUser(
-			roomId,
-			secondUserId,
-			secondDisplayName,
-			secondDatabaseUserId,
-		);
+		const seconduserId = 444;
+		roomStore.addUser(roomId, secondsocketId, secondDisplayName, seconduserId);
 
 		// Delete the leader
-		roomStore.deleteUser(roomId, userId);
+		roomStore.deleteUser(roomId, socketId);
 
 		// Expect user to be changed
-		expect(initialRoom?.roomLeader).toEqual(secondUserId);
+		expect(initialRoom?.roomLeader).toEqual(secondsocketId);
 
-		// Check if only userId is present
+		// Check if only socketId is present
 		const afterRoom = roomStore.get(roomId);
-		expect(afterRoom?.users[secondUserId]).toBeDefined();
-		expect(afterRoom?.users[userId]).toBeUndefined();
+		expect(afterRoom?.users[secondsocketId]).toBeDefined();
+		expect(afterRoom?.users[socketId]).toBeUndefined();
 
 		// Delete the remaining user
-		roomStore.deleteUser(roomId, secondUserId);
+		roomStore.deleteUser(roomId, secondsocketId);
 
 		// Check room is delete after last user is deleted
 		const roomAfterDelete = roomStore.get(roomId);
@@ -159,9 +154,9 @@ describe("Room addUser() and deleteUser()", () => {
 });
 
 describe("updateProgress", () => {
-	const userId = "user1";
+	const socketId = "user1";
 	const displayName = "bob";
-	const databaseUserId = 123;
+	const userId = 123;
 
 	const roomId = "room1";
 
@@ -174,34 +169,29 @@ describe("updateProgress", () => {
 	});
 
 	it("Increment user progress", async () => {
-		roomStore.addUser(roomId, userId, displayName, databaseUserId);
+		roomStore.addUser(roomId, socketId, displayName, userId);
 		const room = roomStore.get(roomId);
 		console.log(room);
-		expect(room?.users[userId].progress).toEqual(0);
+		expect(room?.users[socketId].progress).toEqual(0);
 
-		const secondUserId = "user999";
+		const secondsocketId = "user999";
 		const secondDisplayName = "hello";
-		const secondDatabaseUserId = 444;
-		roomStore.addUser(
-			roomId,
-			secondUserId,
-			secondDisplayName,
-			secondDatabaseUserId,
-		);
-		expect(room?.users[secondUserId].progress).toEqual(0);
+		const seconduserId = 444;
+		roomStore.addUser(roomId, secondsocketId, secondDisplayName, seconduserId);
+		expect(room?.users[secondsocketId].progress).toEqual(0);
 
 		for (let i = 0; i < 10; i++) {
-			roomStore.updateProgress(roomId, userId);
-			expect(room?.users[userId].progress).toEqual(i + 1);
-			expect(room?.users[secondUserId].progress).toEqual(0);
+			roomStore.updateProgress(roomId, socketId);
+			expect(room?.users[socketId].progress).toEqual(i + 1);
+			expect(room?.users[secondsocketId].progress).toEqual(0);
 		}
 	});
 });
 
 describe("updateProgress", () => {
-	const userId = "user1";
+	const socketId = "user1";
 	const displayName = "bob";
-	const databaseUserId = 123;
+	const userId = 123;
 
 	const roomId = "room1";
 
