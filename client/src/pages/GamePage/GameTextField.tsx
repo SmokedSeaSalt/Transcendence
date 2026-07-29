@@ -91,21 +91,6 @@ export default function GameTextField() {
 		outerClassName = "outline-solid relative bg-orange-100 max-h-50/100 ";
 	}
 
-	let spaceFromSide = (promptComplete.length + promptTyped.length + promptTypedWrong.length) * 12 - 5;
-	let spaceFromTop = 0;
-
-	const caretStyle: CSS.Properties = {
-		position: "absolute",
-		width: "2px",
-		background: "#00000",
-		borderRadius: "4px",
-		left: `${spaceFromSide}px`,
-		// left: `${spaceFromSide}%`,
-		top: `${spaceFromTop}px`,
-		fontSize: "20px",
-		fontFamily: "monospace"
-	};
-
 	const untypedStyle: CSS.Properties = {
 		display: "inline",
 		boxShadow: "-3px 0px 0px 0px #000000",
@@ -121,7 +106,6 @@ export default function GameTextField() {
 					<span className="bg-red-300 inline">{promptTypedWrong}</span>
 					<span style={untypedStyle}>{promptUntyped}</span>
 				</div>
-				{/* <div style={caretStyle}>|</div> */}
 				<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 					<input
 						// autoFocus // linter doesn't like it
