@@ -9,7 +9,11 @@ interface TextFieldProps {
 
 const GameTextField: React.FC<TextFieldProps> = (props) => {
 	if (props.prompt === undefined)
-		return <div>Waiting for game to start...</div>;
+		return (
+			<div className="text-center text-xl">
+				Waiting for the game to start...
+			</div>
+		);
 	const prompt = props.prompt.join(" ");
 
 	const { socket, setRoomState, roomState } = useSocket();
@@ -36,7 +40,6 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 			}
 			if (typed[i] === " ") {
 				socket?.emit("completedWord", typed.substring(0, typed.length - 1));
-				console.log(typed.substring(0, typed.length));
 				setTypedText("");
 				const completeLength = promptComplete.length + typed.length;
 				setPromptComplete(prompt.substring(0, completeLength));
@@ -49,7 +52,6 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 		}
 		if (promptIncomplete.length === typed.length) {
 			socket?.emit("completedWord", typed);
-			console.log("GAME OVER!");
 			setPromptComplete(prompt);
 			setPromptIncomplete("");
 			setPromptUntyped("");
@@ -78,7 +80,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	let outerClassName =
 		"outline-double outline-orange-200 relative max-h-50/100";
 	if (isInputFocused) {
-		outerClassName = "outline-solid relative bg-orange-100 max-h-50/100 ";
+		outerClassName = "outline-solid relative outline-orange-500 max-h-50/100 ";
 	}
 
 	// style for untyped text, with boxShadow used as caret
@@ -101,7 +103,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	return (
 		<>
 			{roomState?.state === RoomState.COUNTDOWN ? (
-				<div className="text-center text-xl">{counter}</div>
+				<div className="text-center text-xl">Game starting in {counter}...</div>
 			) : (
 				<div className={outerClassName}>
 					<div
