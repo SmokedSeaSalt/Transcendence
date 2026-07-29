@@ -4,10 +4,14 @@ import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";
 
 interface TextFieldProps {
-	prompt: string[];
+	prompt: string[] | undefined;
 }
 
 const GameTextField: React.FC<TextFieldProps> = (props) => {
+	if (props.prompt === undefined)
+		return <div>Waiting for game to start...</div>;
+	const prompt = props.prompt.join(" ");
+
 	const { socket, setRoomState, roomState } = useSocket();
 	const [cheating, setCheating] = useState<boolean>(false);
 	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
@@ -16,19 +20,11 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	// complete contains words that should no longer be touched; incomplete is everything else
 	// typed & untyped & typedWrong are for marking what the player is doing with incomplete
 	const [promptComplete, setPromptComplete] = useState<string>("");
-	// if (props.prompt === undefined)
-	// {
-	// 	console.log("No prompt");
-	// 	return (<div>Waiting for game to start...</div>);
-	// }
-	// const prompt = props.prompt.join(" ");
-
-	const prompt = props.prompt.join(" ");
-
 	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
 	const [promptTyped, setPromptTyped] = useState<string>("");
 	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
+	const [counter, setCounter] = useState<number>(5);
 
 	const compare = async (currentPrompt: string, typed: string) => {
 		for (let i = 0; i < typed.length; i++) {
@@ -85,16 +81,27 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 		outerClassName = "outline-solid relative bg-orange-100 max-h-50/100 ";
 	}
 
+	// style for untyped text, with boxShadow used as caret
 	const untypedStyle: CSS.Properties = {
 		display: "inline",
 		boxShadow: "-3px 0px 0px 0px #000000",
 		color: "#393636",
 	};
 
+	// timer for countdown
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCounter((prevCount) => prevCount - 1);
+		}, 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, []);
+
 	return (
 		<>
 			{roomState?.state === RoomState.COUNTDOWN ? (
-				<div>COUNTING DOWN!</div>
+				<div className="text-center text-xl">{counter}</div>
 			) : (
 				<div className={outerClassName}>
 					<div
@@ -111,7 +118,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 					</div>
 					<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 						<input
-							// autoFocus // linter doesn't like it
+							autoFocus
 							value={typedText}
 							onChange={handleChange}
 							className="w-100/100 h-100/100"

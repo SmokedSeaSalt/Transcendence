@@ -8,6 +8,9 @@
 		"rules": {
 			"complexity": {
 				"noForEach": "off"
+			},
+			"a11y": {
+				"noAutofocus": "off"
 			}
 		}
 	}
