@@ -1,5 +1,5 @@
+import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
-import { promtSize, WORD_LIST } from "../config/gameSettings.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id

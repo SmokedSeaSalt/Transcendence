@@ -455,10 +455,8 @@ describe("socket disconnect", () => {
 		client1.emit("startGame");
 		await new Promise((r) => setTimeout(r, 50));
 
-		await expect(joinRoom(client2, roomId)).rejects.toThrow();;
+		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 
 		console.log("client2");
-
 	});
-
 });
