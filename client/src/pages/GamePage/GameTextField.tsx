@@ -70,10 +70,17 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	};
 
 	const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-		console.log("cheating attempt");
 		e.preventDefault();
 		setCheating(true);
 		setTimeout(() => setCheating(false), 2000);
+	};
+
+	// automatically forces cursor to end of input
+	const handleSelect = (e: React.SyntheticEvent<HTMLInputElement>) => {
+		e.currentTarget.setSelectionRange(
+			e.currentTarget.value.length,
+			e.currentTarget.value.length,
+		);
 	};
 
 	// make it clear whether the type box is in focus or not
@@ -120,9 +127,11 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 					</div>
 					<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
 						<input
+							name="gameInput"
 							autoFocus
 							value={typedText}
 							onChange={handleChange}
+							onSelect={handleSelect}
 							className="w-100/100 h-100/100"
 							onPaste={handlePaste}
 							onFocus={() => setIsInputFocused(true)}
