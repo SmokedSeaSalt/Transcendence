@@ -99,3 +99,28 @@ export const shortenAPIKeyExpiration = async (unhashedAPIKey: string) => {
 		},
 	});
 };
+
+export const getAllGameSessions = async () => {
+	const gameSessions = await prisma.gameSession.findMany();
+	return gameSessions;
+};
+
+export const getGameSessionsOfUser = async (email: string) => {
+	const user = await prisma.user.findUnique({
+		where: { email },
+		select: {
+			gameSessions: {
+				select: {
+					id: true,
+					charCount: true,
+					wordCount: true,
+					textPrompt: true,
+					startedAt: true,
+					finishedAt: true,
+					results: true,
+				},
+			},
+		},
+	});
+	return user?.gameSessions;
+};

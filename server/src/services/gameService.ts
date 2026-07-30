@@ -1,5 +1,6 @@
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
+import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
@@ -77,6 +78,7 @@ export function validateIncomingWord(
 
 	if (shouldTerminate) {
 		roomStore.setState(roomId, RoomState.FINISHED);
+		saveGameSession(room);
 	}
 
 	return room;
