@@ -6,7 +6,6 @@ export interface userInfo {
 	displayName: string;
 	finishedAt?: Date;
 }
-
 export interface RoomData {
 	roomId: string;
 	roomLeader: string;

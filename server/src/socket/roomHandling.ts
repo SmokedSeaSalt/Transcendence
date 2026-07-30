@@ -1,10 +1,11 @@
 import { setTimeout as wait } from "node:timers/promises";
 import type { Server, Socket } from "socket.io";
-import { maxRoomSize } from "../config/gameSettings.js";
+import { gameTimeout, maxRoomSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
+import { startTimer } from "../services/gameTimers.js";
 
 export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
@@ -134,5 +135,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 
 		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
 		io.to(room.roomId).emit("roomState", room);
+
+		startTimer(socket.data.roomId, gameTimeout);
 	});
 }
