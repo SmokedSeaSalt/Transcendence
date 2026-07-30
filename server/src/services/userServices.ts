@@ -242,9 +242,7 @@ export async function getGameStatsById(id: number) {
 	const largest = {
 		wpm: Math.max(...stats.map((result) => result.wpm)),
 		cpm: Math.max(...stats.map((result) => result.cpm)),
-		accuracy: Math.max(
-			...stats.map((result) => result.accuracy),
-		),
+		accuracy: Math.max(...stats.map((result) => result.accuracy)),
 	};
 	const wins = stats.reduce(
 		(accumulator, result) =>
