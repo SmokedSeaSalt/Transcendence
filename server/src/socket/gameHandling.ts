@@ -21,7 +21,6 @@ async function handleRoomReset(roomId: string, io: Server) {
 	roomStore.create(roomId);
 
 	for (const socket of connectedClientSockets) {
-		console.log(socket.id);
 		roomStore.addUser(
 			roomId,
 			socket.id,
@@ -29,7 +28,6 @@ async function handleRoomReset(roomId: string, io: Server) {
 			socket.data.userId,
 		);
 	}
-	console.log(roomStore.get(roomId));
 	roomStore.setState(roomId, RoomState.LOBBY);
 }
 
