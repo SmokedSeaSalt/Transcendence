@@ -1,5 +1,5 @@
+import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
-import { WORD_LIST } from "../config/wordList.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
@@ -91,7 +91,7 @@ function getRandomWords(size: number): string[] {
 }
 
 export const createPrompt = (): string[] => {
-	const prompt = getRandomWords(15);
+	const prompt = getRandomWords(promtSize);
 
 	return prompt;
 };
