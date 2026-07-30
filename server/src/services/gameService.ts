@@ -93,7 +93,7 @@ function getRandomWords(size: number): string[] {
 }
 
 export const createPrompt = (): string[] => {
-	const prompt = getRandomWords(15);
+	const prompt = getRandomWords(1);
 
 	return prompt;
 };
