@@ -48,17 +48,17 @@ model GameSession {
 }
 
 model GameResult {
-  id        Int         @id @default(autoincrement())
-  score     Int
-  wpm       Int
-  cpm       Int
-  accuracy  Float
-  timeMs    Int
-  placement Int
-  finished  Boolean
-  sessionId Int
-  session   GameSession @relation(fields: [sessionId], references: [id])
-  userId    Int?
-  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  guestName String?
+  id          Int         @id @default(autoincrement())
+  score       Int
+  wpm         Int
+  cpm         Int
+  accuracy    Float
+  timeMs      Int
+  placement   Int
+  finished    Boolean
+  sessionId   Int
+  session     GameSession @relation(fields: [sessionId], references: [id])
+  userId      Int?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  displayName String
 }

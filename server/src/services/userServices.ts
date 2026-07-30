@@ -164,3 +164,40 @@ export const getAllUsers = async () => {
 
 	return users;
 };
+
+/**
+ * @param id id of the user
+ * @returns An array of gameResults
+ */
+export async function getGameHistoryById(id: number) {
+	const gameHistory = await prisma.user.findUnique({
+		where: {
+			id: id,
+		},
+		select: {
+			gameResults: {
+				include: {
+					session: {
+						include: {
+							results: {
+								select: {
+									wpm: true,
+									cpm: true,
+									accuracy: true,
+									placement: true,
+									displayName: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	});
+
+	if (!gameHistory) {
+		return [];
+	}
+
+	return gameHistory;
+}
