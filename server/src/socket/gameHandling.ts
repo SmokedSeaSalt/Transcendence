@@ -31,6 +31,16 @@ async function handleRoomReset(roomId: string, io: Server) {
 	roomStore.setState(roomId, RoomState.LOBBY);
 }
 
+export function roomFinishedTimeoutAndEmitRoomState(roomId: string, io: Server) {
+	setTimeout(async () => {
+		await handleRoomReset(roomId, io);
+		io.to(roomId).emit(
+			"roomState",
+			roomStore.get(roomId),
+		);
+	}, postGameCountDownMs);
+}
+
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", (typedWord: string) => {
 		const room = validateIncomingWord(socket.data.roomId, socket.id, typedWord);
@@ -42,13 +52,7 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		io.to(socket.data.roomId).emit("roomState", room);
 
 		if (room.state === RoomState.FINISHED) {
-			setTimeout(async () => {
-				await handleRoomReset(room.roomId, io);
-				io.to(socket.data.roomId).emit(
-					"roomState",
-					roomStore.get(socket.data.roomId),
-				);
-			}, postGameCountDownMs);
+			roomFinishedTimeoutAndEmitRoomState(socket.data.roomId, io);
 		}
 	});
 }

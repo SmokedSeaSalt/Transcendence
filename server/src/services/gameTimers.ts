@@ -1,5 +1,6 @@
 import { io } from "../app.js";
 import { RoomState } from "../config/socket.js";
+import { roomFinishedTimeoutAndEmitRoomState } from "../socket/gameHandling.js";
 import { saveGameSession } from "./gameSessionServices.js";
 import { roomStore } from "./roomStore.js";
 
@@ -16,6 +17,8 @@ export const startTimer = (roomId: string, durationMs: number) => {
 		roomStore.setState(roomId, RoomState.FINISHED);
 		saveGameSession(room);
 		io.to(room.roomId).emit("roomState", room);
+		roomFinishedTimeoutAndEmitRoomState(room.roomId, io);
+		
 
 	}, durationMs);
 
