@@ -58,6 +58,7 @@ export default function JoinRoomButton() {
 					</h3>
 					<div>
 						<input
+							autoFocus
 							value={roomId}
 							onChange={(e) => setRoomId(e.target.value)}
 							placeholder="Room ID"
