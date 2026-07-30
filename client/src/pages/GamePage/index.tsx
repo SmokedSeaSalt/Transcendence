@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
+import ErrorBox from "./ErrorBox";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import type { RoomStatePayload } from "./SocketTypes";
-import ErrorBox from "./ErrorBox";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -30,9 +30,9 @@ export default function GamePage() {
 	}, [socket, setRoomState]);
 
 	useEffect(() => {
-	socket?.on("disconnect", () => {
-		setErrorStatus(true);
-	});
+		socket?.on("disconnect", () => {
+			setErrorStatus(true);
+		});
 	}, [socket]);
 
 	if (roomState)
@@ -41,11 +41,8 @@ export default function GamePage() {
 			Object.keys(roomState.users).length,
 		);
 
-	if (errorStatus)
-	{
-		return (
-			<ErrorBox />
-		)
+	if (errorStatus) {
+		return <ErrorBox />;
 	}
 
 	return (
