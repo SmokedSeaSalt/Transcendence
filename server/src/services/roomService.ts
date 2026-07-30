@@ -5,7 +5,7 @@ export function transferRoom(
 	newRoomId: string,
 	socketId: string,
 	name: string,
-	userId: number | null,
+	userId: number | undefined,
 ) {
 	const room = roomStore.get(newRoomId);
 

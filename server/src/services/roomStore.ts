@@ -1,7 +1,7 @@
 import { RoomState } from "../config/socket.js";
 
 export interface userInfo {
-	userId: number | null;
+	userId: number | undefined;
 	progress: number;
 	displayName: string;
 	finishedAt?: Date;
@@ -42,7 +42,7 @@ export const roomStore = {
 		roomId: string,
 		socketId: string,
 		name: string,
-		userId: number | null,
+		userId: number | undefined,
 	): void => {
 		const room = rooms.get(roomId);
 		if (!room) return;
