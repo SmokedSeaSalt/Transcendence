@@ -1,12 +1,12 @@
 import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
+import { RoomState } from "../config/socket.js";
 import { createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
 import { registerRoomHandlers } from "./roomHandling.js";
-import { RoomState } from "../config/socket.js";
 
 async function identifySocket(socket: Socket, next: (err?: Error) => void) {
 	const cookies = parse(socket.request.headers.cookie || "");
@@ -39,7 +39,7 @@ export function registerSocketHandlers(io: Server) {
 			console.log(`Recovered: ${socket.id}, room: ${socket.data.roomId}`);
 			const recoveredRoom = roomStore.get(socket.data.roomId);
 			if (recoveredRoom) {
-				if (recoveredRoom.state === RoomState.LOBBY){
+				if (recoveredRoom.state === RoomState.LOBBY) {
 					//add user back to room
 					roomStore.addUser(
 						recoveredRoom.roomId,
@@ -101,8 +101,7 @@ export function registerSocketHandlers(io: Server) {
 			console.log(`Disconnected: ${socket.id}`);
 			roomStore.deleteUser(socket.data.roomId, socket.id);
 			const room = roomStore.get(socket.data.roomId);
-			if (room)
-				io.to(room.roomId).emit("roomState", room);
+			if (room) io.to(room.roomId).emit("roomState", room);
 		});
 	});
 }

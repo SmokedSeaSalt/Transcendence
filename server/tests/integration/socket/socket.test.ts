@@ -1,6 +1,6 @@
 import { type Server as HttpServer, createServer } from "node:http";
 import { Server } from "socket.io";
-import { io as Client, Socket } from "socket.io-client";
+import { io as Client, type Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { io } from "../../../src/app";
@@ -70,7 +70,8 @@ describe("socket disconnect", () => {
 
 		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(
 			httpServer,
-			{ //set lower timeout intervals for disconection checking
+			{
+				//set lower timeout intervals for disconection checking
 				pingInterval: 1000, // send a ping every 1 second
 				pingTimeout: 2000, // disconnect if no pong within 2 seconds
 				connectionStateRecovery: {
@@ -535,10 +536,8 @@ describe("socket disconnect", () => {
 		//reconnect user2
 		await new Promise((r) => setTimeout(r, 4000));
 
-
 		expect(Object.keys(room.users)).toContain(client1Id);
 		expect(Object.keys(room.users)).toContain(client2Id);
-
 	});
 
 	//user timeout disconnect in lobby alone should be in new room after reconnect
@@ -560,8 +559,7 @@ describe("socket disconnect", () => {
 		//reconnect user1
 		await new Promise((r) => setTimeout(r, 4000));
 
-		expect(serverSocketUser1?.data.roomId).not.toBe(roomId)
-
+		expect(serverSocketUser1?.data.roomId).not.toBe(roomId);
 	});
 
 	//user timeout disconnect during game should be in new room after reconnect
@@ -588,12 +586,8 @@ describe("socket disconnect", () => {
 		//reconnect user2
 		await new Promise((r) => setTimeout(r, 4000));
 
-
 		expect(Object.keys(room.users)).toContain(client1Id);
 		expect(Object.keys(room.users)).toContain(client2Id);
-		expect(serverSocketUser2?.data.roomId).not.toBe(roomId)
-
+		expect(serverSocketUser2?.data.roomId).not.toBe(roomId);
 	});
-
-
 });
