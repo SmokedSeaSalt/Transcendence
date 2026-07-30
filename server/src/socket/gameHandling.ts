@@ -13,7 +13,7 @@ async function handleRoomReset(roomId: string, io: Server) {
 	const connectedClientSockets = await io.in(roomId).fetchSockets();
 
 	if (connectedClientSockets.length === 0) {
-		console.log("Socketio room is empty. Deleting the room from roomStore.")
+		console.log("Socketio room is empty. Deleting the room from roomStore.");
 		roomStore.delete(roomId);
 		return;
 	}
