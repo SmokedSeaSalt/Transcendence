@@ -1,11 +1,12 @@
 import { Router } from "express";
-import * as userController from "../../controllers/web/userControllers.js";
+import * as meController from "../../controllers/web/meController.js";
 import { checkCookieStatus } from "../../middleware/cookieAuthentication.js";
 
 const router = Router();
 
 router.use(checkCookieStatus);
 
-router.get("/", userController.buildUserResponseFromSession);
+router.get("/", meController.buildUserResponseFromSession);
+router.get("/gameHistory", meController.getGameHistory);
 
 export default router;
