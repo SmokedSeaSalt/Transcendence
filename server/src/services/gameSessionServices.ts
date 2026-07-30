@@ -3,18 +3,22 @@ import { text } from "stream/consumers";
 import { prisma } from "../db.js";
 import type { RoomData, userInfo } from "./roomStore.js";
 
-const promptCharCount = (prompt: string[] | undefined) => {
+export const promptCharCount = (prompt: string[] | undefined) => {
 	if (!prompt) return 0;
 	let sum = 0;
 	prompt.forEach((word: string) => {
-		sum = +word.length;
+		sum += word.length;
 	});
-	return sum;
+	return sum + prompt.length - 1;
 };
 
-const calculateWpm = (wordCount: number, durationMs: number) => {
-	
+// used to calculate wpm and cpm
+// if minutes 0 or undefined, returns 0
+export const calculateUnitsPM = (units: number, minutes: number | undefined) => {
+	return minutes ? units / minutes : 0
 }
+
+
 
 const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 	const promptWordCount = roomData.wordCount;
@@ -39,8 +43,8 @@ const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 
 			return {
 				score: 0,
-				wpm: minutes ? promptWordCount / minutes : 0,
-				cpm: minutes ? promptCharCount / minutes : 0,
+				wpm: calculateUnitsPM(promptWordCount, minutes),
+				cpm: calculateUnitsPM(promptCharCount, minutes),
 				accuracy: 0,
 				timeMs: timeMs ?? -1,
 				placement: index + 1,

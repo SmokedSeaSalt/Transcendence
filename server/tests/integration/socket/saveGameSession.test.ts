@@ -70,26 +70,26 @@ describe("Save gameSession in db", () => {
 
 
 		roomStore.setState(roomId, RoomState.FINISHED);
-		saveGameSession(room);
+		await saveGameSession(room);
 
 		const gameSessionsUser1 = await getGameSessionsOfUser(email1);
 		if (!gameSessionsUser1) throw new Error("gameSessionUser1 undefined");
 		const gameSession = gameSessionsUser1[0]
 
 		console.log(gameSession);
-		expect(gameSession.charCount).toEqual(10);
+		expect(gameSession.charCount).toEqual(11);
 
 
 		expect(gameSession.finishedAt <= new Date(Date.now())).toBeTruthy();
 		expect(gameSession.results[0].wpm).toEqual(120);
-		expect(gameSession.results[0].cpm).toEqual(600);
+		expect(gameSession.results[0].cpm).toEqual(660);
 		expect(gameSession.results[0].placement).toEqual(1);
 		expect(gameSession.results[0].timeMs).toEqual(1000);
 
 
 
 		expect(gameSession.results[1].wpm).toEqual(60);
-		expect(gameSession.results[1].cpm).toEqual(300);
+		expect(gameSession.results[1].cpm).toEqual(330);
 		expect(gameSession.results[1].placement).toEqual(2);
 		expect(gameSession.results[1].timeMs).toEqual(2000);
 
