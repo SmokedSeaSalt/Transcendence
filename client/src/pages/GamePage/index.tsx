@@ -6,10 +6,12 @@ import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import type { RoomStatePayload } from "./SocketTypes";
+import ErrorBox from "./ErrorBox";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
 	const { socket, setRoomState, roomState } = useSocket();
+	const [errorStatus, setErrorStatus] = useState(false);
 	useEffect(() => {
 		socket?.on("connect", () => {
 			console.log(socket.id);
@@ -23,14 +25,28 @@ export default function GamePage() {
 				console.log("roomState received");
 				setRoomState(payload);
 			});
+			setErrorStatus(false);
 		});
 	}, [socket, setRoomState]);
+
+	useEffect(() => {
+	socket?.on("disconnect", () => {
+		setErrorStatus(true);
+	});
+	}, [socket]);
 
 	if (roomState)
 		console.log(
 			"Current user count in index: ",
 			Object.keys(roomState.users).length,
 		);
+
+	if (errorStatus)
+	{
+		return (
+			<ErrorBox />
+		)
+	}
 
 	return (
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
