@@ -49,6 +49,7 @@ const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 				placement: index + 1,
 				finished: timeMs !== undefined,
 				userId: player.userId,
+				displayName: player.displayName,
 			};
 		});
 };
