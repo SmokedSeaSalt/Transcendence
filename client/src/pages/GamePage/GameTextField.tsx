@@ -30,6 +30,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
 	const [counter, setCounter] = useState<number>(5);
 
+	let extraLength = 0; // for submissions with multiple words
 	const compare = async (currentPrompt: string, typed: string) => {
 		for (let i = 0; i < typed.length; i++) {
 			if (typed[i] !== currentPrompt[i]) {
@@ -39,19 +40,25 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				return;
 			}
 			if (typed[i] === " ") {
-				socket?.emit("completedWord", typed.substring(0, typed.length - 1));
-				setTypedText("");
-				const completeLength = promptComplete.length + typed.length;
-				setPromptComplete(prompt.substring(0, completeLength));
-				setPromptIncomplete(prompt.substring(completeLength));
-				setPromptTyped("");
-				setPromptTypedWrong("");
-				setPromptUntyped(prompt.substring(completeLength));
+				socket?.emit("completedWord", typed.substring(0, i));
+				setTypedText(typed.substring(i + 1));
+				extraLength = extraLength + i + 1;
+				setPromptComplete(
+					prompt.substring(0, promptComplete.length + extraLength),
+				);
+				setPromptIncomplete(
+					prompt.substring(promptComplete.length + extraLength),
+				);
+				compare(
+					prompt.substring(promptComplete.length + extraLength),
+					typed.substring(i + 1),
+				);
 				return;
 			}
 		}
-		if (promptIncomplete.length === typed.length) {
+		if (currentPrompt.length === typed.length) {
 			socket?.emit("completedWord", typed);
+			setTypedText("");
 			setPromptComplete(prompt);
 			setPromptIncomplete("");
 			setPromptUntyped("");
@@ -59,8 +66,8 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 			setPromptTypedWrong("");
 			return;
 		}
-		setPromptUntyped(promptIncomplete.substring(typed.length));
-		setPromptTyped(promptIncomplete.substring(0, typed.length));
+		setPromptUntyped(currentPrompt.substring(typed.length));
+		setPromptTyped(currentPrompt.substring(0, typed.length));
 		setPromptTypedWrong("");
 	};
 
@@ -125,7 +132,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 						<span className="bg-red-300 inline">{promptTypedWrong}</span>
 						<span style={untypedStyle}>{promptUntyped}</span>
 					</div>
-					<div className="absolute top-0 opacity-0 w-100/100 h-100/100">
+					<div className="absolute top-0 opacity-0 size-xl w-100/100 h-100/100">
 						<input
 							name="gameInput"
 							autoFocus
