@@ -469,55 +469,6 @@ describe("socket disconnect", () => {
 		console.log("client2");
 	});
 
-	////user in tmp network issues should recover receive/send events
-	//it("user in tmp network issues should recover receive/send events", async () => {
-	//	roomStore.create(roomId);
-
-	//	const room = roomStore.get(roomId);
-	//	if (!room) {
-	//		throw new Error("room is undefined");
-	//	}
-
-	//	await joinRoom(client1, roomId);
-	//	await joinRoom(client2, roomId);
-
-	//	client1.emit("startGame");
-	//	await new Promise((r) => setTimeout(r, 50));
-	//	expect(room.state === RoomState.COUNTDOWN).toBeTruthy(); // check client 1 is room leader
-	//	expect(room.prompt).toBeDefined(); // check client 1 is room leader
-
-	//	await new Promise((r) => setTimeout(r, 5050));
-	//	expect(room.state === RoomState.IN_PROGRESS).toBeTruthy();
-
-	//	const prompt = room.prompt;
-	//	if (!prompt || !prompt.length) {
-	//		throw new Error("prompt is undefined");
-	//	}
-
-	//	//disconnect user2
-	//	client2.io.engine.close();
-
-	//	client1.emit("completedWord", prompt[0]);
-	//	client2.emit("completedWord", prompt[0]);
-
-	//	//reconnect user2
-	//	await new Promise((r) => setTimeout(r, 4000));
-
-	//	const user1 = room.users[client1Id];
-	//	if (!user1) {
-	//		throw new Error("user1 is undefined");
-	//	}
-	//	const user2 = room.users[client2Id];
-	//	if (!user2) {
-	//		throw new Error("user1 is undefined");
-	//	}
-
-	//	console.log(`user1: ${user1.progress} user2: ${user1.progress}`)
-	//	expect(user1.progress === 1).toBeTruthy();
-	//	expect(user2.progress === 1).toBeTruthy();
-
-	//}, 10_000);
-
 	//user timeout disconnect in lobby with people should be in old lobby after reconnect
 	it("user timeout disconnect in lobby with people should be in old lobby after reconnect", async () => {
 		roomStore.create(roomId);
