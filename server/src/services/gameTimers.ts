@@ -22,4 +22,11 @@ export const startTimer = (roomId: string, durationMs: number) => {
 	gameTimeouts.set(roomId, timeout);
 };
 
-export const cancelTimer = (roomId: string) => {};
+export const cancelTimer = (roomId: string) => {
+	const timeout = gameTimeouts.get(roomId);
+
+	if (timeout) {
+		clearTimeout(timeout);
+		gameTimeouts.delete(roomId);
+	}
+};

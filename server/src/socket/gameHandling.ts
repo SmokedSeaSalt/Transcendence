@@ -3,6 +3,7 @@ import { postGameCountDownMs } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { validateIncomingWord } from "../services/gameService.js";
 import { RoomData, roomStore, userInfo } from "../services/roomStore.js";
+import { cancelTimer } from "../services/gameTimers.js";
 
 async function handleRoomReset(roomId: string, io: Server) {
 	const oldRoom = roomStore.get(roomId);
@@ -52,6 +53,7 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		io.to(socket.data.roomId).emit("roomState", room);
 
 		if (room.state === RoomState.FINISHED) {
+			cancelTimer(socket.data.roomId);
 			roomFinishedTimeoutAndEmitRoomState(socket.data.roomId, io);
 		}
 	});
