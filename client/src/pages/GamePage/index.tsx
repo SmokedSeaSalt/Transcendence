@@ -5,7 +5,7 @@ import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
-import type { RoomStatePayload } from "./SocketTypes";
+import { RoomState, type RoomStatePayload } from "./SocketTypes";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -36,6 +36,7 @@ export default function GamePage() {
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
+			{roomState?.state == RoomState.FINISHED ? <div>The game has finished. Room will be rejoined</div>: null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
