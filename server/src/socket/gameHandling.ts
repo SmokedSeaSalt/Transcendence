@@ -31,13 +31,13 @@ async function handleRoomReset(roomId: string, io: Server) {
 	roomStore.setState(roomId, RoomState.LOBBY);
 }
 
-export function roomFinishedTimeoutAndEmitRoomState(roomId: string, io: Server) {
+export function roomFinishedTimeoutAndEmitRoomState(
+	roomId: string,
+	io: Server,
+) {
 	setTimeout(async () => {
 		await handleRoomReset(roomId, io);
-		io.to(roomId).emit(
-			"roomState",
-			roomStore.get(roomId),
-		);
+		io.to(roomId).emit("roomState", roomStore.get(roomId));
 	}, postGameCountDownMs);
 }
 

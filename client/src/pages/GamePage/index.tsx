@@ -36,7 +36,9 @@ export default function GamePage() {
 		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
-			{roomState?.state == RoomState.FINISHED ? <div>The game has finished. Room will be rejoined</div>: null}
+			{roomState?.state === RoomState.FINISHED ? (
+				<div>The game has finished. Room will be rejoined</div>
+			) : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}

@@ -7,7 +7,6 @@ import { roomStore } from "./roomStore.js";
 const gameTimeouts = new Map<string, NodeJS.Timeout>(); // <roomId, timeout>
 
 export const startTimer = (roomId: string, durationMs: number) => {
-
 	const timeout = setTimeout(() => {
 		console.log(`Game timeout in room ${roomId}`);
 		gameTimeouts.delete(roomId);
@@ -18,13 +17,9 @@ export const startTimer = (roomId: string, durationMs: number) => {
 		saveGameSession(room);
 		io.to(room.roomId).emit("roomState", room);
 		roomFinishedTimeoutAndEmitRoomState(room.roomId, io);
-		
-
 	}, durationMs);
 
 	gameTimeouts.set(roomId, timeout);
-}
+};
 
-export const cancelTimer = (roomId: string) => {
-
-}
+export const cancelTimer = (roomId: string) => {};

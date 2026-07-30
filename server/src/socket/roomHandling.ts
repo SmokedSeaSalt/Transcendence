@@ -3,9 +3,9 @@ import type { Server, Socket } from "socket.io";
 import { gameTimeout, maxRoomSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import { startTimer } from "../services/gameTimers.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
-import { startTimer } from "../services/gameTimers.js";
 
 export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
