@@ -1,6 +1,6 @@
 import { type Server as HttpServer, createServer } from "node:http";
 import { Server } from "socket.io";
-import { io as Client, type Socket } from "socket.io-client";
+import { io as Client, Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { io } from "../../../src/app";
@@ -70,6 +70,14 @@ describe("socket disconnect", () => {
 
 		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(
 			httpServer,
+			{ //set lower timeout intervals for disconection checking
+				pingInterval: 1000, // send a ping every 1 second
+				pingTimeout: 2000, // disconnect if no pong within 2 seconds
+				connectionStateRecovery: {
+					maxDisconnectionDuration: 60 * 1000, // 60 seconds
+					skipMiddlewares: true,
+				},
+			},
 		);
 
 		registerSocketHandlers(ioServer);
@@ -459,4 +467,133 @@ describe("socket disconnect", () => {
 
 		console.log("client2");
 	});
+
+	////user in tmp network issues should recover receive/send events
+	//it("user in tmp network issues should recover receive/send events", async () => {
+	//	roomStore.create(roomId);
+
+	//	const room = roomStore.get(roomId);
+	//	if (!room) {
+	//		throw new Error("room is undefined");
+	//	}
+
+	//	await joinRoom(client1, roomId);
+	//	await joinRoom(client2, roomId);
+
+	//	client1.emit("startGame");
+	//	await new Promise((r) => setTimeout(r, 50));
+	//	expect(room.state === RoomState.COUNTDOWN).toBeTruthy(); // check client 1 is room leader
+	//	expect(room.prompt).toBeDefined(); // check client 1 is room leader
+
+	//	await new Promise((r) => setTimeout(r, 5050));
+	//	expect(room.state === RoomState.IN_PROGRESS).toBeTruthy();
+
+	//	const prompt = room.prompt;
+	//	if (!prompt || !prompt.length) {
+	//		throw new Error("prompt is undefined");
+	//	}
+
+	//	//disconnect user2
+	//	client2.io.engine.close();
+
+	//	client1.emit("completedWord", prompt[0]);
+	//	client2.emit("completedWord", prompt[0]);
+
+	//	//reconnect user2
+	//	await new Promise((r) => setTimeout(r, 4000));
+
+	//	const user1 = room.users[client1Id];
+	//	if (!user1) {
+	//		throw new Error("user1 is undefined");
+	//	}
+	//	const user2 = room.users[client2Id];
+	//	if (!user2) {
+	//		throw new Error("user1 is undefined");
+	//	}
+
+	//	console.log(`user1: ${user1.progress} user2: ${user1.progress}`)
+	//	expect(user1.progress === 1).toBeTruthy();
+	//	expect(user2.progress === 1).toBeTruthy();
+
+	//}, 10_000);
+
+	//user timeout disconnect in lobby with people should be in old lobby after reconnect
+	it("user timeout disconnect in lobby with people should be in old lobby after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+		await joinRoom(client2, roomId);
+
+		//disconnect user2
+		client2.io.engine.close();
+
+		//reconnect user2
+		await new Promise((r) => setTimeout(r, 4000));
+
+
+		expect(Object.keys(room.users)).toContain(client1Id);
+		expect(Object.keys(room.users)).toContain(client2Id);
+
+	});
+
+	//user timeout disconnect in lobby alone should be in new room after reconnect
+	it("user timeout disconnect in lobby alone should be in new room after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+
+		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
+
+		//disconnect user1
+		client1.io.engine.close();
+
+		//reconnect user1
+		await new Promise((r) => setTimeout(r, 4000));
+
+		expect(serverSocketUser1?.data.roomId).not.toBe(roomId)
+
+	});
+
+	//user timeout disconnect during game should be in new room after reconnect
+	it("user timeout disconnect during game should be in new room after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+		await joinRoom(client2, roomId);
+
+		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
+
+		client1.emit("startGame");
+		await new Promise((r) => setTimeout(r, 50));
+		expect(room.state === RoomState.COUNTDOWN).toBeTruthy();
+
+		//disconnect user2
+		client2.io.engine.close();
+
+		//reconnect user2
+		await new Promise((r) => setTimeout(r, 4000));
+
+
+		expect(Object.keys(room.users)).toContain(client1Id);
+		expect(Object.keys(room.users)).toContain(client2Id);
+		expect(serverSocketUser2?.data.roomId).not.toBe(roomId)
+
+	});
+
+
 });
