@@ -13,38 +13,36 @@ import { saveGameSession } from "../../../src/services/gameSessionServices";
 import { roomStore } from "../../../src/services/roomStore";
 import { RoomData } from "../../../src/services/roomStore";
 import { registerSocketHandlers } from "../../../src/socket/";
-import { createUser, deleteUser, getGameSessionsOfUser } from "../../helpers/dbHelpers";
-
+import {
+	createUser,
+	deleteUser,
+	getGameSessionsOfUser,
+} from "../../helpers/dbHelpers";
 
 describe("Save gameSession in db", () => {
 	const roomId = "thisIsADifferentRoom";
 
-	const email1 = "thisisanewemail@gmail.com"
+	const email1 = "thisisanewemail@gmail.com";
 	const socketId1 = "123abc";
-	const name1 = "hello"
+	const name1 = "hello";
 	let id1: number;
 
 	const socketId2 = "qwert";
-	const name2 = "bob"
+	const name2 = "bob";
 	const id2 = undefined;
 
-
 	beforeEach(async () => {
-
 		roomStore.create(roomId);
-		const user = await createUser(email1, name1, "123abc!ABC", "user")
+		const user = await createUser(email1, name1, "123abc!ABC", "user");
 		id1 = user.id;
 	});
 
 	afterEach(async () => {
 		roomStore.delete(roomId);
-		await deleteUser(email1)
-
+		await deleteUser(email1);
 	});
 
 	it("save roomData as gameSession in db for one logged in user and one guest", async () => {
-
-
 		// roomStore.create(roomId);
 		const room = roomStore.get(roomId);
 		if (!room) throw new Error("Room undefined");
@@ -54,7 +52,6 @@ describe("Save gameSession in db", () => {
 
 		room.prompt = ["hello", "world"];
 		room.wordCount = 2;
-
 
 		const users = room.users;
 
@@ -68,17 +65,15 @@ describe("Save gameSession in db", () => {
 		users[socketId2].progress = 2;
 		users[socketId2].finishedAt = new Date(now.getTime());
 
-
 		roomStore.setState(roomId, RoomState.FINISHED);
 		await saveGameSession(room);
 
 		const gameSessionsUser1 = await getGameSessionsOfUser(email1);
 		if (!gameSessionsUser1) throw new Error("gameSessionUser1 undefined");
-		const gameSession = gameSessionsUser1[0]
+		const gameSession = gameSessionsUser1[0];
 
 		console.log(gameSession);
 		expect(gameSession.charCount).toEqual(11);
-
 
 		expect(gameSession.finishedAt <= new Date(Date.now())).toBeTruthy();
 		expect(gameSession.results[0].wpm).toEqual(120);
@@ -86,15 +81,9 @@ describe("Save gameSession in db", () => {
 		expect(gameSession.results[0].placement).toEqual(1);
 		expect(gameSession.results[0].timeMs).toEqual(1000);
 
-
-
 		expect(gameSession.results[1].wpm).toEqual(60);
 		expect(gameSession.results[1].cpm).toEqual(330);
 		expect(gameSession.results[1].placement).toEqual(2);
 		expect(gameSession.results[1].timeMs).toEqual(2000);
-
-
 	});
-
-	
 });

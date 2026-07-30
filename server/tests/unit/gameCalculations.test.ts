@@ -17,9 +17,11 @@ import {
 
 import { DatabaseSync } from "node:sqlite";
 import { RoomState } from "../../src/config/socket.js";
+import {
+	calculateUnitsPM,
+	promptCharCount,
+} from "../../src/services/gameSessionServices.js";
 import { type RoomData, roomStore } from "../../src/services/roomStore.js";
-import { calculateUnitsPM, promptCharCount } from "../../src/services/gameSessionServices.js";
-
 
 describe("Room create(), get(), delete", () => {
 	const socketId = "user1";
@@ -45,5 +47,4 @@ describe("Room create(), get(), delete", () => {
 		expect(calculateUnitsPM(10, 0.5)).toEqual(20);
 		expect(calculateUnitsPM(1, 0)).toEqual(0);
 	});
-
-})
+});

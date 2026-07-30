@@ -1,5 +1,3 @@
-import type { GameResult, GameSession } from "@prisma/client";
-import { text } from "stream/consumers";
 import { prisma } from "../db.js";
 import type { RoomData, userInfo } from "./roomStore.js";
 
@@ -14,11 +12,12 @@ export const promptCharCount = (prompt: string[] | undefined) => {
 
 // used to calculate wpm and cpm
 // if minutes 0 or undefined, returns 0
-export const calculateUnitsPM = (units: number, minutes: number | undefined) => {
-	return minutes ? units / minutes : 0
-}
-
-
+export const calculateUnitsPM = (
+	units: number,
+	minutes: number | undefined,
+) => {
+	return minutes ? units / minutes : 0;
+};
 
 const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 	const promptWordCount = roomData.wordCount;
