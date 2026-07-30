@@ -223,8 +223,9 @@ export async function getGameStatsById(id: number) {
 		return null;
 	}
 
-	const length = gameStats.gameResults.length;
-	const totals = gameStats.gameResults.reduce(
+	const stats = gameStats.gameResults;
+	const length = stats.length;
+	const totals = stats.reduce(
 		(accumulator, result) => ({
 			wpm: accumulator.wpm + result.wpm,
 			cpm: accumulator.cpm + result.cpm,
@@ -239,13 +240,13 @@ export async function getGameStatsById(id: number) {
 		accuracy: totals.accuracy / length,
 	};
 	const largest = {
-		wpm: Math.max(...gameStats.gameResults.map((result) => result.wpm)),
-		cpm: Math.max(...gameStats.gameResults.map((result) => result.cpm)),
+		wpm: Math.max(...stats.map((result) => result.wpm)),
+		cpm: Math.max(...stats.map((result) => result.cpm)),
 		accuracy: Math.max(
-			...gameStats.gameResults.map((result) => result.accuracy),
+			...stats.map((result) => result.accuracy),
 		),
 	};
-	const wins = gameStats.gameResults.reduce(
+	const wins = stats.reduce(
 		(accumulator, result) =>
 			result.placement === 1 ? accumulator + 1 : accumulator,
 		0,
