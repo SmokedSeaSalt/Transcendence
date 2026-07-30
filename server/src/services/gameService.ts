@@ -1,5 +1,5 @@
+import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
-import { WORD_LIST } from "../config/wordList.js";
 import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
@@ -93,7 +93,7 @@ function getRandomWords(size: number): string[] {
 }
 
 export const createPrompt = (): string[] => {
-	const prompt = getRandomWords(1);
+	const prompt = getRandomWords(promtSize);
 
 	return prompt;
 };

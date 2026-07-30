@@ -119,7 +119,7 @@ describe("socket disconnect", () => {
 
 		roomStore.delete(roomId);
 	});
-	/* tests: 
+	/* tests:
 		starting room
 		moving from one room to another
 		leaving the new room and new leader being assigned
@@ -445,5 +445,18 @@ describe("socket disconnect", () => {
 		console.log("client2");
 		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 		// await joinRoom(client2, roomId);
+	});
+
+	it("users are only allowed to join during lobby state", async () => {
+		roomStore.create(roomId);
+
+		await joinRoom(client1, roomId);
+
+		client1.emit("startGame");
+		await new Promise((r) => setTimeout(r, 50));
+
+		await expect(joinRoom(client2, roomId)).rejects.toThrow();
+
+		console.log("client2");
 	});
 });

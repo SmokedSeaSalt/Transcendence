@@ -72,7 +72,6 @@ describe("Save gameSession in db", () => {
 		if (!gameSessionsUser1) throw new Error("gameSessionUser1 undefined");
 		const gameSession = gameSessionsUser1[0];
 
-		console.log(gameSession);
 		expect(gameSession.charCount).toEqual(11);
 
 		expect(gameSession.finishedAt <= new Date(Date.now())).toBeTruthy();
