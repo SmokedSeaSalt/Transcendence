@@ -63,6 +63,7 @@ describe("/web/me/gameResults", async () => {
 				user: {
 					connect: { id: user.id },
 				},
+				displayName: name,
 			},
 		});
 
@@ -84,8 +85,8 @@ describe("/web/me/gameResults", async () => {
 				charCount: 11,
 				wordCount: 2,
 				textPrompt: "Hello World",
-				players: [{ name }],
 			},
+			displayName: name,
 		});
 	});
 	afterAll(async () => {

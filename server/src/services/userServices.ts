@@ -179,9 +179,13 @@ export async function getGameHistoryById(id: number) {
 				include: {
 					session: {
 						include: {
-							players: {
+							results: {
 								select: {
-									name: true,
+									wpm: true,
+									cpm: true,
+									accuracy: true,
+									placement: true,
+									displayName: true,
 								},
 							},
 						},
