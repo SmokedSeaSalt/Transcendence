@@ -5,7 +5,7 @@ import { useLeaveRoom } from "./useLeaveRoom";
 import { useStartGame } from "./useStartGame";
 
 export default function GamePageHeader() {
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 	const { leaveRoom, loading, error } = useLeaveRoom();
 	// todo: change back to regular loading when separate files for buttons are made
 	const { startGame, loadingStart, errorStart } = useStartGame();

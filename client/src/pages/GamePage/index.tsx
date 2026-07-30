@@ -1,45 +1,23 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import Button from "../../components/Button";
 import ErrorBox from "./ErrorBox";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
-import type { RoomStatePayload } from "./SocketTypes";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
-	const { socket, setRoomState, roomState } = useSocket();
-	const [errorStatus, setErrorStatus] = useState(false);
-	useEffect(() => {
-		socket?.on("connect", () => {
-			console.log(socket.id);
-			if (socket.id === undefined) {
-				setMessage("No valid socket.id");
-			} else {
-				setMessage(socket.id);
-			}
+	const { socket, roomState, errorStatus } = useSocket();
 
-			socket.on("roomState", (payload: RoomStatePayload) => {
-				console.log("roomState received");
-				setRoomState(payload);
-			});
-			setErrorStatus(false);
-		});
-	}, [socket, setRoomState]);
-
-	useEffect(() => {
-		socket?.on("disconnect", () => {
-			setErrorStatus(true);
-		});
-	}, [socket]);
-
-	if (roomState)
-		console.log(
-			"Current user count in index: ",
-			Object.keys(roomState.users).length,
-		);
+	// useEffect(() => {
+	// 	if (!socket) setMessage("No socket.");
+	// 	else if (socket.id === undefined) {
+	// 		setMessage("Socket.id undefined.");
+	// 	} else {
+	// 		setMessage(socket.id);
+	// 	}
+	// }, [roomState]);
 
 	if (errorStatus) {
 		return <ErrorBox />;

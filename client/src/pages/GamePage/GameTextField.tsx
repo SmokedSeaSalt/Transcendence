@@ -16,7 +16,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 		);
 	const prompt = props.prompt.join(" ");
 
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 	const [cheating, setCheating] = useState<boolean>(false);
 	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
