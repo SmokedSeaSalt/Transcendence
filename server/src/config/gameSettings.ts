@@ -1,4 +1,4 @@
-export const promtSize: number = 1;
+export const promtSize: number = 15;
 export const maxRoomSize: number = 100;
 export const postGameCountDownMs: number = 10_000;
 
