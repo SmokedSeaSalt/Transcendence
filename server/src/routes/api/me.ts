@@ -43,6 +43,35 @@ apiRegistry.registerPath({
 router.get("/", meController.getMyProfile);
 
 apiRegistry.registerPath({
+	method: "get",
+	path: "/api/me/gameHistory",
+	tags: ["Api"],
+
+	request: {},
+
+	responses: {
+		200: {
+			description: "Game History returned",
+			content: {
+				"application/json": {
+					schema: userResponseSchema,
+				},
+			},
+		},
+
+		401: {
+			description: "Unauthorized error",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.get("/gameHistory", meController.getGameHistory);
+
+apiRegistry.registerPath({
 	method: "put",
 	path: "/api/me",
 	tags: ["Api"],

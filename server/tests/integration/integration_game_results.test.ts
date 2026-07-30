@@ -2,13 +2,10 @@ import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
-import {
-	createUserWithRoleAndApiKey,
-	deleteUser,
-} from "../helpers/dbHelpers.js";
+import { deleteUser } from "../helpers/dbHelpers.js";
 
-describe("/web/me/gameResults", async () => {
-	const gameResultsPath = "/web/me/gameHistory";
+describe("/web/me/gameHistory", async () => {
+	const gameHistoryPath = "/web/me/gameHistory";
 	const email = "test@example.com";
 	const name = "Test User";
 	const password = "ValidPassword123!";
@@ -24,7 +21,7 @@ describe("/web/me/gameResults", async () => {
 
 	it("Returns 200 with an empty array", async () => {
 		const res = await request(app)
-			.get(gameResultsPath)
+			.get(gameHistoryPath)
 			.set("Cookie", currentCookie);
 
 		expect(res.status).toBe(200);
@@ -68,7 +65,7 @@ describe("/web/me/gameResults", async () => {
 		});
 
 		const res = await request(app)
-			.get(gameResultsPath)
+			.get(gameHistoryPath)
 			.set("Cookie", currentCookie);
 
 		expect(res.status).toBe(200);
