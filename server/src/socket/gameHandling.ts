@@ -9,10 +9,17 @@ async function handleRoomReset(roomId: string, io: Server) {
 	if (!oldRoom) return;
 	const oldRoomUsers = oldRoom.users;
 	if (!oldRoomUsers) return;
+
+	const connectedClientSockets = await io.in(roomId).fetchSockets();
+
+	if (connectedClientSockets.length === 0) {
+		console.log("Socketio room is empty. Deleting the room from roomStore.")
+		roomStore.delete(roomId);
+		return;
+	}
 	// wipe the old room in roomStore
 	roomStore.create(roomId);
 
-	const connectedClientSockets = await io.in(roomId).fetchSockets();
 	for (const socket of connectedClientSockets) {
 		console.log(socket.id);
 		roomStore.addUser(
