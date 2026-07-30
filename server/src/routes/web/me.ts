@@ -8,5 +8,6 @@ router.use(checkCookieStatus);
 
 router.get("/", meController.buildUserResponseFromSession);
 router.get("/gameHistory", meController.getGameHistory);
+router.get("/stats", meController.getGameStats);
 
 export default router;
