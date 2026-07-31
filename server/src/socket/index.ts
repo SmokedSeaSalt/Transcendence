@@ -35,6 +35,8 @@ export function registerSocketHandlers(io: Server) {
 	io.use(identifySocket);
 
 	io.on("connection", (socket) => {
+		// todo issue #163. this is only temp spectator flag
+		socket.data.isSpectator = false;
 		if (socket.recovered) {
 			console.log(`Recovered: ${socket.id}, room: ${socket.data.roomId}`);
 			const recoveredRoom = roomStore.get(socket.data.roomId);
