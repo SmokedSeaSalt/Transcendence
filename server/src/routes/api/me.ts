@@ -42,6 +42,8 @@ apiRegistry.registerPath({
 });
 router.get("/", meController.getMyProfile);
 
+router.get("/stats", meController.getGameStats);
+
 apiRegistry.registerPath({
 	method: "put",
 	path: "/api/me",

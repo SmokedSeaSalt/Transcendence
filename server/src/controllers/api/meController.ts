@@ -82,3 +82,25 @@ export const deleteUser = async (
 		}
 	}
 };
+
+export async function getGameStats(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Unauthorized"));
+		}
+
+		const gameStats = await userServices.getGameStatsById(req.user.id);
+
+		return res.status(200).json(gameStats);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+}
