@@ -9,7 +9,7 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		if (socket.data.isSpectator) return;
 
 
-		/*
+		/* TODO
 			- tests are now failing because the test io and the io from the server are both being used.
 			So in the tests, users are being added to sockets in the test io. And then the backend checks are being done
 			with the server io, which sees that there are no users in io.in(roomId).fetchSockets() and the finish checker
