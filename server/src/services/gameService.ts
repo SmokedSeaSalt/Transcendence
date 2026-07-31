@@ -69,9 +69,6 @@ export async function validateIncomingWord(
 	// If the user typed the final word, check if all others are done as well
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
-		const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
-			room.roomId,
-		);
 		allActivePlayersFinished = await areAllActivePlayersFinished(room);
 	}
 
