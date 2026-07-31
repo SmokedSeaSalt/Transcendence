@@ -95,7 +95,7 @@ export async function getGameHistory(
 
 		const gameHistory = await userServices.getGameHistoryById(req.user.id);
 		if (!gameHistory) {
-			return res.status(200).json({ gameResults: [] });
+			return next(new NotFoundError("Not Found"));
 		}
 
 		return res.status(200).json(gameHistory);
@@ -119,6 +119,9 @@ export async function getGameStats(
 		}
 
 		const gameStats = await userServices.getGameStatsById(req.user.id);
+		if (!gameStats) {
+			return next(new NotFoundError("Not Found"));
+		}
 
 		return res.status(200).json(gameStats);
 	} catch (error: unknown) {
