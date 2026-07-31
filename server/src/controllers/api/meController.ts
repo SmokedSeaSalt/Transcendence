@@ -94,6 +94,9 @@ export async function getGameHistory(
 		}
 
 		const gameHistory = await userServices.getGameHistoryById(req.user.id);
+		if (!gameHistory) {
+			return res.status(200).json({ gameResults: [] });
+		}
 
 		return res.status(200).json(gameHistory);
 	} catch (error: unknown) {

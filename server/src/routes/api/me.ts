@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as meController from "../../controllers/api/meController.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import {
+	playerHistorySchema,
 	putNameSchema,
 	putNameValidation,
 	zodValidationErrorSchema,
@@ -54,7 +55,7 @@ apiRegistry.registerPath({
 			description: "Game History returned",
 			content: {
 				"application/json": {
-					schema: userResponseSchema,
+					schema: playerHistorySchema,
 				},
 			},
 		},
