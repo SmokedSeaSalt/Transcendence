@@ -1,6 +1,7 @@
 import Button from "../../components/Button";
 import JoinRoomButton from "./JoinRoomButton";
 import { useSocket } from "./SocketContext";
+import { RoomState } from "./SocketTypes";
 import { useLeaveRoom } from "./useLeaveRoom";
 import { useStartGame } from "./useStartGame";
 
@@ -9,6 +10,10 @@ export default function GamePageHeader() {
 	const { leaveRoom, loading, error } = useLeaveRoom();
 	// todo: change back to regular loading when separate files for buttons are made
 	const { startGame, loadingStart, errorStart } = useStartGame();
+
+	const startDisabled =
+		roomState?.roomLeader !== socket?.id ||
+		roomState?.state !== RoomState.LOBBY;
 
 	const handleLeaveClick = async () => {
 		leaveRoom();
@@ -25,7 +30,11 @@ export default function GamePageHeader() {
 				<Button type="button" onClick={handleLeaveClick}>
 					Leave room
 				</Button>
-				<Button type="button" onClick={handleStartClick}>
+				<Button
+					type="button"
+					onClick={handleStartClick}
+					disabled={startDisabled}
+				>
 					Start game
 				</Button>
 				{roomState ? (
