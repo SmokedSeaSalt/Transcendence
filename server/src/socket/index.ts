@@ -106,11 +106,14 @@ export function registerSocketHandlers(io: Server) {
 
 			const room = roomStore.get(socket.data.roomId);
 			if (room) {
+				// todo make helper
+				// in helper if not IN_PROGESS, skip
 				const allActivePlayersFinished = await areAllActivePlayersFinished(room);
 				if (allActivePlayersFinished) {
 					roomStore.setState(room.roomId, RoomState.FINISHED);
 					saveGameSession(room);
 				}
+				// end todo
 				io.to(room.roomId).emit("roomState", room);
 			}
 		});

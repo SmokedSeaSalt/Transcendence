@@ -68,6 +68,8 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
+				// todo call helper that checks if users are finished and then set state
+
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
@@ -107,6 +109,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
+				// todo call helper that checks if users are finished and then set state
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
