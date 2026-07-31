@@ -69,9 +69,7 @@ export async function validateIncomingWord(
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
 		const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
-		console.log(`activePlayerSocketIds size ${activePlayerSocketIds.size}`)
-		allActivePlayersFinished = isRoomDone(activePlayerSocketIds, room);
-
+		allActivePlayersFinished = await areAllActivePlayersFinished(room);
 	}
 
 	if (allActivePlayersFinished) {
@@ -82,10 +80,14 @@ export async function validateIncomingWord(
 	return room;
 }
 
+export async function areAllActivePlayersFinished(room: RoomData) {
+	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
+	return isRoomDone(activePlayerSocketIds, room);
+}
+
 function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	const users = room.users;
 	for (const playerSocketId of activePlayerSocketIds) {
-		console.log(`users ${Object.keys(users)}    playerSocketId: ${playerSocketId}`);
 		if (users[playerSocketId].progress !== room.wordCount) {
 			return false;
 		}

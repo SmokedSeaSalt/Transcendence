@@ -2,11 +2,12 @@ import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
-import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import { areAllActivePlayersFinished, createPrompt, createUniqueRoom } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
 import { registerRoomHandlers } from "./roomHandling.js";
+import { saveGameSession } from "../services/gameSessionServices.js";
 
 async function identifySocket(socket: Socket, next: (err?: Error) => void) {
 	const cookies = parse(socket.request.headers.cookie || "");
@@ -99,11 +100,19 @@ export function registerSocketHandlers(io: Server) {
 		//to update client frontend
 		io.to(socket.data.roomId).emit("roomState", room);
 
-		socket.on("disconnect", () => {
+		socket.on("disconnect", async () => {
 			console.log(`Disconnected: ${socket.id}`);
 			roomStore.deleteUser(socket.data.roomId, socket.id);
+
 			const room = roomStore.get(socket.data.roomId);
-			if (room) io.to(room.roomId).emit("roomState", room);
+			if (room) {
+				const allActivePlayersFinished = await areAllActivePlayersFinished(room);
+				if (allActivePlayersFinished) {
+					roomStore.setState(room.roomId, RoomState.FINISHED);
+					saveGameSession(room);
+				}
+				io.to(room.roomId).emit("roomState", room);
+			}
 		});
 	});
 }

@@ -1,7 +1,7 @@
 export const promtSize: number = 2;
 export const maxRoomSize: number = 100;
 export const postGameCountDownMs: number = 10_000;
-export const gameTimeout: number = 200_000;
+export const gameTimeout: number = 20_000;
 
 export const WORD_LIST: string[] = [
 	"one",
