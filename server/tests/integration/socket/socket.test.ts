@@ -452,7 +452,7 @@ describe("socket disconnect", () => {
 
 		user2.userId = 123;
 		console.log("client2");
-		await expect(await joinRoom(client2, roomId)).rejects.toThrow();
+		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 		// await joinRoom(client2, roomId);
 	});
 
@@ -464,7 +464,7 @@ describe("socket disconnect", () => {
 		client1.emit("startGame");
 		await new Promise((r) => setTimeout(r, 50));
 
-		await expect(await joinRoom(client2, roomId)).rejects.toThrow();
+		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 
 		console.log("client2");
 	});
