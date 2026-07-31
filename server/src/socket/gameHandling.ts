@@ -44,6 +44,8 @@ export function roomFinishedTimeoutAndEmitRoomState(
 
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", (typedWord: string) => {
+		if (socket.data.isSpectator) return;
+
 		const room = validateIncomingWord(socket.data.roomId, socket.id, typedWord);
 
 		if (!room) {

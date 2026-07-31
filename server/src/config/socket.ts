@@ -43,4 +43,5 @@ export interface SocketData {
 	userId: number | undefined;
 	roomId: string;
 	displayName: string;
+	isSpectator: boolean;
 }
