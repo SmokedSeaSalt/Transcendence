@@ -1,3 +1,4 @@
+import { io } from "../app.js";
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { saveGameSession } from "./gameSessionServices.js";
@@ -27,7 +28,7 @@ function makeid(length: number) {
 	return result;
 }
 
-export function validateIncomingWord(
+export async function validateIncomingWord(
 	roomId: string,
 	userId: string,
 	typedWord: string,
@@ -63,25 +64,43 @@ export function validateIncomingWord(
 		return;
 	}
 
-	let shouldTerminate = false;
+	let allActivePlayersFinished = false;
 	// If the user typed the final word, check if all others are done as well
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
-		shouldTerminate = true;
-		for (const user of Object.values(room.users)) {
-			if (user.progress !== room.wordCount) {
-				shouldTerminate = false;
-				break;
-			}
-		}
+		const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
+		allActivePlayersFinished = isRoomDone(activePlayerSocketIds, room);
+
 	}
 
-	if (shouldTerminate) {
+	if (allActivePlayersFinished) {
 		roomStore.setState(roomId, RoomState.FINISHED);
 		saveGameSession(room);
 	}
 
 	return room;
+}
+
+function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
+	const users = room.users;
+	for (const playerSocketId of activePlayerSocketIds) {
+		if (users[playerSocketId].progress !== room.wordCount) {
+			return false;
+		}
+	}
+	return true;
+}
+
+async function getActiveUserSocketIdsFromRoom(roomId: string) {
+	const activeSockets = await io.in(roomId).fetchSockets();
+
+	const activePlayerSocketIds = new Set(
+		activeSockets
+			.filter((socket) => socket.data.isSpectator === false)
+			.map((socket) => socket.data.roomId)
+	);
+
+	return activePlayerSocketIds;
 }
 
 function getRandomWords(size: number): string[] {
