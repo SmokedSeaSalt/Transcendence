@@ -97,7 +97,7 @@ export const roomStore = {
 		const room = rooms.get(roomId);
 		if (!room) return;
 		if (room.state === state) return;
-		console.log(`Room ${roomId} set to state ${state}`)
+		console.log(`Room ${roomId} set to state ${state}`);
 		room.state = state;
 
 		if (state === RoomState.IN_PROGRESS) room.startedAt = new Date();

@@ -2,12 +2,17 @@ import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
-import { areAllActivePlayersFinished, createPrompt, createUniqueRoom, finishAndSaveGameIfDone } from "../services/gameService.js";
+import {
+	areAllActivePlayersFinished,
+	createPrompt,
+	createUniqueRoom,
+	finishAndSaveGameIfDone,
+} from "../services/gameService.js";
+import { saveGameSession } from "../services/gameSessionServices.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
 import { registerRoomHandlers } from "./roomHandling.js";
-import { saveGameSession } from "../services/gameSessionServices.js";
 
 async function identifySocket(socket: Socket, next: (err?: Error) => void) {
 	const cookies = parse(socket.request.headers.cookie || "");

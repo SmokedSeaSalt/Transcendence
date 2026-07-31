@@ -68,7 +68,9 @@ export async function validateIncomingWord(
 	// If the user typed the final word, check if all others are done as well
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
-		const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
+		const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
+			room.roomId,
+		);
 		allActivePlayersFinished = await areAllActivePlayersFinished(room);
 	}
 
@@ -91,7 +93,9 @@ export async function finishAndSaveGameIfDone(room: RoomData) {
 }
 
 export async function areAllActivePlayersFinished(room: RoomData) {
-	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
+	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
+		room.roomId,
+	);
 	return isRoomDone(activePlayerSocketIds, room);
 }
 
@@ -107,11 +111,11 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 
 async function getActiveUserSocketIdsFromRoom(roomId: string) {
 	const activeSockets = await io.in(roomId).fetchSockets();
-	console.log(`active sockets length ${activeSockets.length}`)
+	console.log(`active sockets length ${activeSockets.length}`);
 	const activePlayerSocketIds = new Set(
 		activeSockets
 			.filter((socket) => socket.data.isSpectator === false)
-			.map((socket) => socket.id)
+			.map((socket) => socket.id),
 	);
 
 	return activePlayerSocketIds;
