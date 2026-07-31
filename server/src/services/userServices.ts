@@ -231,7 +231,7 @@ export async function getGameStatsById(id: number) {
 			average_cpm: 0,
 			average_accuracy: 0,
 			wins: 0,
-		}
+		};
 	}
 
 	const stats = gameStats.gameResults;
