@@ -4,7 +4,7 @@ import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
 import { deleteUser } from "../helpers/dbHelpers.js";
 
-describe("/web/me/gameHistory", async () => {
+describe("get /web/me/gameHistory", async () => {
 	const gameHistoryPath = "/web/me/gameHistory";
 	const email = "test@example.com";
 	const name = "Test User";
