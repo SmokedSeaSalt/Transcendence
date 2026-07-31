@@ -137,6 +137,21 @@ export const playerHistorySchema = z
 	.nullable()
 	.openapi("PlayerHistory");
 
+//////////////////////
+// GET Player Stats //
+//////////////////////
+export const playerStatsSchema = z
+	.object({
+		max_wpm: z.number(),
+		max_cpm: z.number(),
+		max_accuracy: z.number(),
+		average_wpm: z.number(),
+		average_cpm: z.number(),
+		average_accuracy: z.number(),
+		wins: z.number(),
+	})
+	.openapi("PlayerStats");
+
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
 export const putNameValidation = () => zodValidate(putNameSchema);
