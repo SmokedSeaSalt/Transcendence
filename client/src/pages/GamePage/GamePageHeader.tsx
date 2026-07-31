@@ -27,9 +27,12 @@ export default function GamePageHeader() {
 		<>
 			<div className="flex place-content-end m-1 space-x-2">
 				<JoinRoomButton />
+				<div>
 				<Button type="button" onClick={handleLeaveClick}>
 					Leave room
 				</Button>
+				</div>
+				<div>
 				<Button
 					type="button"
 					onClick={handleStartClick}
@@ -37,14 +40,17 @@ export default function GamePageHeader() {
 				>
 					Start game
 				</Button>
+				</div>
+				<div>
 				{roomState ? (
 					<p>
 						Current room ID: <br />
-						{roomState.roomId}
+						<span className="text-lg font-bold">{roomState.roomId}</span>
 					</p>
 				) : (
 					<p>Currently not in a room.</p>
 				)}
+				</div>
 			</div>
 		</>
 	);
