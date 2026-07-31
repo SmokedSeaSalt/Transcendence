@@ -201,3 +201,62 @@ export async function getGameHistoryById(id: number) {
 
 	return gameHistory;
 }
+
+export async function getGameStatsById(id: number) {
+	const gameStats = await prisma.user.findUnique({
+		where: {
+			id,
+		},
+		select: {
+			gameResults: {
+				select: {
+					wpm: true,
+					cpm: true,
+					accuracy: true,
+					placement: true,
+				},
+			},
+		},
+	});
+
+	if (!gameStats || gameStats.gameResults.length === 0) {
+		return null;
+	}
+
+	const stats = gameStats.gameResults;
+	const length = stats.length;
+	const totals = stats.reduce(
+		(accumulator, result) => ({
+			wpm: accumulator.wpm + result.wpm,
+			cpm: accumulator.cpm + result.cpm,
+			accuracy: accumulator.accuracy + result.accuracy,
+		}),
+		{ wpm: 0, cpm: 0, accuracy: 0 },
+	);
+
+	const average = {
+		wpm: totals.wpm / length,
+		cpm: totals.cpm / length,
+		accuracy: totals.accuracy / length,
+	};
+	const largest = {
+		wpm: Math.max(...stats.map((result) => result.wpm)),
+		cpm: Math.max(...stats.map((result) => result.cpm)),
+		accuracy: Math.max(...stats.map((result) => result.accuracy)),
+	};
+	const wins = stats.reduce(
+		(accumulator, result) =>
+			result.placement === 1 ? accumulator + 1 : accumulator,
+		0,
+	);
+
+	return {
+		max_wpm: largest.wpm,
+		max_cpm: largest.cpm,
+		max_accuracy: largest.accuracy,
+		average_wpm: average.wpm,
+		average_cpm: average.cpm,
+		average_accuracy: average.accuracy,
+		wins: wins,
+	};
+}

@@ -38,6 +38,10 @@ export const io = new Server<
 		origin: ["http://localhost:5173", "https://admin.socket.io"],
 		credentials: true,
 	},
+	connectionStateRecovery: {
+		maxDisconnectionDuration: 60 * 1000, // 60 seconds
+		skipMiddlewares: true,
+	},
 });
 registerSocketHandlers(io);
 
