@@ -2,7 +2,7 @@ import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
-import { areAllActivePlayersFinished, createPrompt, createUniqueRoom } from "../services/gameService.js";
+import { areAllActivePlayersFinished, createPrompt, createUniqueRoom, finishAndSaveGameIfDone } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
@@ -106,14 +106,7 @@ export function registerSocketHandlers(io: Server) {
 
 			const room = roomStore.get(socket.data.roomId);
 			if (room) {
-				// todo make helper
-				// in helper if not IN_PROGESS, skip
-				const allActivePlayersFinished = await areAllActivePlayersFinished(room);
-				if (allActivePlayersFinished) {
-					roomStore.setState(room.roomId, RoomState.FINISHED);
-					saveGameSession(room);
-				}
-				// end todo
+				finishAndSaveGameIfDone(room);
 				io.to(room.roomId).emit("roomState", room);
 			}
 		});

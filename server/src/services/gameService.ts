@@ -80,6 +80,16 @@ export async function validateIncomingWord(
 	return room;
 }
 
+export async function finishAndSaveGameIfDone(room: RoomData) {
+	if (room.state !== RoomState.IN_PROGRESS) return;
+
+	const allActivePlayersFinished = await areAllActivePlayersFinished(room);
+	if (allActivePlayersFinished) {
+		roomStore.setState(room.roomId, RoomState.FINISHED);
+		saveGameSession(room);
+	}
+}
+
 export async function areAllActivePlayersFinished(room: RoomData) {
 	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(room.roomId);
 	return isRoomDone(activePlayerSocketIds, room);

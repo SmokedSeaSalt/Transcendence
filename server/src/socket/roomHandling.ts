@@ -2,7 +2,7 @@ import { setTimeout as wait } from "node:timers/promises";
 import type { Server, Socket } from "socket.io";
 import { gameTimeout, maxRoomSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
-import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import { createPrompt, createUniqueRoom, finishAndSaveGameIfDone } from "../services/gameService.js";
 import { startTimer } from "../services/gameTimers.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
@@ -68,8 +68,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
-				// todo call helper that checks if users are finished and then set state
-
+				finishAndSaveGameIfDone(oldRoom);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
@@ -109,7 +108,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
-				// todo call helper that checks if users are finished and then set state
+				finishAndSaveGameIfDone(oldRoom);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}

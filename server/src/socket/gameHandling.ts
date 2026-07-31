@@ -32,10 +32,11 @@ async function handleRoomReset(roomId: string, io: Server) {
 	roomStore.setState(roomId, RoomState.LOBBY);
 }
 
-export function roomFinishedTimeoutAndEmitRoomState(
+export function cancelTimerSetRoomFinishedTimeoutAndEmitRoomState(
 	roomId: string,
 	io: Server,
 ) {
+	cancelTimer(roomId);
 	setTimeout(async () => {
 		await handleRoomReset(roomId, io);
 		io.to(roomId).emit("roomState", roomStore.get(roomId));
@@ -55,8 +56,7 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		io.to(socket.data.roomId).emit("roomState", room);
 
 		if (room.state === RoomState.FINISHED) {
-			cancelTimer(socket.data.roomId);
-			roomFinishedTimeoutAndEmitRoomState(socket.data.roomId, io);
+			cancelTimerSetRoomFinishedTimeoutAndEmitRoomState(socket.data.roomId, io);
 		}
 	});
 }
