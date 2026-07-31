@@ -196,7 +196,7 @@ export async function getGameHistoryById(id: number) {
 	});
 
 	if (!gameHistory) {
-		return [];
+		return null;
 	}
 
 	return gameHistory;

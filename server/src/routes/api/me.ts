@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as meController from "../../controllers/api/meController.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import {
+	playerHistorySchema,
 	putNameSchema,
 	putNameValidation,
 	zodValidationErrorSchema,
@@ -41,6 +42,35 @@ apiRegistry.registerPath({
 	},
 });
 router.get("/", meController.getMyProfile);
+
+apiRegistry.registerPath({
+	method: "get",
+	path: "/api/me/gameHistory",
+	tags: ["Api"],
+
+	request: {},
+
+	responses: {
+		200: {
+			description: "Game History returned",
+			content: {
+				"application/json": {
+					schema: playerHistorySchema,
+				},
+			},
+		},
+
+		401: {
+			description: "Unauthorized error",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+	},
+});
+router.get("/gameHistory", meController.getGameHistory);
 
 apiRegistry.registerPath({
 	method: "put",

@@ -90,6 +90,53 @@ export const putNameSchema = z
 	})
 	.strict();
 
+////////////////////////
+// GET Player History //
+////////////////////////
+const sessionResultSchema = z.object({
+	wpm: z.number(),
+	cpm: z.number(),
+	accuracy: z.number(),
+	placement: z.number(),
+	displayName: z.string(),
+});
+
+const sessionSchema = z
+	.object({
+		id: z.number(),
+		charCount: z.number(),
+		wordCount: z.number(),
+		textPrompt: z.string(),
+		startedAt: z.date(),
+		finishedAt: z.date(),
+		results: z.array(sessionResultSchema),
+	})
+	.openapi("PlayerHistorySession");
+
+const gameResultSchema = z
+	.object({
+		id: z.number(),
+		score: z.number(),
+		wpm: z.number(),
+		cpm: z.number(),
+		accuracy: z.number(),
+		timeMs: z.number(),
+		placement: z.number(),
+		finished: z.boolean(),
+		sessionId: z.number(),
+		userId: z.number().nullable(),
+		displayName: z.string(),
+		session: sessionSchema,
+	})
+	.openapi("PlayerHistoryGameResult");
+
+export const playerHistorySchema = z
+	.object({
+		gameResults: z.array(gameResultSchema),
+	})
+	.nullable()
+	.openapi("PlayerHistory");
+
 export const createUserValidation = () => zodValidate(createUserSchema);
 export const loginUserValidation = () => zodValidate(loginSchema);
 export const putNameValidation = () => zodValidate(putNameSchema);
