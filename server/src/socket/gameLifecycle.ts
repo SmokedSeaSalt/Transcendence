@@ -7,26 +7,29 @@ import { handleRoomReset } from "./roomHandling.js";
 
 // after postGameCountDownMs, the still active users will be in a reset lobby together. Clients will then be informed by an emit of the new roomstate
 function scheduleRoomReset(roomId: string) {
-	const room = roomStore.get(roomId);
-	if (!room) return;
+
 
 	setTimeout(async () => {
 		await handleRoomReset(roomId, io);
+		const room = roomStore.get(roomId);
+		if (!room) return;
 		io.to(roomId).emit("roomState", room);
 	}, postGameCountDownMs);
 }
 
 export async function endGame(roomId: string, reason:string) {
+	console.log(`endGame() called with reason ${reason}`);
 	cancelTimeout(roomId);
 
-	roomStore.setState(roomId, RoomState.FINISHED); // todo do i set this here? or should this be the flag/signal for the services to pass back down to the socket functions?
+	roomStore.setState(roomId, RoomState.FINISHED);
 
 	const room = roomStore.get(roomId);
 	if (!room) return;
 	await saveGameSession(room);
 
-	scheduleRoomReset(roomId);
+	io.to(roomId).emit("roomState", room);
 
+	scheduleRoomReset(roomId);
 }
 
 const gameTimeouts = new Map<string, NodeJS.Timeout>(); // <roomId, timeout>

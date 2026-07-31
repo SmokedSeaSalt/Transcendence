@@ -1,6 +1,7 @@
 import { io } from "../app.js";
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
+import { endGame } from "../socket/gameLifecycle.js";
 import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
@@ -74,21 +75,17 @@ export async function validateIncomingWord(
 		allActivePlayersFinished = await areAllActivePlayersFinished(room);
 	}
 
-	if (allActivePlayersFinished) {
-		roomStore.setState(roomId, RoomState.FINISHED);
-		saveGameSession(room);
-	}
 
-	return room;
+	return { room, allActivePlayersFinished };
 }
 
 export async function finishAndSaveGameIfDone(room: RoomData) {
 	if (room.state !== RoomState.IN_PROGRESS) return;
 
 	const allActivePlayersFinished = await areAllActivePlayersFinished(room);
+
 	if (allActivePlayersFinished) {
-		roomStore.setState(room.roomId, RoomState.FINISHED);
-		saveGameSession(room);
+		endGame(room.roomId, "All active players are done. Someone has left after the rest were done typing.");
 	}
 }
 
@@ -109,9 +106,10 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	return true;
 }
 
+
+// todo should this be a service if it interacts with io? should this be moved to the socket folder?
 async function getActiveUserSocketIdsFromRoom(roomId: string) {
 	const activeSockets = await io.in(roomId).fetchSockets();
-	console.log(`active sockets length ${activeSockets.length}`);
 	const activePlayerSocketIds = new Set(
 		activeSockets
 			.filter((socket) => socket.data.isSpectator === false)
