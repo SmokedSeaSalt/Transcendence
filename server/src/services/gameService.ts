@@ -1,3 +1,4 @@
+import { Server } from "socket.io";
 import { io } from "../app.js";
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
@@ -31,22 +32,22 @@ function makeid(length: number) {
 
 export async function validateIncomingWord(
 	roomId: string,
-	userId: string,
+	socketId: string,
 	typedWord: string,
 ) {
 	const room = roomStore.get(roomId);
 
 	if (!room) {
-		return null;
+		return;
 	}
 	if (room.state !== RoomState.IN_PROGRESS) {
-		return null;
+		return;
 	}
 	if (!room.prompt || !room.wordCount) {
-		return null;
+		return;
 	}
 
-	const user = room.users[userId];
+	const user = room.users[socketId];
 
 	// If user already done, return
 	if (user.progress >= room.wordCount) {
@@ -54,26 +55,23 @@ export async function validateIncomingWord(
 	}
 
 	if (typedWord === room.prompt[user.progress]) {
-		roomStore.updateProgress(roomId, userId);
+		roomStore.updateProgress(roomId, socketId);
 		console.log(
-			`user: ${userId} typed "${typedWord}" correctly in room: ${roomId}`,
+			`user: ${socketId} typed "${typedWord}" correctly in room: ${roomId}`,
 		);
 	} else {
 		console.log(
-			`user: ${userId}, sent an invalid word "${typedWord}" in room: ${roomId}`,
+			`user: ${socketId}, sent an invalid word "${typedWord}" in room: ${roomId}`,
 		);
 		return;
 	}
 
-	let allActivePlayersFinished = false;
-	// If the user typed the final word, check if all others are done as well
+	// If the user typed the final word set finished time
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
-		allActivePlayersFinished = await areAllActivePlayersFinished(room);
 	}
 
-
-	return { room, allActivePlayersFinished };
+	return room;
 }
 
 export async function finishAndSaveGameIfDone(room: RoomData, io: Server) {
@@ -82,7 +80,7 @@ export async function finishAndSaveGameIfDone(room: RoomData, io: Server) {
 	const allActivePlayersFinished = await areAllActivePlayersFinished(room, io);
 
 	if (allActivePlayersFinished) {
-		endGame(room.roomId, "All active players are done. Someone has left after the rest were done typing.");
+		endGame(room.roomId, "All active players are done or someone has left and the rest were done typing.");
 	}
 }
 
@@ -103,7 +101,6 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	}
 	return true;
 }
-
 
 // todo should this be a service if it interacts with io? should this be moved to the socket folder?
 async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
