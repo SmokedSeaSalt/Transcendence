@@ -76,19 +76,20 @@ export async function validateIncomingWord(
 	return { room, allActivePlayersFinished };
 }
 
-export async function finishAndSaveGameIfDone(room: RoomData) {
+export async function finishAndSaveGameIfDone(room: RoomData, io: Server) {
 	if (room.state !== RoomState.IN_PROGRESS) return;
 
-	const allActivePlayersFinished = await areAllActivePlayersFinished(room);
+	const allActivePlayersFinished = await areAllActivePlayersFinished(room, io);
 
 	if (allActivePlayersFinished) {
 		endGame(room.roomId, "All active players are done. Someone has left after the rest were done typing.");
 	}
 }
 
-export async function areAllActivePlayersFinished(room: RoomData) {
+export async function areAllActivePlayersFinished(room: RoomData, io: Server) {
 	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
 		room.roomId,
+		io,
 	);
 	return isRoomDone(activePlayerSocketIds, room);
 }
@@ -105,7 +106,7 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 
 
 // todo should this be a service if it interacts with io? should this be moved to the socket folder?
-async function getActiveUserSocketIdsFromRoom(roomId: string) {
+async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
 	const activeSockets = await io.in(roomId).fetchSockets();
 	const activePlayerSocketIds = new Set(
 		activeSockets

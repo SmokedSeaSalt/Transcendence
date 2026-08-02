@@ -94,7 +94,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
-				finishAndSaveGameIfDone(oldRoom);
+				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
@@ -134,7 +134,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
-				finishAndSaveGameIfDone(oldRoom);
+				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}

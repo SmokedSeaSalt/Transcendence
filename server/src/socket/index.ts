@@ -111,7 +111,7 @@ export function registerSocketHandlers(io: Server) {
 
 			const room = roomStore.get(socket.data.roomId);
 			if (room) {
-				finishAndSaveGameIfDone(room);
+				finishAndSaveGameIfDone(room, io);
 				io.to(room.roomId).emit("roomState", room);
 			}
 		});
