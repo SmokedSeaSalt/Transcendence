@@ -108,10 +108,4 @@ export const roomStore = {
 		rooms.delete(roomId);
 	},
 
-	// this should not be here but a seperate service that gets a room object.
-	// we want to keep this inmemory only, this would need to be a async if this calls the database helper functions
-	saveToDatabase: (): void => {
-		// transform data
-		// call functions in gameService to create the gameSession and GameResult database entries
-	},
 };
