@@ -274,6 +274,8 @@ describe("socket disconnect", () => {
 			roomId,
 		);
 
+		await new Promise((r) => setTimeout(r, 50));
+
 		if (!room.finishedAt) {
 			throw new Error("finished at time not set");
 		}
