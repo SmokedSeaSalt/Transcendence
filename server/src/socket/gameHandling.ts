@@ -1,13 +1,14 @@
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
-import { finishAndSaveGameIfDone, validateIncomingWord } from "../services/gameService.js";
+import {
+	finishAndSaveGameIfDone,
+	validateIncomingWord,
+} from "../services/gameService.js";
 import { endGame } from "./gameLifecycle.js";
-
 
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", async (typedWord: string) => {
 		if (socket.data.isSpectator) return;
-
 
 		/* TODO
 			- tests are now failing because the test io and the io from the server are both being used.
@@ -41,6 +42,5 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 			finishAndSaveGameIfDone(room, io);
 		}
 		io.to(socket.data.roomId).emit("roomState", room);
-
 	});
 }

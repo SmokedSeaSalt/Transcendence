@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import type { Server } from "socket.io";
 import { io } from "../app.js";
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
@@ -80,7 +80,10 @@ export async function finishAndSaveGameIfDone(room: RoomData, io: Server) {
 	const allActivePlayersFinished = await areAllActivePlayersFinished(room, io);
 
 	if (allActivePlayersFinished) {
-		endGame(room.roomId, "All active players are done or someone has left and the rest were done typing.");
+		endGame(
+			room.roomId,
+			"All active players are done or someone has left and the rest were done typing.",
+		);
 	}
 }
 

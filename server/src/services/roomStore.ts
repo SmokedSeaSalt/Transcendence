@@ -107,5 +107,4 @@ export const roomStore = {
 	delete: (roomId: string): void => {
 		rooms.delete(roomId);
 	},
-
 };
