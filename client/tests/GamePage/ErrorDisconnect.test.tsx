@@ -15,7 +15,6 @@
 // // import { registerSocketHandlers } from "../../../server/src/socket";
 // // import { Server } from "socket.io";
 
-
 // test("force disconnect should give error page", async () => {
 // 	let httpServer: HttpServer;
 // 	// let ioServer: Server;
@@ -71,13 +70,11 @@
 // 		client1.disconnect();
 // 	});
 
-
 // 	render(
 // 		<SocketProvider>
 // 			<GamePage />
 // 		</SocketProvider>,
 // 	);
-
 
 // 	expect(await screen.findByText(/Something went wrong and you were disconnected/i)).toBeInTheDocument();
 // });
