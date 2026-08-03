@@ -38,5 +38,5 @@ export const getUserStats = () => {
 		fetchData();
 	}, [fetchData]);
 
-	return { userStats, loading, refetch: fetchData };
+	return { userStats, loading };
 };
