@@ -6,11 +6,14 @@ import { useSocket } from "./SocketContext";
 import { RoomState, type RoomUser } from "./SocketTypes";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 export default function FinishedGamePopup() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [userResults, setUserResults] = useState<RoomUser[]>([]);
 	const { roomState } = useSocket();
+
+	useEscapeKey(() => setOpen(false), open);
 
 	useEffect(() => {
 		if (!roomState) return;

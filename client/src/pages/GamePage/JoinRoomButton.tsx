@@ -3,12 +3,15 @@ import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [roomId, setRoomId] = useState<string>("");
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const { emitJoinRoom, loading, error } = useConnectToRoom();
+
+	useEscapeKey(() => setOpen(false), open);
 
 	const clickJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
