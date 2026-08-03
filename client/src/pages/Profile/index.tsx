@@ -29,7 +29,7 @@ export default function ProfilePage() {
 		return null;
 	}
 
-	// todo: user stats should probably be part of a larger div with graph instead of index directly
+	// todo: userStats should probably be part of a larger div with graph; maybe separate component?
 
 	return (
 		<main
@@ -43,6 +43,7 @@ export default function ProfilePage() {
 			<NameBar />
 			<div>
 				<UserStats />
+				{/* graph goes here */}
 			</div>
 		</main>
 	);
