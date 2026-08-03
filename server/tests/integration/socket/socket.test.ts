@@ -15,7 +15,7 @@ import { registerSocketHandlers } from "../../../src/socket/";
 
 function joinRoom(client: Socket, roomId: string): Promise<void> {
 	return new Promise((resolve, reject) => {
-		client.emit("joinRoom", roomId, (success: boolean, message?: string) => {
+		client.emit("joinRoom", roomId, false, (success: boolean, message?: string) => {
 			if (!success) {
 				reject(new Error(message));
 				return;
