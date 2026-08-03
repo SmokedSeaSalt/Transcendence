@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import ErrorBox from "./ErrorBox";
 import Button from "../../components/Button";
+import ErrorBox from "./ErrorBox";
 import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
