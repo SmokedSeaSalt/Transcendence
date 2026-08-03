@@ -33,7 +33,9 @@ export default function GamePage() {
 		);
 
 	return (
-		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+		<main
+			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
+		>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
 			{roomState?.state === RoomState.FINISHED ? (
