@@ -8,6 +8,7 @@ export enum RoomState {
 export interface RoomUser {
 	displayName: string;
 	progress: number;
+	finishedAt?: Date;
 }
 
 export interface RoomStatePayload {

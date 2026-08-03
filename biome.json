@@ -11,6 +11,9 @@
 			},
 			"a11y": {
 				"noAutofocus": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off"
 			}
 		}
 	}
