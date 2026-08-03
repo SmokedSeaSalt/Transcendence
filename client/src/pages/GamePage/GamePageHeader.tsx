@@ -31,7 +31,7 @@ export default function GamePageHeader({
 		<>
 			<div className="flex place-content-end m-1 space-x-2">
 				<div className="flex items-center place-content-end m-1 space-x-2 font-bold">
-					{isSpectator && <h3 >You are spectating.</h3>}
+					{isSpectator && <h3>You are spectating.</h3>}
 				</div>
 				<JoinRoomButton />
 				<div>
