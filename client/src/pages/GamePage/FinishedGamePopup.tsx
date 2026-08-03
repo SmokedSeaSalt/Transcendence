@@ -13,8 +13,6 @@ export default function FinishedGamePopup() {
 	const [userResults, setUserResults] = useState<RoomUser[]>([]);
 	const { roomState } = useSocket();
 
-	useEscapeKey(() => setOpen(false), open);
-
 	useEffect(() => {
 		if (!roomState) return;
 		if (roomState.state === RoomState.FINISHED) {

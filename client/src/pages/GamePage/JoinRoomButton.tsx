@@ -11,8 +11,6 @@ export default function JoinRoomButton() {
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const { emitJoinRoom, loading, error } = useConnectToRoom();
 
-	useEscapeKey(() => setOpen(false), open);
-
 	const clickJoinRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		setOpen(true);
