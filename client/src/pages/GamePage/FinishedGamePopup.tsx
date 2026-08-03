@@ -5,6 +5,7 @@ import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
 import { useSocket } from "./SocketContext";
 import { RoomState, RoomUser } from "./SocketTypes";
+import ReactConfetti from "react-confetti";
 
 export default function FinishedGamePopup() {
 	const [open, setOpen] = useState<boolean>(false);
@@ -21,6 +22,9 @@ export default function FinishedGamePopup() {
 						(b.finishedAt ? new Date(b.finishedAt).getTime() : Number.MAX_SAFE_INTEGER)
 					)
 			setUserResults(tempUserResults);
+		}
+		if (roomState.state === RoomState.COUNTDOWN) {
+			setOpen(false);
 		} 
 
 
@@ -28,7 +32,10 @@ export default function FinishedGamePopup() {
 	}, [roomState]);
 
 	return (
-		
+		<div>
+			{open && <ReactConfetti />}
+			
+			
 			<Popup open={open} onClose={() => setOpen(false)}>
 				<div className="text-mist-100">
 						<h3 >
@@ -46,5 +53,8 @@ export default function FinishedGamePopup() {
 						</div>
 					</div>
 			</Popup>
+		</div>
+		
+
 	);
 }
