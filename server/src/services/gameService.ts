@@ -105,7 +105,6 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	return true;
 }
 
-// todo should this be a service if it interacts with io? should this be moved to the socket folder?
 async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
 	const activeSockets = await io.in(roomId).fetchSockets();
 	const activePlayerSocketIds = new Set(
