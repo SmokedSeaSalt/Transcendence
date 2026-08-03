@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
+import ErrorBox from "./ErrorBox";
+import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
@@ -9,28 +11,11 @@ import { RoomState, type RoomStatePayload } from "./SocketTypes";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
-	const { socket, setRoomState, roomState } = useSocket();
-	useEffect(() => {
-		socket?.on("connect", () => {
-			console.log(socket.id);
-			if (socket.id === undefined) {
-				setMessage("No valid socket.id");
-			} else {
-				setMessage(socket.id);
-			}
+	const { socket, roomState, errorStatus } = useSocket();
 
-			socket.on("roomState", (payload: RoomStatePayload) => {
-				console.log("roomState received");
-				setRoomState(payload);
-			});
-		});
-	}, [socket, setRoomState]);
-
-	if (roomState)
-		console.log(
-			"Current user count in index: ",
-			Object.keys(roomState.users).length,
-		);
+	if (errorStatus) {
+		return <ErrorBox />;
+	}
 
 	return (
 		<main
@@ -38,6 +23,7 @@ export default function GamePage() {
 		>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
+			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
 				<div>The game has finished. Room will be rejoined</div>
 			) : null}

@@ -6,7 +6,7 @@ export const useConnectToRoom = () => {
 	const [message, setMessage] = useState<string>("");
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 
 	const emitJoinRoom = async (
 		roomId: string,

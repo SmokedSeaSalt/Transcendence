@@ -11,7 +11,7 @@ const colourPalettes: [string, string, string][] = [
 ];
 
 export default function ProgressField() {
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 	// only grab once from room info
 	let totalWords = 1;
 	if (roomState?.wordCount !== undefined) {

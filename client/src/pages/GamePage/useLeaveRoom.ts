@@ -4,7 +4,7 @@ import { useSocket } from "./SocketContext";
 export const useLeaveRoom = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 
 	const leaveRoom = async () => {
 		setLoading(true);
