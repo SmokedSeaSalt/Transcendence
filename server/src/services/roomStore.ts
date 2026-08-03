@@ -6,7 +6,6 @@ export interface userInfo {
 	displayName: string;
 	finishedAt?: Date;
 }
-
 export interface RoomData {
 	roomId: string;
 	roomLeader: string;
@@ -98,6 +97,7 @@ export const roomStore = {
 		const room = rooms.get(roomId);
 		if (!room) return;
 		if (room.state === state) return;
+		console.log(`Room ${roomId} set to state ${state}`);
 		room.state = state;
 
 		if (state === RoomState.IN_PROGRESS) room.startedAt = new Date();
@@ -106,12 +106,5 @@ export const roomStore = {
 
 	delete: (roomId: string): void => {
 		rooms.delete(roomId);
-	},
-
-	// this should not be here but a seperate service that gets a room object.
-	// we want to keep this inmemory only, this would need to be a async if this calls the database helper functions
-	saveToDatabase: (): void => {
-		// transform data
-		// call functions in gameService to create the gameSession and GameResult database entries
 	},
 };

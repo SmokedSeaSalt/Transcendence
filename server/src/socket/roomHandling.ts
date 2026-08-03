@@ -1,10 +1,37 @@
 import { setTimeout as wait } from "node:timers/promises";
 import type { Server, Socket } from "socket.io";
-import { maxRoomSize } from "../config/gameSettings.js";
+import { gameTimeout, maxRoomSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
-import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import {
+	createPrompt,
+	createUniqueRoom,
+	finishAndSaveGameIfDone,
+} from "../services/gameService.js";
 import { transferRoom } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
+import { startTimeout } from "./gameLifecycle.js";
+
+export async function handleRoomReset(roomId: string, io: Server) {
+	const connectedClientSockets = await io.in(roomId).fetchSockets();
+
+	if (connectedClientSockets.length === 0) {
+		console.log("Socketio room is empty. Deleting the room from roomStore.");
+		roomStore.delete(roomId);
+		return;
+	}
+	// wipe the old room in roomStore
+	roomStore.create(roomId);
+
+	for (const socket of connectedClientSockets) {
+		roomStore.addUser(
+			roomId,
+			socket.id,
+			socket.data.displayName,
+			socket.data.userId,
+		);
+	}
+	roomStore.setState(roomId, RoomState.LOBBY);
+}
 
 export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, callback) => {
@@ -67,6 +94,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
+				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
@@ -106,6 +134,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			socket.leave(oldRoomId);
 			const oldRoom = roomStore.get(oldRoomId);
 			if (oldRoom) {
+				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
 			}
 		}
@@ -134,5 +163,7 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 
 		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
 		io.to(room.roomId).emit("roomState", room);
+
+		startTimeout(socket.data.roomId, gameTimeout);
 	});
 }
