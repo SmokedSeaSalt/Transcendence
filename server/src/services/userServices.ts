@@ -270,6 +270,6 @@ export async function getGameStatsById(id: number) {
 		average_cpm: average.cpm,
 		average_accuracy: average.accuracy,
 		wins: wins,
-		total_games: gameStats.gameResults.length,
+		total_games: length,
 	};
 }
