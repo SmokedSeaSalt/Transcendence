@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
+import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import { RoomState, type RoomStatePayload } from "./SocketTypes";
-import FinishedGamePopup from "./FinishedGamePopup";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
