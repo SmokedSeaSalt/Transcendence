@@ -144,6 +144,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onFocus={() => setIsInputFocused(true)}
 							onBlur={() => setIsInputFocused(false)}
 							maxLength={promptIncomplete.length}
+							disabled={roomState?.state !== RoomState.IN_PROGRESS}
 						/>
 					</div>
 					{cheating ? (
