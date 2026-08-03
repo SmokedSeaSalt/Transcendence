@@ -1,11 +1,11 @@
 import type * as CSS from "csstype";
 import type React from "react";
-import bongoCatPic from "../../assets/logo_temp_cat.png";
 import bikePic from "../../assets/bike.svg";
+import bongoCatPic from "../../assets/logo_temp_cat.png";
 import type { RoomUser } from "./SocketTypes";
 
 interface ProgressBarProps {
-	colourPalette: [string, string]; // = bar colour (tailwind style), marker colour (hex code)
+	colourPalette: [string, string, string]; // = bar colour (tailwind style), marker colour (hex code), hue-rotate (deg)
 	totalWords: number;
 	user: RoomUser | undefined; // user = displayName & progress
 }
@@ -19,9 +19,9 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 	if (progress > 100) progress = 100;
 
 	// automatically updates distance from top when markerSize is updated so it's always centered
-	// note: 110 depends on the h- value set for containerStyle & the h- & bottom- values set for barStyle
-	const markerSize = 95;
-	const topDistance = (110 - markerSize) / 2;
+	// note: 30 depends on the h- value set for containerStyle & the h- & bottom- values set for barStyle
+	const markerSize = 160;
+	const topDistance = (30 - markerSize) / 2;
 	const markerStyle: CSS.Properties = {
 		height: `${markerSize}%`,
 		aspectRatio: 1 / 1,
@@ -34,22 +34,14 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 		margin: "auto",
 	};
 
-	// colours to pass on in hue-rotate, depending:
-	// blue = 0deg; purple = 50-80deg; pink = 100deg; (dark orange) 170deg; green 240deg
-
 	const containerStyle = "relative bottom-0 left-0 h-100/100 content-center";
 	const barStyle = `absolute ${props.colourPalette[0]} h-30/100 w-100/100 rounded-sm bottom-3/10`;
+	const imgStyle = `w-100/100 m-auto ${props.colourPalette[2]}`;
 	return (
 		<div className={containerStyle}>
 			<div className={barStyle} />
 			<div style={markerStyle}>
-				<img
-					// className="rounded-lg w-90/100 m-auto"
-					className="w-100/100 m-auto"
-					src={bikePic}
-					alt="bike img"
-					// style="filter: hue-rotate(150deg)"> // for tailwind: "hue-rotate-100"
-				/>
+				<img className={imgStyle} src={bikePic} alt="bike img" />
 			</div>
 		</div>
 	);
