@@ -16,7 +16,7 @@ export interface RoomStatePayload {
 	state: RoomState;
 	prompt?: string[];
 	wordCount?: number;
-	users: Record<number, RoomUser>;
+	users: Record<string, RoomUser>;
 	createdAt: Date;
 	startedAt?: Date;
 	finishedAt?: Date;
