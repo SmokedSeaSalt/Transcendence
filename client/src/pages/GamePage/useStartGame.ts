@@ -4,7 +4,7 @@ import { useSocket } from "./SocketContext";
 export const useStartGame = () => {
 	const [loadingStart, setLoading] = useState(false);
 	const [errorStart, setError] = useState<string | null>(null);
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 
 	const startGame = async () => {
 		setLoading(true);
