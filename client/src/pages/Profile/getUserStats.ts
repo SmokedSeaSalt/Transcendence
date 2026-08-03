@@ -8,6 +8,7 @@ export type jsonUserStats = {
 	average_cpm: number;
 	average_accuracy: number;
 	wins: number;
+	total_games: number;
 };
 
 // hook to return either userStats object or null if user is not logged in
