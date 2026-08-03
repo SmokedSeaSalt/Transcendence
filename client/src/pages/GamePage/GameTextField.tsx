@@ -16,7 +16,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 		);
 	const prompt = props.prompt.join(" ");
 
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 	const [cheating, setCheating] = useState<boolean>(false);
 	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
@@ -145,6 +145,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onBlur={() => setIsInputFocused(false)}
 							maxLength={promptIncomplete.length}
 							autoComplete="off"
+							disabled={roomState?.state !== RoomState.IN_PROGRESS}
 						/>
 					</div>
 					{cheating ? (

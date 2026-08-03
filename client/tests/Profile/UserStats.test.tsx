@@ -1,52 +1,43 @@
-// import { render, screen } from "@testing-library/react";
-// import userEvent from "@testing-library/user-event";
-// import { afterEach, expect, test, vi } from "vitest";
-// import { waitFor } from "@testing-library/react";
-// import UserStats from "../../src/pages/Profile/UserStats";
-// import { getUserStats } from "../../src/pages/Profile/getUserStats";
-// import { redirect } from "react-router-dom";
+import { render, screen } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { redirect } from "react-router-dom";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import UserStats from "../../src/pages/Profile/UserStats";
+import { getUserStats } from "../../src/pages/Profile/getUserStats";
 
-// type VitestMock = ReturnType<typeof vi.fn>;
+type VitestMock = ReturnType<typeof vi.fn>;
 
-// test("see if stats are displayed when fetched", async () => {
+test("stats when logged out", async () => {
+	render(<UserStats />);
 
-// 	// const mockResponse = {
-// 	// 	max_wpm: 100,
-// 	// 	max_cpm: 0,
-// 	// 	max_accuracy: 0,
-// 	// 	average_wpm: 20,
-// 	// 	average_cpm: 0,
-// 	// 	average_accuracy: 0,
-// 	// 	wins: 5,
-// 	// 	total_games: 10,
-// 	// };
+	expect(await screen.findByText("No stats")).toBeInTheDocument();
+});
 
-// 	const mockResponse = {
-// 		ok: true,
-// 		redirect: false,
+test("stats when logged in", async () => {
+	const mockStats = {
+		max_wpm: 47,
+		max_cpm: 380,
+		max_accuracy: 0,
+		average_wpm: 44,
+		average_cpm: 363,
+		average_accuracy: 0,
+		wins: 3,
+		total_games: 3,
+	};
 
-// 	};
+	const mockFetch = vi.fn().mockResolvedValue({
+		ok: true,
+		json: async () => mockStats,
+	}) as unknown as VitestMock;
+	globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
 
-// 	render(
-// 		<UserStats />
-// 	);
+	render(<UserStats />);
 
-// 	globalThis.fetch = vi.fn(() => 
-// 		Promise.resolve({
-// 			json: () => Promise.resolve(mockResponse),
-// 		}),
-// 	);
+	expect(await screen.findByText("Games won: 3")).toBeInTheDocument();
+	expect(await screen.findByText("Games played: 3")).toBeInTheDocument();
+	expect(await screen.findByText("Max wpm: 47")).toBeInTheDocument();
+	expect(await screen.findByText("Average wpm: 44")).toBeInTheDocument();
 
-
-// 	// expect fetch for stats
-// 	await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
-
-// 	// inspect fetch args (URL and request options)
-// 	const [url, opts] = mockFetch.mock.calls[0] as [
-// 		string,
-// 		{ method?: string; body?: string },
-// 	];
-// 	expect(typeof url).toBe("string");
-// 	// expect(getUserStats).toHaveBeenCalled();
-// 	expect(JSON.parse(opts.body ?? "")).toEqual( null );
-// });
+	mockFetch.mockClear();
+});

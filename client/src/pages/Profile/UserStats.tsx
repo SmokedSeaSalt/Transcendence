@@ -3,7 +3,7 @@ import { getUserStats } from "./getUserStats";
 export default function UserStats() {
 	const { userStats, loading } = getUserStats();
 
-	if (userStats === null) return <></>;
+	if (userStats === null) return <div>No stats</div>;
 
 	const statClass = "m-2 p-2 bg-blue-100 rounded-md";
 	return (

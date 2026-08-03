@@ -18,7 +18,7 @@ export const useLogin = () => {
 				body: JSON.stringify(payload),
 			});
 			if (!res.ok)
-				throw new Error((await res.json()).message || "Registration failed");
+				throw new Error((await res.json()).message || "Login failed");
 			await updateLoggedinUser();
 			nav("/");
 		} catch (err) {
