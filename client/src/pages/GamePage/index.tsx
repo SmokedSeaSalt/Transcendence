@@ -6,6 +6,7 @@ import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import { RoomState, type RoomStatePayload } from "./SocketTypes";
+import FinishedGamePopup from "./FinishedGamePopup";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -38,6 +39,7 @@ export default function GamePage() {
 		>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
+			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
 				<div>The game has finished. Room will be rejoined</div>
 			) : null}
