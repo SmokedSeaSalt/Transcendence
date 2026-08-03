@@ -1,5 +1,8 @@
+import type { Server } from "socket.io";
+import { io } from "../app.js";
 import { WORD_LIST, promtSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
+import { endGame } from "../socket/gameLifecycle.js";
 import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
@@ -27,24 +30,24 @@ function makeid(length: number) {
 	return result;
 }
 
-export function validateIncomingWord(
+export async function validateIncomingWord(
 	roomId: string,
-	userId: string,
+	socketId: string,
 	typedWord: string,
 ) {
 	const room = roomStore.get(roomId);
 
 	if (!room) {
-		return null;
+		return;
 	}
 	if (room.state !== RoomState.IN_PROGRESS) {
-		return null;
+		return;
 	}
 	if (!room.prompt || !room.wordCount) {
-		return null;
+		return;
 	}
 
-	const user = room.users[userId];
+	const user = room.users[socketId];
 
 	// If user already done, return
 	if (user.progress >= room.wordCount) {
@@ -52,36 +55,65 @@ export function validateIncomingWord(
 	}
 
 	if (typedWord === room.prompt[user.progress]) {
-		roomStore.updateProgress(roomId, userId);
+		roomStore.updateProgress(roomId, socketId);
 		console.log(
-			`user: ${userId} typed "${typedWord}" correctly in room: ${roomId}`,
+			`user: ${socketId} typed "${typedWord}" correctly in room: ${roomId}`,
 		);
 	} else {
 		console.log(
-			`user: ${userId}, sent an invalid word "${typedWord}" in room: ${roomId}`,
+			`user: ${socketId}, sent an invalid word "${typedWord}" in room: ${roomId}`,
 		);
 		return;
 	}
 
-	let shouldTerminate = false;
-	// If the user typed the final word, check if all others are done as well
+	// If the user typed the final word set finished time
 	if (user.progress === room.wordCount) {
 		user.finishedAt = new Date(Date.now());
-		shouldTerminate = true;
-		for (const user of Object.values(room.users)) {
-			if (user.progress !== room.wordCount) {
-				shouldTerminate = false;
-				break;
-			}
-		}
-	}
-
-	if (shouldTerminate) {
-		roomStore.setState(roomId, RoomState.FINISHED);
-		saveGameSession(room);
 	}
 
 	return room;
+}
+
+export async function finishAndSaveGameIfDone(room: RoomData, io: Server) {
+	if (room.state !== RoomState.IN_PROGRESS) return;
+
+	const allActivePlayersFinished = await areAllActivePlayersFinished(room, io);
+
+	if (allActivePlayersFinished) {
+		endGame(
+			room.roomId,
+			"All active players are done or someone has left and the rest were done typing.",
+		);
+	}
+}
+
+export async function areAllActivePlayersFinished(room: RoomData, io: Server) {
+	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
+		room.roomId,
+		io,
+	);
+	return isRoomDone(activePlayerSocketIds, room);
+}
+
+function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
+	const users = room.users;
+	for (const playerSocketId of activePlayerSocketIds) {
+		if (users[playerSocketId].progress !== room.wordCount) {
+			return false;
+		}
+	}
+	return true;
+}
+
+async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
+	const activeSockets = await io.in(roomId).fetchSockets();
+	const activePlayerSocketIds = new Set(
+		activeSockets
+			.filter((socket) => socket.data.isSpectator === false)
+			.map((socket) => socket.id),
+	);
+
+	return activePlayerSocketIds;
 }
 
 function getRandomWords(size: number): string[] {

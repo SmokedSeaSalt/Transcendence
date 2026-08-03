@@ -2,7 +2,13 @@ import type { User } from "@prisma/client";
 import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
-import { createPrompt, createUniqueRoom } from "../services/gameService.js";
+import {
+	areAllActivePlayersFinished,
+	createPrompt,
+	createUniqueRoom,
+	finishAndSaveGameIfDone,
+} from "../services/gameService.js";
+import { saveGameSession } from "../services/gameSessionServices.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
@@ -35,6 +41,8 @@ export function registerSocketHandlers(io: Server) {
 	io.use(identifySocket);
 
 	io.on("connection", (socket) => {
+		// todo issue #163. this is only temp spectator flag
+		socket.data.isSpectator = false;
 		if (socket.recovered) {
 			console.log(`Recovered: ${socket.id}, room: ${socket.data.roomId}`);
 			const recoveredRoom = roomStore.get(socket.data.roomId);
@@ -97,11 +105,15 @@ export function registerSocketHandlers(io: Server) {
 		//to update client frontend
 		io.to(socket.data.roomId).emit("roomState", room);
 
-		socket.on("disconnect", () => {
+		socket.on("disconnect", async () => {
 			console.log(`Disconnected: ${socket.id}`);
 			roomStore.deleteUser(socket.data.roomId, socket.id);
+
 			const room = roomStore.get(socket.data.roomId);
-			if (room) io.to(room.roomId).emit("roomState", room);
+			if (room) {
+				finishAndSaveGameIfDone(room, io);
+				io.to(room.roomId).emit("roomState", room);
+			}
 		});
 	});
 }
