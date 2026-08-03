@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import ErrorBox from "./ErrorBox";
+import Button from "../../components/Button";
+import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
@@ -21,6 +23,7 @@ export default function GamePage() {
 		>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
+			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
 				<div>The game has finished. Room will be rejoined</div>
 			) : null}
