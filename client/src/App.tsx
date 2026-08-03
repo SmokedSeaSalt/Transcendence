@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 export default function App() {
 	return (
@@ -29,6 +30,7 @@ export default function App() {
 									</SocketProvider>
 								}
 							/>
+							<Route path="/leaderboard" element={<LeaderboardPage />} />
 						</Routes>
 					</main>
 				</AuthProvider>
