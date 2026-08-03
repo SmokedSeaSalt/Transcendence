@@ -23,6 +23,7 @@ export const useConnectToRoom = () => {
 					socket.emit(
 						"joinRoom",
 						roomId,
+						false,
 						(success: boolean, message: string | undefined) => {
 							resolve({ success, message: message ?? "" });
 						},
