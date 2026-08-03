@@ -41,8 +41,33 @@ export async function getGameHistory(
 		}
 
 		const gameHistory = await userServices.getGameHistoryById(req.user.id);
+		if (!gameHistory) {
+			return res.status(200).json({ gameResults: [] });
+		}
 
 		return res.status(200).json(gameHistory);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+}
+
+export async function getGameStats(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Unauthorized"));
+		}
+
+		const gameStats = await userServices.getGameStatsById(req.user.id);
+
+		return res.status(200).json(gameStats);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);

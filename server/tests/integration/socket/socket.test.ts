@@ -70,6 +70,15 @@ describe("socket disconnect", () => {
 
 		ioServer = new Server<ServerToClientEvents, ClientToServerEvents>(
 			httpServer,
+			{
+				//set lower timeout intervals for disconection checking
+				pingInterval: 1000, // send a ping every 1 second
+				pingTimeout: 2000, // disconnect if no pong within 2 seconds
+				connectionStateRecovery: {
+					maxDisconnectionDuration: 60 * 1000, // 60 seconds
+					skipMiddlewares: true,
+				},
+			},
 		);
 
 		registerSocketHandlers(ioServer);
@@ -265,6 +274,8 @@ describe("socket disconnect", () => {
 			roomId,
 		);
 
+		await new Promise((r) => setTimeout(r, 50));
+
 		if (!room.finishedAt) {
 			throw new Error("finished at time not set");
 		}
@@ -458,5 +469,78 @@ describe("socket disconnect", () => {
 		await expect(joinRoom(client2, roomId)).rejects.toThrow();
 
 		console.log("client2");
+	});
+
+	//user timeout disconnect in lobby with people should be in old lobby after reconnect
+	it("user timeout disconnect in lobby with people should be in old lobby after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+		await joinRoom(client2, roomId);
+
+		//disconnect user2
+		client2.io.engine.close();
+
+		//reconnect user2
+		await new Promise((r) => setTimeout(r, 4000));
+
+		expect(Object.keys(room.users)).toContain(client1Id);
+		expect(Object.keys(room.users)).toContain(client2Id);
+	});
+
+	//user timeout disconnect in lobby alone should be in new room after reconnect
+	it("user timeout disconnect in lobby alone should be in new room after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+
+		const serverSocketUser1 = ioServer.sockets.sockets.get(client1Id);
+
+		//disconnect user1
+		client1.io.engine.close();
+
+		//reconnect user1
+		await new Promise((r) => setTimeout(r, 4000));
+
+		expect(serverSocketUser1?.data.roomId).not.toBe(roomId);
+	});
+
+	//user timeout disconnect during game should be in new room after reconnect
+	it("user timeout disconnect during game should be in new room after reconnect", async () => {
+		roomStore.create(roomId);
+
+		const room = roomStore.get(roomId);
+		if (!room) {
+			throw new Error("room is undefined");
+		}
+
+		await joinRoom(client1, roomId);
+		await joinRoom(client2, roomId);
+
+		const serverSocketUser2 = ioServer.sockets.sockets.get(client2Id);
+
+		client1.emit("startGame");
+		await new Promise((r) => setTimeout(r, 50));
+		expect(room.state === RoomState.COUNTDOWN).toBeTruthy();
+
+		//disconnect user2
+		client2.io.engine.close();
+
+		//reconnect user2
+		await new Promise((r) => setTimeout(r, 4000));
+
+		expect(Object.keys(room.users)).toContain(client1Id);
+		expect(Object.keys(room.users)).toContain(client2Id);
+		expect(serverSocketUser2?.data.roomId).not.toBe(roomId);
 	});
 });

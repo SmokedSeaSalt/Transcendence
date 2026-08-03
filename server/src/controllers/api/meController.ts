@@ -82,3 +82,53 @@ export const deleteUser = async (
 		}
 	}
 };
+
+export async function getGameHistory(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Unauthorized"));
+		}
+
+		const gameHistory = await userServices.getGameHistoryById(req.user.id);
+		if (!gameHistory) {
+			return next(new NotFoundError("Not Found"));
+		}
+
+		return res.status(200).json(gameHistory);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+}
+
+export async function getGameStats(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	try {
+		if (!req.user) {
+			return next(new UnauthorizedError("Unauthorized"));
+		}
+
+		const gameStats = await userServices.getGameStatsById(req.user.id);
+		if (!gameStats) {
+			return next(new NotFoundError("Not Found"));
+		}
+
+		return res.status(200).json(gameStats);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			next(error);
+		} else {
+			next(new Error(String(error)));
+		}
+	}
+}

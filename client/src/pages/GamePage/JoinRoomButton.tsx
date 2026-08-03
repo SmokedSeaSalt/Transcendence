@@ -43,7 +43,7 @@ export default function JoinRoomButton() {
 	};
 
 	return (
-		<div style={{ padding: "1em" }}>
+		<div>
 			<Button onClick={clickJoinRoom} type={"button"}>
 				Join room
 			</Button>

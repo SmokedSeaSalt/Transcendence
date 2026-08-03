@@ -5,28 +5,25 @@ import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
+import { RoomState, type RoomStatePayload } from "./SocketTypes";
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
 	const { socket, roomState, errorStatus } = useSocket();
-
-	// useEffect(() => {
-	// 	if (!socket) setMessage("No socket.");
-	// 	else if (socket.id === undefined) {
-	// 		setMessage("Socket.id undefined.");
-	// 	} else {
-	// 		setMessage(socket.id);
-	// 	}
-	// }, [roomState]);
 
 	if (errorStatus) {
 		return <ErrorBox />;
 	}
 
 	return (
-		<main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+		<main
+			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
+		>
 			<GamePageHeader />
 			{message ? <p>Socket id: {message}</p> : null}
+			{roomState?.state === RoomState.FINISHED ? (
+				<div>The game has finished. Room will be rejoined</div>
+			) : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
