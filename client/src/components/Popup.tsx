@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useEscapeKey } from "../hooks/useEscapeKey";
 import Button from "./Button";
 
 interface PopupProps {
@@ -8,6 +9,8 @@ interface PopupProps {
 }
 
 export default function Popup({ open, onClose, children }: PopupProps) {
+	useEscapeKey(() => onClose(), open);
+
 	if (!open) return null;
 
 	return (
