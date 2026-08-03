@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
-import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);

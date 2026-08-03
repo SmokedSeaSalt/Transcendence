@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import ReactConfetti from "react-confetti";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 import { useSocket } from "./SocketContext";
 import { RoomState, type RoomUser } from "./SocketTypes";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
-import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 export default function FinishedGamePopup() {
 	const [open, setOpen] = useState<boolean>(false);
