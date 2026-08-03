@@ -1,28 +1,33 @@
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { app } from "../../src/app.js";
-import { prisma } from "../../src/db.js";
-import { deleteUser } from "../helpers/dbHelpers.js";
+import { app } from "../../../src/app";
+import { prisma } from "../../../src/db";
+import {
+	createUserWithRoleAndApiKey,
+	deleteUser,
+} from "../../helpers/dbHelpers";
 
-describe("get /web/me/gameHistory", async () => {
-	const gameHistoryPath = "/web/me/gameHistory";
+describe("get /api/me/gameHistory", async () => {
+	const gameHistoryPath = "/api/me/gameHistory";
 	const email = "test@example.com";
 	const name = "Test User";
-	const password = "ValidPassword123!";
-	let currentCookie: string;
+	const unhashedPassword = "ValidPassword123!";
+	const unhashedApiKey = "key";
 
-	it("register", async () => {
-		const res = await request(app)
-			.post("/web/users/register")
-			.send({ email, name, password })
-			.expect(201);
-		currentCookie = res.headers["set-cookie"];
+	beforeAll(async () => {
+		await createUserWithRoleAndApiKey(
+			email,
+			name,
+			unhashedPassword,
+			unhashedApiKey,
+			"user",
+		);
 	});
 
 	it("Returns 200 with an empty array", async () => {
 		const res = await request(app)
 			.get(gameHistoryPath)
-			.set("Cookie", currentCookie);
+			.set("Authorization", unhashedApiKey);
 
 		expect(res.status).toBe(200);
 		expect(res.body).toStrictEqual({ gameResults: [] });
@@ -66,7 +71,7 @@ describe("get /web/me/gameHistory", async () => {
 
 		const res = await request(app)
 			.get(gameHistoryPath)
-			.set("Cookie", currentCookie);
+			.set("Authorization", unhashedApiKey);
 
 		expect(res.status).toBe(200);
 		expect(res.body.gameResults).toHaveLength(1);
@@ -85,6 +90,11 @@ describe("get /web/me/gameHistory", async () => {
 			},
 			displayName: name,
 		});
+	});
+	it("Returns 401 for missing an apikey", async () => {
+		const res = await request(app).get(gameHistoryPath);
+
+		expect(res.status).toBe(401);
 	});
 	afterAll(async () => {
 		await deleteUser(email);

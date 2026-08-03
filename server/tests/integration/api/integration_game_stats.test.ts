@@ -1,29 +1,34 @@
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { app } from "../../src/app.js";
-import { prisma } from "../../src/db.js";
+import { app } from "../../../src/app";
+import { prisma } from "../../../src/db";
 import {
 	createUserWithRoleAndApiKey,
 	deleteUser,
-} from "../helpers/dbHelpers.js";
+} from "../../helpers/dbHelpers";
 
-describe("/web/me/stats", async () => {
-	const statsPath = "/web/me/stats";
+describe("get /api/me/stats", async () => {
+	const statsPath = "/api/me/stats";
 	const email = "test@example.com";
 	const name = "Test User";
-	const password = "ValidPassword123!";
+	const unhashedPassword = "ValidPassword123!";
+	const unhashedApiKey = "Api";
 	let currentCookie: string;
 
-	it("register", async () => {
-		const res = await request(app)
-			.post("/web/users/register")
-			.send({ email, name, password })
-			.expect(201);
-		currentCookie = res.headers["set-cookie"];
+	beforeAll(async () => {
+		await createUserWithRoleAndApiKey(
+			email,
+			name,
+			unhashedPassword,
+			unhashedApiKey,
+			"user",
+		);
 	});
 
 	it("Returns 200 with all values at 0", async () => {
-		const res = await request(app).get(statsPath).set("Cookie", currentCookie);
+		const res = await request(app)
+			.get(statsPath)
+			.set("Authorization", unhashedApiKey);
 
 		expect(res.status).toBe(200);
 
@@ -106,7 +111,9 @@ describe("/web/me/stats", async () => {
 			});
 		}
 
-		const res = await request(app).get(statsPath).set("Cookie", currentCookie);
+		const res = await request(app)
+			.get(statsPath)
+			.set("Authorization", unhashedApiKey);
 
 		const wins = resultsData.filter((r) => r.placement === 1).length;
 		const max_wpm = Math.max(...resultsData.map((r) => r.wpm));

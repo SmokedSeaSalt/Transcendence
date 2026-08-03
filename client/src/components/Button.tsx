@@ -17,7 +17,7 @@ export default function Button({
 		<button
 			type={type}
 			disabled={disabled || loading}
-			className={`inline-flex items-center justify-center rounded-md bg-orange-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+			className={`inline-flex h-full items-center justify-center rounded-md bg-orange-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
 			{...props}
 		>
 			{loading ? "Loading…" : children}
