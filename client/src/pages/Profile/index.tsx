@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../components/AuthContext";
 import NameBar from "./NameBar";
+import UserStats from "./UserStats";
 
 export default function ProfilePage() {
 	const { updateLoggedinUser, currentUser, loading } = useAuthContext();
@@ -28,6 +29,8 @@ export default function ProfilePage() {
 		return null;
 	}
 
+	// todo: userStats should probably be part of a larger div with graph; maybe separate component?
+
 	return (
 		<main
 			style={{
@@ -38,6 +41,10 @@ export default function ProfilePage() {
 			}}
 		>
 			<NameBar />
+			<div>
+				<UserStats />
+				{/* graph goes here */}
+			</div>
 		</main>
 	);
 }
