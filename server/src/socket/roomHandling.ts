@@ -8,16 +8,23 @@ import {
 	finishAndSaveGameIfDone,
 	getActiveUserSocketIdsFromRoom,
 } from "../services/gameService.js";
-import { transferRoom } from "../services/roomService.js";
+import {
+	handleLeftoverSpectators,
+	transferRoom,
+} from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 import { startTimeout } from "./gameLifecycle.js";
 
 export async function handleRoomReset(roomId: string, io: Server) {
-	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(roomId, io);
+	const activePlayerSocketIds = await getActiveUserSocketIdsFromRoom(
+		roomId,
+		io,
+	);
 
 	if (activePlayerSocketIds.size === 0) {
 		console.log("Socketio room is empty. Deleting the room from roomStore.");
 		roomStore.delete(roomId);
+		handleLeftoverSpectators(roomId, io);
 		return;
 	}
 	// overwrite the old room in roomStore using a new empty room with the same id
@@ -25,7 +32,7 @@ export async function handleRoomReset(roomId: string, io: Server) {
 
 	for (const socketId of activePlayerSocketIds) {
 		const userSocket = io.sockets.sockets.get(socketId);
-		if (userSocket){
+		if (userSocket) {
 			roomStore.addUser(
 				roomId,
 				userSocket.id,
@@ -39,24 +46,24 @@ export async function handleRoomReset(roomId: string, io: Server) {
 
 export function registerRoomHandlers(io: Server, socket: Socket) {
 	socket.on("joinRoom", (newRoomId: string, asSpectator: boolean, callback) => {
-
 		const newRoom = roomStore.get(newRoomId);
 		if (!newRoom) {
 			callback(false, `Failed to join room ${newRoomId}. Room does not exist.`);
 			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
 			return;
 		}
-		if (newRoomId === socket.data.roomId)
-		{
-			callback(false, `Failed to join room ${newRoomId}. User already in room.`);
+		if (newRoomId === socket.data.roomId) {
+			callback(
+				false,
+				`Failed to join room ${newRoomId}. User already in room.`,
+			);
 			console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
 			return;
 		}
 
 		const oldRoomId = socket.data.roomId;
 		//check if spectator
-		if (asSpectator)
-		{
+		if (asSpectator) {
 			socket.data.isSpectator = true;
 			roomStore.deleteUser(oldRoomId, socket.id);
 		} else {
@@ -75,7 +82,9 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 
 			if (Object.keys(newRoom.users).length >= maxRoomSize) {
 				callback(false, `Failed to join room ${newRoomId}. Room full.`);
-				console.log(`${socket.id} failed to joinRoom: ${newRoomId}. Room full.`);
+				console.log(
+					`${socket.id} failed to joinRoom: ${newRoomId}. Room full.`,
+				);
 				return;
 			}
 
@@ -105,11 +114,13 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			);
 
 			if (!success) {
-				callback(false, `Failed to join room ${newRoomId}. Room does not exist`);
+				callback(
+					false,
+					`Failed to join room ${newRoomId}. Room does not exist`,
+				);
 				console.log(`${socket.id} failed to joinRoom: ${newRoomId}`);
 				return;
 			}
-
 		}
 
 		if (oldRoomId) {
@@ -118,6 +129,8 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			if (oldRoom) {
 				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
+			} else {
+				handleLeftoverSpectators(oldRoomId, io);
 			}
 		}
 
@@ -130,7 +143,6 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 	});
 
 	socket.on("leaveRoom", () => {
-
 		socket.data.isSpectator = false;
 
 		const oldRoomId = socket.data.roomId;
@@ -161,6 +173,8 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 			if (oldRoom) {
 				finishAndSaveGameIfDone(oldRoom, io);
 				io.to(oldRoomId).emit("roomState", oldRoom);
+			} else {
+				handleLeftoverSpectators(oldRoomId, io);
 			}
 		}
 

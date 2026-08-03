@@ -105,7 +105,10 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	return true;
 }
 
-export async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
+export async function getActiveUserSocketIdsFromRoom(
+	roomId: string,
+	io: Server,
+) {
 	const activeSockets = await io.in(roomId).fetchSockets();
 	const activePlayerSocketIds = new Set(
 		activeSockets

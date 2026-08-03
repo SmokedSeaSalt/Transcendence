@@ -9,6 +9,7 @@ import {
 	finishAndSaveGameIfDone,
 } from "../services/gameService.js";
 import { saveGameSession } from "../services/gameSessionServices.js";
+import { handleLeftoverSpectators } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
@@ -45,7 +46,7 @@ export function registerSocketHandlers(io: Server) {
 			console.log(`Recovered: ${socket.id}, room: ${socket.data.roomId}`);
 			const recoveredRoom = roomStore.get(socket.data.roomId);
 			if (recoveredRoom) {
-				if (!socket.data.isSpectator){
+				if (!socket.data.isSpectator) {
 					if (recoveredRoom.state === RoomState.LOBBY) {
 						//add user back to room
 						roomStore.addUser(
@@ -116,6 +117,8 @@ export function registerSocketHandlers(io: Server) {
 			if (room) {
 				finishAndSaveGameIfDone(room, io);
 				io.to(room.roomId).emit("roomState", room);
+			} else {
+				handleLeftoverSpectators(socket.data.roomId, io);
 			}
 		});
 	});
