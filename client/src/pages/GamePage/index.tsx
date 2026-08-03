@@ -45,7 +45,7 @@ export default function GamePage() {
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
 				<div className="p-3 my-3">
-					<GameTextField prompt={roomState?.prompt} />
+					<GameTextField isSpectator={isSpectator} prompt={roomState?.prompt} />
 				</div>
 			</div>
 		</main>
