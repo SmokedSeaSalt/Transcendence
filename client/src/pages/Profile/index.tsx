@@ -5,8 +5,10 @@ import GameHistory from "./GameHistory";
 import NameBar from "./NameBar";
 import UserProgressionGraph from "./UserProgressionGraph";
 import UserStats from "./UserStats";
+import getGameHistory from "./getGameHistory";
 
 export default function ProfilePage() {
+	const gameHistory = getGameHistory();
 	const { updateLoggedinUser, currentUser, loading } = useAuthContext();
 	const nav = useNavigate();
 
@@ -52,9 +54,9 @@ export default function ProfilePage() {
 				}}
 			>
 				<UserStats />
-				<UserProgressionGraph />
+				<UserProgressionGraph gameHistory={gameHistory} />
 			</div>
-			<GameHistory />
+			<GameHistory gameHistory={gameHistory} />
 		</main>
 	);
 }

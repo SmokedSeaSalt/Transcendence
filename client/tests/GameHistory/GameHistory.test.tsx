@@ -1,12 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 import GameHistory from "../../src/pages/Profile/GameHistory";
 import getGameHistory from "../../src/pages/Profile/getGameHistory";
 import type { jsonGameHistory } from "../../src/pages/Profile/getGameHistory";
-
-vi.mock("../../src/pages/Profile/getGameHistory");
-
-const mockedGetGameHistory = vi.mocked(getGameHistory);
 
 function makeGameHistory(count: number): jsonGameHistory {
 	const gameResults = Array.from({ length: count }, (_, i) => ({
@@ -44,26 +40,15 @@ function makeGameHistory(count: number): jsonGameHistory {
 	return { gameResults };
 }
 
-import { afterEach } from "vitest";
-
-afterEach(() => {
-	mockedGetGameHistory.mockReset();
-});
-
 test("renders nothing when gameHistory is null", () => {
-	mockedGetGameHistory.mockReturnValue(null);
-
-	const { container } = render(<GameHistory />);
+	const { container } = render(<GameHistory gameHistory={null}/>);
 
 	expect(container).toBeEmptyDOMElement();
 });
 
 test("renders one entry per game result", () => {
-	mockedGetGameHistory.mockReturnValue(makeGameHistory(3));
+	render(<GameHistory gameHistory={makeGameHistory(3)}/>);
 
-	render(<GameHistory />);
-
-	// 3 game results -> 3 "Placement:" cells rendered
 	expect(screen.getAllByText(/Placement:/i)).toHaveLength(3);
 });
 
@@ -71,12 +56,10 @@ test("renders game results in reverse order (most recent first)", () => {
 	const gameHistory = makeGameHistory(2);
 	gameHistory.gameResults[0].wpm = 60; // oldest
 	gameHistory.gameResults[1].wpm = 90; // most recent
-	mockedGetGameHistory.mockReturnValue(gameHistory);
 
-	render(<GameHistory />);
+	render(<GameHistory gameHistory={gameHistory}/>);
 
 	const wpmEntries = screen.getAllByText(/Words per minute:/i);
-	// index 1 (wpm 90) should render before index 0 (wpm 60), since the loop counts down
 	expect(wpmEntries[0]).toHaveTextContent("90");
 	expect(wpmEntries[1]).toHaveTextContent("60");
 });
