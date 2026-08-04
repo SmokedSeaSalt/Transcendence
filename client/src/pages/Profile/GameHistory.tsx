@@ -12,9 +12,7 @@ export default function GameHistory() {
 	const gameHistoryClass = " bg-blue-800 text-lg py-1";
 
 	const gameHistoryList = [];
-	console.log(
-		`gameHistory.gameResults.length = ${gameHistory.gameResults.length}`,
-	);
+
 	for (let index = gameHistory.gameResults.length - 1; index >= 0; index -= 1) {
 		gameHistoryList.push(
 			<div className="grid grid-cols-2 bg-blue-600 m-3 rounded-md">
@@ -22,7 +20,6 @@ export default function GameHistory() {
 				<PlayerList gameHistory={gameHistory} index={index} />
 			</div>,
 		);
-		console.log(`Appending for the ${index} time`);
 	}
 
 	return (
