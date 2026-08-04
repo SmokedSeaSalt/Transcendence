@@ -25,7 +25,6 @@ export const getLeaderboardStats = () => {
 			if (!response.ok) setLeaderboardStats(null);
 			else {
 				const jsonData = await response.json();
-				// console.log("json data from /web/leaderboard: ", jsonData);
 				setLeaderboardStats(jsonData);
 			}
 		} catch (error) {

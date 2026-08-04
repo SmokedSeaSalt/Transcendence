@@ -7,10 +7,8 @@ export default function LeaderboardPage() {
 	const [message, setMessage] = useState("");
 
 	return (
-		<main
-			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
-		>
-			<h1 className="text-center">Leaderboard</h1>
+		<main className="p-1">
+			<h1 className="pt-5 text-center text-3xl">Leaderboard</h1>
 			<Leaderboard />
 		</main>
 	);
