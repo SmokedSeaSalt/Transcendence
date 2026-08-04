@@ -19,7 +19,7 @@ export const userAuth = () => {
 			if (!response.ok) setData(null);
 			else {
 				const jsonData = await response.json();
-				console.log("json data from /web/me: ", jsonData);
+				// console.log("json data from /web/me: ", jsonData);
 				setData(jsonData);
 			}
 		} catch (error) {

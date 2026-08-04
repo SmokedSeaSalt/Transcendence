@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-type leaderboardStats = {
-	userStats: userForLeaderboard[];
+export type leaderboardStats = {
+	leaderboard: userForLeaderboard[];
 };
 
 export type userForLeaderboard = {
@@ -25,7 +25,7 @@ export const getLeaderboardStats = () => {
 			if (!response.ok) setLeaderboardStats(null);
 			else {
 				const jsonData = await response.json();
-				console.log("json data from /web/leaderboard: ", jsonData);
+				// console.log("json data from /web/leaderboard: ", jsonData);
 				setLeaderboardStats(jsonData);
 			}
 		} catch (error) {

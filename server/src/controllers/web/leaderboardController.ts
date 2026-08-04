@@ -7,12 +7,12 @@ export async function getLeaderboard(
 	next: NextFunction,
 ) {
 	try {
-		const leadboard = await leaderboardServices.getAllUsersInOrderWpm();
-		if (!leadboard) {
-			return res.status(200).json({ leadboard: [] });
+		const leaderboard = await leaderboardServices.getAllUsersInOrderWpm();
+		if (!leaderboard) {
+			return res.status(200).json({ leaderboard: [] });
 		}
 
-		return res.status(200).json(leadboard);
+		return res.status(200).json({ leaderboard: leaderboard });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
