@@ -41,13 +41,13 @@ function makeGameHistory(count: number): jsonGameHistory {
 }
 
 test("renders nothing when gameHistory is null", () => {
-	const { container } = render(<GameHistory gameHistory={null}/>);
+	const { container } = render(<GameHistory gameHistory={null} />);
 
 	expect(container).toBeEmptyDOMElement();
 });
 
 test("renders one entry per game result", () => {
-	render(<GameHistory gameHistory={makeGameHistory(3)}/>);
+	render(<GameHistory gameHistory={makeGameHistory(3)} />);
 
 	expect(screen.getAllByText(/Placement:/i)).toHaveLength(3);
 });
@@ -57,7 +57,7 @@ test("renders game results in reverse order (most recent first)", () => {
 	gameHistory.gameResults[0].wpm = 60; // oldest
 	gameHistory.gameResults[1].wpm = 90; // most recent
 
-	render(<GameHistory gameHistory={gameHistory}/>);
+	render(<GameHistory gameHistory={gameHistory} />);
 
 	const wpmEntries = screen.getAllByText(/Words per minute:/i);
 	expect(wpmEntries[0]).toHaveTextContent("90");

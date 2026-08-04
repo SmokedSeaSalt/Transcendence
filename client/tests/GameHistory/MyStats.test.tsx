@@ -3,7 +3,9 @@ import { expect, test } from "vitest";
 import MyStats from "../../src/pages/Profile/MyStats";
 import type { jsonGameResults } from "../../src/pages/Profile/getGameHistory";
 
-function makeGameResult(overrides: Partial<jsonGameResults> = {}): jsonGameResults {
+function makeGameResult(
+	overrides: Partial<jsonGameResults> = {},
+): jsonGameResults {
 	return {
 		id: 1,
 		score: 100,
@@ -63,13 +65,19 @@ test("renders formatted date", () => {
 	const gameResult = makeGameResult();
 	render(<MyStats gameResults={gameResult} />);
 
-	const expectedDate = new Date(gameResult.session.finishedAt).toLocaleString("en-NL");
+	const expectedDate = new Date(gameResult.session.finishedAt).toLocaleString(
+		"en-NL",
+	);
 
-	expect(screen.getByText(new RegExp(`Date:.*${expectedDate}`, "i"))).toBeInTheDocument();
+	expect(
+		screen.getByText(new RegExp(`Date:.*${expectedDate}`, "i")),
+	).toBeInTheDocument();
 });
 
 test("renders zero values correctly (not falsy-blank)", () => {
-	render(<MyStats gameResults={makeGameResult({ placement: 0, wpm: 0, cpm: 0 })} />);
+	render(
+		<MyStats gameResults={makeGameResult({ placement: 0, wpm: 0, cpm: 0 })} />,
+	);
 
 	expect(screen.getByText(/Placement: 0/i)).toBeInTheDocument();
 	expect(screen.getByText(/Words per minute: 0/i)).toBeInTheDocument();

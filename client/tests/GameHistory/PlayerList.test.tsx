@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 import PlayerList from "../../src/pages/Profile/PlayerList";
-import type { jsonSession, jsonResults } from "../../src/pages/Profile/getGameHistory";
+import type {
+	jsonResults,
+	jsonSession,
+} from "../../src/pages/Profile/getGameHistory";
 
 function makeResult(overrides: Partial<jsonResults> = {}): jsonResults {
 	return {
@@ -28,7 +31,9 @@ function makeSession(results: jsonResults[]): jsonSession {
 }
 
 test("renders a single player with placement, name, and time", () => {
-	const session = makeSession([makeResult({ placement: 1, displayName: "Alice", timeMs: 42000 })]);
+	const session = makeSession([
+		makeResult({ placement: 1, displayName: "Alice", timeMs: 42000 }),
+	]);
 	render(<PlayerList gameSession={session} />);
 
 	expect(screen.getByText(/1\.\s*Alice/i)).toBeInTheDocument();

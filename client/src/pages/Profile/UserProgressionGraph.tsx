@@ -1,5 +1,5 @@
 import ArrayGraph from "./ArrayGraph";
-import { type jsonGameHistory } from "./getGameHistory";
+import type { jsonGameHistory } from "./getGameHistory";
 
 export default function UserProgressionGraph({
 	gameHistory,
