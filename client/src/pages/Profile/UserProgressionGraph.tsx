@@ -1,11 +1,9 @@
 import ArrayGraph from "./ArrayGraph";
-import getGameHistory from "./getGameHistory";
-// import { getGameHistory } from "./getGameHistory";
-import { getUserStats } from "./getUserStats";
+import type { jsonGameHistory } from "./getGameHistory";
 
-export default function UserProgressionGraph() {
-	const gameHistory = getGameHistory();
-
+export default function UserProgressionGraph({
+	gameHistory,
+}: { gameHistory: jsonGameHistory | null }) {
 	if (!gameHistory) return <div>No progression</div>;
 
 	const gameHistoryList = gameHistory.gameResults;
