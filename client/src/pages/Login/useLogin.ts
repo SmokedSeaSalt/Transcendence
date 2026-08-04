@@ -19,7 +19,7 @@ export const useLogin = () => {
 			});
 			if (!res.ok) {
 				if (res.status === 502) throw new Error("The login service is temporarily unavailable");
-				throw new Error((await res.json()).message || "Login failed");
+				throw new Error((await res.json()).error || "Login failed");
 			}
 			await updateLoggedinUser();
 			nav("/");

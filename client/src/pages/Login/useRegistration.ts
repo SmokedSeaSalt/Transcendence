@@ -23,7 +23,7 @@ export const useRegistration = () => {
 			});
 			if (!res.ok) {
 				if (res.status === 502) throw new Error("The registration service is temporarily unavailable");
-				throw new Error((await res.json()).message || "Login failed");
+				throw new Error((await res.json()).error || "Registration failed");
 			}
 			await updateLoggedinUser();
 			nav("/");
