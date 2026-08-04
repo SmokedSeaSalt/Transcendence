@@ -15,7 +15,7 @@ export default function UserStats() {
 					<div className={statClass}>Games played: {userStats.total_games}</div>
 					<div className={statClass}>Games won: {userStats.wins}</div>
 					<div className={statClass}>
-						Average wpm: {userStats.average_wpm.toFixed(2)}
+						Average wpm: {Number(userStats.average_wpm.toFixed(1))}
 					</div>
 					<div className={statClass}>Max wpm: {userStats.max_wpm} </div>
 				</div>
