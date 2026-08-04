@@ -25,7 +25,6 @@ export const useLogin = () => {
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
-			throw err;
 		} finally {
 			setLoading(false);
 		}
