@@ -17,7 +17,7 @@ export function getApiSwaggerSpec() {
 
 		servers: [
 			{
-				url: `http://localhost:${externalPort}/api`,
+				url: `https://localhost:${externalPort}/`,
 			},
 		],
 	});
