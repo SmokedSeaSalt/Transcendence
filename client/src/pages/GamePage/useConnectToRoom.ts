@@ -10,6 +10,7 @@ export const useConnectToRoom = () => {
 
 	const emitJoinRoom = async (
 		roomId: string,
+		joinAsSpectator: boolean,
 	): Promise<{ success: boolean; message: string }> => {
 		setLoading(true);
 		setError(null);
@@ -23,6 +24,7 @@ export const useConnectToRoom = () => {
 					socket.emit(
 						"joinRoom",
 						roomId,
+						joinAsSpectator,
 						(success: boolean, message: string | undefined) => {
 							resolve({ success, message: message ?? "" });
 						},
