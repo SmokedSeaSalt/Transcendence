@@ -4,9 +4,9 @@ export default function PlayerList({
 	gameHistory,
 	index,
 }: { gameHistory: jsonGameHistory; index: number }) {
-	const playerListClass = "overflow-y-auto max-h-50 my-4 pl-2";
+	const playerListClass = "overflow-y-auto max-h-40 pl-2";
 	const playerClass =
-		"m-1 p-1 bg-red-300 grid grid-cols-2 outline-solid rounded-md";
+		"m-2 p-2 bg-red-300 grid grid-cols-2 outline-solid rounded-md";
 	const playerTimeClass = "text-right pr-5";
 
 	const playerLists = [];

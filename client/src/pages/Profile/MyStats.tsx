@@ -4,9 +4,9 @@ export default function MyStats({
 	gameHistory,
 	index,
 }: { gameHistory: jsonGameHistory; index: number }) {
-	const myStatsClass = "grid grid-cols-2 py-4 pr-2 content-center";
+	const myStatsClass = "grid grid-cols-2 py-1 pr-2 content-center";
 	const childMyStatsClass =
-		"bg-red-300 m-1 p-4 outline-solid rounded-md text-center";
+		"bg-red-300 m-1 p-2 outline-solid rounded-md text-center";
 
 	return (
 		<div className={myStatsClass}>

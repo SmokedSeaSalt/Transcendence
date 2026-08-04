@@ -9,7 +9,7 @@ export default function GameHistory() {
 		return <></>;
 	}
 
-	const gameHistoryClass = "grid grid-cols-2 bg-blue-800 text-lg";
+	const gameHistoryClass = " bg-blue-800 text-lg py-1";
 
 	const gameHistoryList = [];
 	console.log(
@@ -17,8 +17,10 @@ export default function GameHistory() {
 	);
 	for (let index = gameHistory.gameResults.length - 1; index >= 0; index -= 1) {
 		gameHistoryList.push(
-			<MyStats gameHistory={gameHistory} index={index} />,
-			<PlayerList gameHistory={gameHistory} index={index} />,
+			<div className="grid grid-cols-2 bg-blue-600 m-3 rounded-md">
+				<MyStats gameHistory={gameHistory} index={index} />
+				<PlayerList gameHistory={gameHistory} index={index} />
+			</div>,
 		);
 		console.log(`Appending for the ${index} time`);
 	}
