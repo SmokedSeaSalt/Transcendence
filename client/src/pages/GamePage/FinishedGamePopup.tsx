@@ -4,6 +4,9 @@ import Popup from "../../components/Popup";
 import { useSocket } from "./SocketContext";
 import { RoomState, type RoomUser } from "./SocketTypes";
 
+const trimString = (str: string, maxLength = 25) =>
+	str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+
 export default function FinishedGamePopup() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [userResults, setUserResults] = useState<Map<string, RoomUser>>(
@@ -48,7 +51,7 @@ export default function FinishedGamePopup() {
 							([socketId, user], index) => (
 								<div key={socketId} className="flex justify-between">
 									<div>
-										{index + 1}. {user.displayName}
+										{index + 1}. {trimString(user.displayName)}
 									</div>
 
 									<div>
