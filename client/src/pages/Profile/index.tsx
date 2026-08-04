@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../components/AuthContext";
 import NameBar from "./NameBar";
+import UserProgressionGraph from "./UserProgressionGraph";
 import UserStats from "./UserStats";
 
 export default function ProfilePage() {
@@ -41,9 +42,16 @@ export default function ProfilePage() {
 			}}
 		>
 			<NameBar />
-			<div>
+			<div
+				style={{
+					display: "flex",
+					maxWidth: 960,
+					margin: "2rem auto",
+					boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
+				}}
+			>
 				<UserStats />
-				{/* graph goes here */}
+				<UserProgressionGraph />
 			</div>
 		</main>
 	);
