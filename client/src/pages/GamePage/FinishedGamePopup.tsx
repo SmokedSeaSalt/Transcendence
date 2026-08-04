@@ -6,21 +6,28 @@ import { RoomState, type RoomUser } from "./SocketTypes";
 
 export default function FinishedGamePopup() {
 	const [open, setOpen] = useState<boolean>(false);
-	const [userResults, setUserResults] = useState<RoomUser[]>([]);
+	const [userResults, setUserResults] = useState<Map<string, RoomUser>>(
+		new Map(),
+	);
 	const { roomState } = useSocket();
+	const [finishedStartedAt, setFinishedStartedAt] = useState<Date>(new Date());
 
 	useEffect(() => {
 		if (!roomState) return;
 		if (roomState.state === RoomState.FINISHED) {
 			setOpen(true);
-			const tempUserResults = Object.values(roomState.users).sort(
-				(a, b) =>
-					(a.finishedAt
-						? new Date(a.finishedAt).getTime()
-						: Number.MAX_SAFE_INTEGER) -
-					(b.finishedAt
-						? new Date(b.finishedAt).getTime()
-						: Number.MAX_SAFE_INTEGER),
+			if (roomState.startedAt) setFinishedStartedAt(roomState.startedAt);
+
+			const tempUserResults = new Map(
+				Object.entries(roomState.users).sort(
+					([, a], [, b]) =>
+						(a.finishedAt
+							? new Date(a.finishedAt).getTime()
+							: Number.MAX_SAFE_INTEGER) -
+						(b.finishedAt
+							? new Date(b.finishedAt).getTime()
+							: Number.MAX_SAFE_INTEGER),
+				),
 			);
 			setUserResults(tempUserResults);
 		}
@@ -37,11 +44,21 @@ export default function FinishedGamePopup() {
 				<div className="text-mist-100">
 					<h3>Game results!</h3>
 					<div>
-						{userResults.map((user, index) => (
-							<div key={index}>
-								{index + 1}. {user.displayName}
-							</div>
-						))}
+						{Array.from(userResults.entries()).map(
+							([socketId, user], index) => (
+								<div key={socketId}>
+									{index + 1}. {user.displayName} :{" "}
+									{user.finishedAt && finishedStartedAt
+										? (
+												(new Date(user.finishedAt).getTime() -
+													new Date(finishedStartedAt).getTime()) /
+												1000
+											).toFixed(2)
+										: "N/A"}
+									seconds
+								</div>
+							),
+						)}
 					</div>
 				</div>
 			</Popup>
