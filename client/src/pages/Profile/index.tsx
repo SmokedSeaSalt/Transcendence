@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../components/AuthContext";
+import GameHistory from "./GameHistory";
 import NameBar from "./NameBar";
 import UserProgressionGraph from "./UserProgressionGraph";
 import UserStats from "./UserStats";
@@ -53,6 +54,7 @@ export default function ProfilePage() {
 				<UserStats />
 				<UserProgressionGraph />
 			</div>
+			<GameHistory />
 		</main>
 	);
 }

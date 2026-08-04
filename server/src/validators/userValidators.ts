@@ -97,6 +97,7 @@ const sessionResultSchema = z.object({
 	wpm: z.number(),
 	cpm: z.number(),
 	accuracy: z.number(),
+	timeMs: z.number(),
 	placement: z.number(),
 	displayName: z.string(),
 });
