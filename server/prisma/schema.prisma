@@ -62,3 +62,9 @@ model GameResult {
   user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   displayName String
 }
+
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
