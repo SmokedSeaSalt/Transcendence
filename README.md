@@ -1,6 +1,6 @@
 *This project has been created as part of the 42 curriculum by dbakker, egrisel, mgroos, mvan-rij.*
 
-# Transcendence
+# Gotta type(bike) fast!
 
 ## Description
 [//]: <> (A “Description” section that clearly presents the project, including its goal and a brief overview.)
@@ -9,12 +9,15 @@
 This project is a web application for a (multiplayer) typing speed game.
 "Hit keys on keyboard to type characters faster than the competition"
 
+### Features
+[//]: <> (Brief description of each feature’s functionality.)
+
 - Simple single player.
 - Multiplayer rooms.
 - User login for result logging.
 - User page to view results and progress.
-- API for getting user results.
 - Public leaderboard.
+- API for getting user results.
 
 
 ## Instructions
@@ -48,22 +51,23 @@ This project is a web application for a (multiplayer) typing speed game.
 [//]: <> (Tables/collections and their relationships.)
 [//]: <> (Key fields and data types.)
 
-### Feature List
-
 ## Subject Modules
 [//]: <> (◦ Which team member(s) worked on each module)
+[//]: <> (◦ todo better justification)
 
-| Modules | Points | Implementation | Contrubuted |
-| :------ | :----- | :------------- | :---------- |
-| **WEB** Use a framework for both the frontend and backend. | 2 | We are using React for the frontend and Express for the backend. | All team members have contributed/worked with both frameworks. |
-| **WEB** Implement real-time features using WebSockets or similar technology. | 2 | The game logic communicates via WebSockets to receive and send updates to clients and the server. | |
-| **WEB** use ORM for the database. | 1 | Prisma is used for an ORM compatible database. | All team members have contributed/worked with the ORM database. |
-| **WEB** A public API to interact with the database with a secured API key, rate limiting, documentation, and at least 5 endpoints. | 2 | The api has secure hashed API tokens, rate limiting middleware, industry standard Swagger documentation and enough endpoints. | |
-| **User Management** Game statistics and match history. | 1 | We track the users wins, losses and wpm(words per minute). These are displayed on their profile. This is also where a user can access their match history and wpm progression over time. | |
-| **Gaming and user experience** Implement a complete web-based game where users can play against each other. | 2 | We made a realtime multiplayer typing speed game. You win by typing the prompt the fastest without errors.| |
-| **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time. | 2 | Multiple players from within the same network can play together. | |
-| **Gaming and user experience** Multiplayer game (more than two players). | 2 | The game supports up to XXX players per lobby that are all playing against each other. | |
-| | **Total points: 14** | | |
+| Modules | Points | Implementation | Justification | Contrubuted |
+| :------ | :----- | :------------- | :------------ | :---------- |
+| **WEB** Use a framework for both the frontend and backend. | 2 | We are using React for the frontend and Express for the backend. | Justification | All team members have contributed/worked with both frameworks. |
+| **WEB** Implement real-time features using WebSockets or similar technology. | 2 | The game logic communicates via WebSockets to receive and send updates to clients and the server. | Justification | egrisel and mvan-rij have implemented and worked with the backend logic for the sockets. mgroos and mvan-rij have implemented and worked with the socket for the frontend. |
+| **WEB** use ORM for the database. | 1 | Prisma is used for an ORM compatible database. | Justification | All team members have contributed/worked with the ORM database. |
+| **WEB** A public API to interact with the database with a secured API key, rate limiting, documentation, and at least 5 endpoints. | 2 | The api has secure hashed API tokens, rate limiting middleware, industry standard Swagger documentation and enough endpoints. | Justification | dbakker and egrisel have implemented API endpoints. egrisel has implemented the API key, rate limiting and documentation. |
+| **Accessibility and Internationalization**  Support for additional browsers. | 1 | During delopment only browser features that are industry standard and widely supported. | Justification | All team members have worked on keeping the code flexable across browsers. |
+| **User Management** Game statistics and match history. | 1 | We track the users wins, losses and wpm(words per minute). These are displayed on their profile. This is also where a user can access their match history and wpm progression over time. | Justification | All team members have contributed/worked with the user game statistics and history. |
+| **Gaming and user experience** Implement a complete web-based game where users can play against each other. | 2 | We made a realtime multiplayer typing speed game. You win by typing the prompt the fastest without errors. | Justification | egrisel, mgroos and mvan-rij contributed/worked on the implementation of the game. |
+| **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time. | 2 | Multiple players from within the same network can play together. With propper setup like DNS and portforwarding remote players from different networks is also possible. | Justification | egrisel and mvan-rij have worked on the project configuration to make this possible. egrisel, mgroos and mvan-rij have implemented code logic for this module to work. |
+| **Gaming and user experience** Multiplayer game (more than two players). | 2 | The game supports up to a server side configurable amount of players (default 100) per lobby that are all playing against each other. | Justification | egrisel and mvan-rij have worked on the project configuration to make this possible. egrisel, mgroos and mvan-rij have implemented code logic for this module to work. |
+| **Gaming and user experience** Implement spectator mode for games. | 1 | You can join a room as spectator at any time and get updates about the players in thar room. | Justification | egrisel and mvan-rij have implemented the code logic for this module to work. |
+| | **Total points: 16** | | |
 
 ## The Team
 
@@ -86,8 +90,86 @@ This project is a web application for a (multiplayer) typing speed game.
 The team organized the work by dividing the work into smaller tasks. These were then distributed to the team by preference per team member. These tasks were mamnaged using GitHub Issues to keep track of progress and responsibility. For communucations a mix of in-person (impromptu) meetings and Slack. A small progress meeting (standup) was held almost daily, in these meeting the progress and any roadblocks were discussed.
 
 ### Individual Contributions
+#### dbakker
+This team member has contributed/worked with the following modules:
+- **WEB** Use a framework for both the frontend and backend.
+- **WEB** use ORM for the database.
+- **WEB** A public API to interact with the database with a secured API key, rate limiting, documentation, and at least 5 endpoints.
+- **Accessibility and Internationalization**  Support for additional browsers.
+- **User Management** Game statistics and match history.
 
+and the following features:
+- User page to view results and progress.
+- Public leaderboard.
+- API for getting user results.
 
+Personal challenged faced and overcome:
+// todo dbakker
+
+#### egrisel
+This team member has contributed/worked with the following modules:
+- **WEB** Use a framework for both the frontend and backend.
+- **WEB** Implement real-time features using WebSockets or similar technology.
+- **WEB** use ORM for the database.
+- **WEB** A public API to interact with the database with a secured API key, rate limiting, documentation, and at least 5 endpoints.
+- **Accessibility and Internationalization**  Support for additional browsers.
+- **User Management** Game statistics and match history.
+- **Gaming and user experience** Implement a complete web-based game where users can play against each other.
+- **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time.
+- **Gaming and user experience** Multiplayer game (more than two players).
+- **Gaming and user experience** Implement spectator mode for games.
+
+and the following features:
+- Simple single player.
+- Multiplayer rooms.
+- User login for result logging.
+- User page to view results and progress.
+- API for getting user results.
+
+Personal challenged faced and overcome:
+// todo dbakker
+
+#### mgroos
+This team member has contributed/worked with the following modules:
+- **WEB** Use a framework for both the frontend and backend.
+- **WEB** Implement real-time features using WebSockets or similar technology.
+- **WEB** use ORM for the database.
+- **Accessibility and Internationalization**  Support for additional browsers.
+- **User Management** Game statistics and match history.
+- **Gaming and user experience** Implement a complete web-based game where users can play against each other.
+- **Gaming and user experience** Multiplayer game (more than two players).
+
+and the following features:
+- Simple single player.
+- Multiplayer rooms.
+- User login for result logging.
+- User page to view results and progress.
+- Public leaderboard.
+
+Personal challenged faced and overcome:
+// todo dbakker
+
+#### mvan-rij
+This team member has contributed/worked with the following modules:
+- **WEB** Use a framework for both the frontend and backend.
+- **WEB** Implement real-time features using WebSockets or similar technology.
+- **WEB** use ORM for the database.
+- **Accessibility and Internationalization**  Support for additional browsers.
+- **User Management** Game statistics and match history.
+- **Gaming and user experience** Implement a complete web-based game where users can play against each other.
+- **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time.
+- **Gaming and user experience** Multiplayer game (more than two players).
+- **Gaming and user experience** Implement spectator mode for games.
+
+and the following features:
+- Simple single player.
+- Multiplayer rooms.
+- User login for result logging.
+- User page to view results and progress.
+- API for getting user results.
+
+Personal challenged faced and overcome:
+// todo dbakker
 
 ## Resources
 [//]: <> (A “Resources” section listing classic references related to the topic (documentation, articles, tutorials, etc.), as well as a description of how AI was used — specifying for which tasks and which parts of the project.)
