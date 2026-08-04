@@ -21,8 +21,21 @@ export const useRegistration = () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(payload),
 			});
-			if (!res.ok)
-				throw new Error((await res.json()).message || "Registration failed");
+
+			const text = await res.text();
+
+			if (!res.ok) {
+				if (res.status === 502) {
+					throw new Error("The login service is temporarily unavailable. Please try again later.");
+				}
+				try {
+					const data = JSON.parse(text);
+					throw new Error(data.message || "Login failed");
+				} catch {
+					throw new Error(`Login failed: ${text.slice(0, 100)}`);
+				}
+			}
+			
 			await updateLoggedinUser();
 			nav("/");
 		} catch (err) {
