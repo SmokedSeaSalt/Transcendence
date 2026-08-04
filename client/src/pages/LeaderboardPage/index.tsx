@@ -10,9 +10,8 @@ export default function LeaderboardPage() {
 		<main
 			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
 		>
-		<h1>LEADERBOARD</h1>
-		<Leaderboard />
-
+			<h1 className="text-center">Leaderboard</h1>
+			<Leaderboard />
 		</main>
 	);
 }

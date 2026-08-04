@@ -4,11 +4,11 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import GamePage from "./pages/GamePage";
 import { SocketProvider } from "./pages/GamePage/SocketContext";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
-import LeaderboardPage from "./pages/LeaderboardPage";
 
 export default function App() {
 	return (

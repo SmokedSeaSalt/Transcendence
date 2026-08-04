@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 
-export type leaderboardStats = {
-	userStats: userLeaderboardStats[];
+type leaderboardStats = {
+	userStats: userForLeaderboard[];
 };
 
-export type userLeaderboardStats = {
+export type userForLeaderboard = {
 	name: string;
 	max_wpm: number;
 	max_cpm: number;
-	average_wpm: number;
-	average_cpm: number;
+	avg_wpm: number;
+	avg_cpm: number;
 };
 
 // hook to return either leaderboardStats object or null if user is not logged in
 export const getLeaderboardStats = () => {
-	const [leaderboardStats, setLeaderboardStats] = useState<leaderboardStats | null>(null);
+	const [leaderboardStats, setLeaderboardStats] =
+		useState<leaderboardStats | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchData = useCallback(async () => {

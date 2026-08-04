@@ -33,10 +33,11 @@ export const getAllUsersInOrderWpm = async () => {
 			cpm: Math.max(...stats.map((result) => result.cpm)),
 		};
 		const totals = stats.reduce(
-		(accumulator, result) => ({
-			wpm: accumulator.wpm + result.wpm,
-			cpm: accumulator.cpm + result.cpm,
-		}), { wpm: 0, cpm: 0 },
+			(accumulator, result) => ({
+				wpm: accumulator.wpm + result.wpm,
+				cpm: accumulator.cpm + result.cpm,
+			}),
+			{ wpm: 0, cpm: 0 },
 		);
 		const length = stats.length;
 		const averages = {
