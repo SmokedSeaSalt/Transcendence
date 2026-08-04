@@ -9,6 +9,7 @@ import {
 	finishAndSaveGameIfDone,
 } from "../services/gameService.js";
 import { saveGameSession } from "../services/gameSessionServices.js";
+import { handleLeftoverSpectators } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";
 import { registerGameHandlers } from "./gameHandling.js";
@@ -41,29 +42,32 @@ export function registerSocketHandlers(io: Server) {
 	io.use(identifySocket);
 
 	io.on("connection", (socket) => {
-		// todo issue #163. this is only temp spectator flag
-		socket.data.isSpectator = false;
 		if (socket.recovered) {
 			console.log(`Recovered: ${socket.id}, room: ${socket.data.roomId}`);
 			const recoveredRoom = roomStore.get(socket.data.roomId);
 			if (recoveredRoom) {
-				if (recoveredRoom.state === RoomState.LOBBY) {
-					//add user back to room
-					roomStore.addUser(
-						recoveredRoom.roomId,
-						socket.id,
-						socket.data.displayName,
-						socket.data.userId,
-					);
-				} else {
-					socket.leave(socket.data.roomId);
-					socket.data.roomId = undefined;
+				if (!socket.data.isSpectator) {
+					if (recoveredRoom.state === RoomState.LOBBY) {
+						//add user back to room
+						roomStore.addUser(
+							recoveredRoom.roomId,
+							socket.id,
+							socket.data.displayName,
+							socket.data.userId,
+						);
+					} else {
+						socket.data.isSpectator = false;
+						socket.leave(socket.data.roomId);
+						socket.data.roomId = undefined;
+					}
 				}
 			} else {
+				socket.data.isSpectator = false;
 				socket.leave(socket.data.roomId);
 				socket.data.roomId = undefined;
 			}
 		} else {
+			socket.data.isSpectator = false;
 			console.log(`Connected: ${socket.id}`);
 		}
 
@@ -113,6 +117,8 @@ export function registerSocketHandlers(io: Server) {
 			if (room) {
 				finishAndSaveGameIfDone(room, io);
 				io.to(room.roomId).emit("roomState", room);
+			} else {
+				handleLeftoverSpectators(socket.data.roomId, io);
 			}
 		});
 	});
