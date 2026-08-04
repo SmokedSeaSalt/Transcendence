@@ -1,21 +1,39 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./components/AuthContext";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import GamePage from "./pages/GamePage";
+import { SocketProvider } from "./pages/GamePage/SocketContext";
+import Login from "./pages/Login";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Profile from "./pages/Profile";
+import TermsOfService from "./pages/TermsOfService";
 
 export default function App() {
-  const [message, setMessage] = useState("");
-
-  const handleClick = async () => {
-    const response = await fetch("/server/hello");
-    const text = await response.text();
-    setMessage(text);
-  };
-
-  return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>React + Express</h1>
-      <button type="button" onClick={handleClick}>
-        Call /hello
-      </button>
-      {message ? <p>{message}</p> : null}
-    </main>
-  );
+	return (
+		<BrowserRouter>
+			<div className="min-h-screen flex flex-col">
+				<AuthProvider>
+					<Header />
+					<main className="flex-1">
+						<Routes>
+							<Route path="/login" element={<Login />} />
+							<Route path="/profile" element={<Profile />} />
+							<Route path="/terms-of-service" element={<TermsOfService />} />
+							<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+							<Route
+								path="/"
+								element={
+									<SocketProvider>
+										<GamePage />
+									</SocketProvider>
+								}
+							/>
+						</Routes>
+					</main>
+				</AuthProvider>
+				<Footer />
+			</div>
+		</BrowserRouter>
+	);
 }

@@ -1,0 +1,275 @@
+import { createHash } from "node:crypto";
+import type { User } from "@prisma/client";
+import bcrypt from "bcrypt";
+import { prisma } from "../db.js";
+import {
+	EmailAlreadyExistsError,
+	HashError,
+	LoginInvalidCredentialsError,
+	PasswordValidationError,
+} from "../errors/errorTypes.js";
+
+//////////////////////////////////
+// Login ////////////////////////
+////////////////////////////////
+export const authenticateUser = async (
+	email: string,
+	unhashedPassword: string,
+): Promise<User> => {
+	const user = await prisma.user.findUnique({
+		where: { email },
+	});
+	if (!user) {
+		throw new LoginInvalidCredentialsError("Invalid credentials");
+	}
+
+	const validPassword = await bcrypt.compare(
+		unhashedPassword,
+		user.hashedPassword,
+	);
+	if (!validPassword) {
+		throw new LoginInvalidCredentialsError("Invalid credentials");
+	}
+	return user;
+};
+
+///////////////////////////////////////
+// Signup ////////////////////////////
+/////////////////////////////////////
+export const createUser = async (
+	email: string,
+	name: string,
+	unhashedPassword: string,
+) => {
+	const [hashedPassword, emailExists] = await Promise.all([
+		hashPassword(unhashedPassword),
+		emailAlreadyExists(email),
+	]);
+
+	if (emailExists) {
+		throw new EmailAlreadyExistsError("User already exists with this email.");
+	}
+
+	const newUser = await prisma.user.create({
+		data: {
+			email: email,
+			name: name,
+			hashedPassword: hashedPassword,
+		},
+	});
+	return newUser;
+};
+
+const hashPassword = async (password: string): Promise<string> => {
+	const saltRounds: number = 10;
+	if (typeof password !== "string" || password.length === 0) {
+		throw new PasswordValidationError("Password is required");
+	}
+	try {
+		const hash = await bcrypt.hash(password, saltRounds);
+		return hash;
+	} catch (err) {
+		console.error("Failed to hash password:", err);
+		throw new HashError("bcyrpt.hash() failed to hash password");
+	}
+};
+
+const emailAlreadyExists = async (userInputEmail: string): Promise<boolean> => {
+	const user = await prisma.user.findUnique({
+		where: { email: userInputEmail },
+	});
+
+	return !!user;
+};
+
+// Querying user from db with id
+export const getUserByID = async (id: number): Promise<User | null> => {
+	const user = await prisma.user.findUnique({
+		where: { id: id },
+	});
+
+	return user;
+};
+
+// returns the user object based on sessionToken, or null.
+export const getUserFromSession = async (
+	sessionToken: string,
+): Promise<User | null> => {
+	const sessionHashedToken = createHash("sha256")
+		.update(sessionToken)
+		.digest("hex");
+	try {
+		const sessionWithUser = await prisma.session.findUnique({
+			where: { hashedToken: sessionHashedToken },
+			include: { user: true },
+		});
+		if (sessionWithUser == null) {
+			console.log("getUserFromSession: user null");
+			return null;
+		}
+		return sessionWithUser.user;
+	} catch {
+		// todo: throw error
+		console.log("getUserFromSession: threw error searching prisma sessions");
+		return null;
+	}
+};
+
+export const setUserNameById = async (
+	id: number,
+	newName: string,
+): Promise<User | null> => {
+	const updatedUser = await prisma.user.update({
+		where: {
+			id: id,
+		},
+		data: {
+			name: newName,
+		},
+	});
+
+	return updatedUser;
+};
+
+/**
+ * @param id id of the user
+ * @returns 1 on success, 0 if not found.
+ */
+export const deleteUserById = async (id: number): Promise<number> => {
+	const deletedUser = await prisma.user.deleteMany({
+		where: {
+			id: id,
+		},
+	});
+
+	return deletedUser.count;
+};
+
+/**
+ * @param id id of the user
+ * @returns 1 on success, 0 if not found.
+ */
+export const deleteUserApiKeyById = async (id: number): Promise<number> => {
+	const deletedApiKey = await prisma.aPIKey.deleteMany({
+		where: {
+			userId: id,
+		},
+	});
+
+	return deletedApiKey.count;
+};
+
+export const getAllUsers = async () => {
+	const users = await prisma.user.findMany();
+
+	return users;
+};
+
+/**
+ * @param id id of the user
+ * @returns An array of gameResults
+ */
+export async function getGameHistoryById(id: number) {
+	const gameHistory = await prisma.user.findUnique({
+		where: {
+			id: id,
+		},
+		select: {
+			gameResults: {
+				include: {
+					session: {
+						include: {
+							results: {
+								select: {
+									wpm: true,
+									cpm: true,
+									accuracy: true,
+									placement: true,
+									displayName: true,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	});
+
+	if (!gameHistory) {
+		return null;
+	}
+
+	return gameHistory;
+}
+
+export async function getGameStatsById(id: number) {
+	const gameStats = await prisma.user.findUnique({
+		where: {
+			id,
+		},
+		select: {
+			gameResults: {
+				select: {
+					wpm: true,
+					cpm: true,
+					accuracy: true,
+					placement: true,
+				},
+			},
+		},
+	});
+
+	if (!gameStats) {
+		return null;
+	}
+	if (gameStats.gameResults.length === 0) {
+		return {
+			max_wpm: 0,
+			max_cpm: 0,
+			max_accuracy: 0,
+			average_wpm: 0,
+			average_cpm: 0,
+			average_accuracy: 0,
+			wins: 0,
+			total_games: 0,
+		};
+	}
+
+	const stats = gameStats.gameResults;
+	const length = stats.length;
+	const totals = stats.reduce(
+		(accumulator, result) => ({
+			wpm: accumulator.wpm + result.wpm,
+			cpm: accumulator.cpm + result.cpm,
+			accuracy: accumulator.accuracy + result.accuracy,
+		}),
+		{ wpm: 0, cpm: 0, accuracy: 0 },
+	);
+
+	const average = {
+		wpm: totals.wpm / length,
+		cpm: totals.cpm / length,
+		accuracy: totals.accuracy / length,
+	};
+	const largest = {
+		wpm: Math.max(...stats.map((result) => result.wpm)),
+		cpm: Math.max(...stats.map((result) => result.cpm)),
+		accuracy: Math.max(...stats.map((result) => result.accuracy)),
+	};
+	const wins = stats.reduce(
+		(accumulator, result) =>
+			result.placement === 1 ? accumulator + 1 : accumulator,
+		0,
+	);
+
+	return {
+		max_wpm: largest.wpm,
+		max_cpm: largest.cpm,
+		max_accuracy: largest.accuracy,
+		average_wpm: average.wpm,
+		average_cpm: average.cpm,
+		average_accuracy: average.accuracy,
+		wins: wins,
+		total_games: length,
+	};
+}

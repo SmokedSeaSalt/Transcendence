@@ -1,0 +1,126 @@
+import { createHash } from "node:crypto";
+import bcrypt from "bcrypt";
+import { prisma } from "../../src/db.js";
+
+type Role = "user" | "admin";
+
+export const deleteUser = async (email: string) => {
+	await prisma.user.deleteMany({ where: { email } });
+};
+
+export const deleteSession = async (token: string) => {
+	const hashedToken = createHash("sha256").update(token).digest("hex");
+	await prisma.session.deleteMany({ where: { hashedToken } });
+};
+
+export const createUser = async (
+	email: string,
+	name: string,
+	password: string,
+	role: Role = "user",
+) => {
+	const user = await prisma.user.create({
+		data: {
+			email: email,
+			name: name,
+			hashedPassword: password,
+			role: role,
+		},
+	});
+	return user;
+};
+
+export const createApiKey = async (
+	unhashedKey: string,
+	userId: number,
+	expiresAt: Date,
+) => {
+	const hashedKey = createHash("sha256").update(unhashedKey).digest("hex");
+	const apiKey = await prisma.aPIKey.create({
+		data: {
+			hashedKey,
+			userId,
+			expiresAt,
+		},
+	});
+	return apiKey;
+};
+
+export const createUserWithRoleAndApiKey = async (
+	email: string,
+	name: string,
+	unhashedPassword: string,
+	unhashedApiKey: string,
+	role: Role,
+) => {
+	const hashedPassword = await bcrypt.hash(unhashedPassword, 1);
+	const user = await createUser(email, name, hashedPassword, role);
+	await createApiKey(
+		unhashedApiKey,
+		user.id,
+		new Date(Date.now() + 60 * 60 * 1000),
+	);
+	return user;
+};
+
+export const shortenExpiration = async (token: string) => {
+	const hashedToken = createHash("sha256").update(token).digest("hex");
+	await prisma.session.update({
+		where: { hashedToken: hashedToken },
+		data: {
+			expiresAt: new Date(Date.now() - 1),
+		},
+	});
+};
+
+export const userExists = async (email: string): Promise<boolean> => {
+	return !!(await getUserByEmail(email));
+};
+
+export const getUserByEmail = async (email: string) => {
+	const user = await prisma.user.findUnique({ where: { email } });
+	return user;
+};
+
+export const getUserWithApiKey = async (email: string) => {
+	const user = await prisma.user.findUnique({
+		where: { email },
+		include: { apiKey: true },
+	});
+	return user;
+};
+
+export const shortenAPIKeyExpiration = async (unhashedAPIKey: string) => {
+	const hashedKey = createHash("sha256").update(unhashedAPIKey).digest("hex");
+	await prisma.aPIKey.update({
+		where: { hashedKey: hashedKey },
+		data: {
+			expiresAt: new Date(Date.now() - 1),
+		},
+	});
+};
+
+export const getAllGameSessions = async () => {
+	const gameSessions = await prisma.gameSession.findMany();
+	return gameSessions;
+};
+
+export const getGameSessionsOfUser = async (email: string) => {
+	const user = await prisma.user.findUnique({
+		where: { email },
+		select: {
+			gameSessions: {
+				select: {
+					id: true,
+					charCount: true,
+					wordCount: true,
+					textPrompt: true,
+					startedAt: true,
+					finishedAt: true,
+					results: true,
+				},
+			},
+		},
+	});
+	return user?.gameSessions;
+};

@@ -1,0 +1,29 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../components/AuthContext";
+
+export const useLogout = () => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const nav = useNavigate();
+	const { updateLoggedinUser } = useAuthContext();
+
+	const logout = async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const res = await fetch("/web/users/logout");
+			if (!res.ok)
+				throw new Error((await res.json()).message || "Logout failed");
+		} catch (err) {
+			setError(err instanceof Error ? err.message : String(err));
+			throw err;
+		} finally {
+			setLoading(false);
+			await updateLoggedinUser();
+			nav("/");
+		}
+	};
+
+	return { logout, loading, error };
+};

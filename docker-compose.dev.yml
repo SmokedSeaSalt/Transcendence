@@ -8,9 +8,13 @@ services:
       - "8000:8000"
     volumes:
       - ./server/src:/app/src
+      - ./server/tests:/app/tests
+    environment:
+      NODE_ENV: ${NODE_ENV}
 
   client:
     ports:
       - "5173:5173"
     volumes:
       - ./client/src:/app/src
+      - ./client/tests:/app/tests

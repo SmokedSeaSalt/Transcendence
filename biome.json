@@ -1,0 +1,20 @@
+{
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"linter": {
+		"rules": {
+			"complexity": {
+				"noForEach": "off"
+			},
+			"a11y": {
+				"noAutofocus": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			}
+		}
+	}
+}

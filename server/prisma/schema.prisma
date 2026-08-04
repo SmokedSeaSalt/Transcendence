@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  hashedToken     String      @id
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
+model APIKey {
+  hashedKey       String      @id
+  userId          Int         @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt       DateTime
+  createdAt       DateTime    @default(now())
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  email          String        @unique
+  name           String
+  hashedPassword String
+  role           String        @default("user")
+  createdAt      DateTime      @default(now())
+  session        Session?
+  apiKey         APIKey?
+  gameResults    GameResult[]
+  gameSessions   GameSession[]
+}
+
+model GameSession {
+  id         Int          @id @default(autoincrement())
+  charCount  Int
+  wordCount  Int
+  textPrompt String
+  startedAt  DateTime
+  finishedAt DateTime
+  results    GameResult[]
+  players    User[]
+}
+
+model GameResult {
+  id          Int         @id @default(autoincrement())
+  score       Int
+  wpm         Int
+  cpm         Int
+  accuracy    Float
+  timeMs      Int
+  placement   Int
+  finished    Boolean
+  sessionId   Int
+  session     GameSession @relation(fields: [sessionId], references: [id])
+  userId      Int?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  displayName String
+}

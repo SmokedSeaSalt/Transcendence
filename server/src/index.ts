@@ -1,12 +1,10 @@
-import express from "express";
+import { httpServer } from "./app.js";
+import { createAdminUser } from "./config/dbSeed.js";
 
-const app = express();
 const port = Number(process.env.PORT ?? 8000);
 
-app.get("/server/hello", (_req, res) => {
-  res.send("hello");
-});
+httpServer.listen(port, async () => {
+	console.log(`Server listening on http://localhost:${port}`);
 
-app.listen(port, () =>           {
-  console.log(`Server listening on http://localhost:${port}`);
+	await createAdminUser();
 });

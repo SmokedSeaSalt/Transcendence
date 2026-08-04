@@ -8,6 +8,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      retries: 5
 
   server:
     container_name: server
@@ -16,9 +20,17 @@ services:
       dockerfile: ${DOCKERFILE:-Dockerfile.prod}
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PORT: 8000
+      EXTERNAL_PORT: ${EXTERNAL_PORT}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - ./server/prisma:/app/prisma
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   client:
     container_name: client
@@ -32,8 +44,9 @@ services:
     image: nginx:1.30-alpine
     container_name: nginx
     ports:
-      - "8080:80"
+      - "${EXTERNAL_PORT}:443"
     volumes:
+      - ./.certs:/etc/ssl/certs:ro
       - ./nginx/${NGINX_CONF:-nginx.prod.conf}:/etc/nginx/nginx.conf:ro
     depends_on:
       - server

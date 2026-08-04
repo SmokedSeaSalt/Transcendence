@@ -1,0 +1,38 @@
+export enum RoomState {
+	LOBBY = "Lobby",
+	COUNTDOWN = "Countdown",
+	IN_PROGRESS = "InProgress",
+	FINISHED = "Finished",
+}
+
+export interface RoomUser {
+	displayName: string;
+	progress: number;
+	finishedAt?: Date;
+}
+
+export interface RoomStatePayload {
+	roomId: string;
+	roomLeader: string;
+	state: RoomState;
+	prompt?: string[];
+	wordCount?: number;
+	users: Record<string, RoomUser>;
+	createdAt: Date;
+	startedAt?: Date;
+	finishedAt?: Date;
+}
+
+export interface ServerToClientEvents {
+	roomState: (payload: RoomStatePayload) => void;
+}
+
+export interface ClientToServerEvents {
+	completedWord: (word: string) => void;
+	joinRoom: (
+		roomId: string,
+		callback: (success: boolean, message?: string) => void,
+	) => void;
+	startGame: () => void;
+	leaveRoom: () => void;
+}
