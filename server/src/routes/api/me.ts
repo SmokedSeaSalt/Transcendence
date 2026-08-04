@@ -18,7 +18,8 @@ const router = Router();
 apiRegistry.registerPath({
 	method: "get",
 	path: "/api/me",
-	tags: ["Api"],
+	tags: ["User Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 
@@ -47,7 +48,8 @@ router.get("/", meController.getMyProfile);
 apiRegistry.registerPath({
 	method: "get",
 	path: "/api/me/stats",
-	tags: ["Api"],
+	tags: ["User Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 
@@ -76,7 +78,8 @@ router.get("/stats", meController.getGameStats);
 apiRegistry.registerPath({
 	method: "get",
 	path: "/api/me/gameHistory",
-	tags: ["Api"],
+	tags: ["User Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 
@@ -105,7 +108,8 @@ router.get("/gameHistory", meController.getGameHistory);
 apiRegistry.registerPath({
 	method: "put",
 	path: "/api/me",
-	tags: ["Api"],
+	tags: ["User Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {
 		body: {
@@ -145,7 +149,8 @@ router.put("/", putNameValidation(), meController.putName);
 apiRegistry.registerPath({
 	method: "delete",
 	path: "/api/me",
-	tags: ["Api"],
+	tags: ["User Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 
