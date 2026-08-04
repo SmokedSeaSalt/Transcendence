@@ -5,6 +5,7 @@ import { RoomState } from "./SocketTypes";
 
 interface TextFieldProps {
 	prompt: string[] | undefined;
+	isSpectator: boolean;
 }
 
 const GameTextField: React.FC<TextFieldProps> = (props) => {
@@ -145,7 +146,9 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onBlur={() => setIsInputFocused(false)}
 							maxLength={promptIncomplete.length}
 							autoComplete="off"
-							disabled={roomState?.state !== RoomState.IN_PROGRESS}
+							disabled={
+								roomState?.state !== RoomState.IN_PROGRESS || props.isSpectator
+							}
 						/>
 					</div>
 					{cheating ? (

@@ -7,7 +7,15 @@ import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
-import { RoomState, type RoomStatePayload } from "./SocketTypes";
+import { RoomState, type RoomStatePayload, RoomUser } from "./SocketTypes";
+
+function isCurrentUserSpectator(
+	roomState: RoomStatePayload | undefined,
+	socketId: string | undefined,
+) {
+	if (!roomState || !socketId) return false;
+	return !(socketId in roomState.users);
+}
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
@@ -16,12 +24,17 @@ export default function GamePage() {
 	if (errorStatus) {
 		return <ErrorBox />;
 	}
+	if (!roomState) {
+		return <ErrorBox />;
+	}
+
+	const isSpectator = isCurrentUserSpectator(roomState, socket?.id);
 
 	return (
 		<main
 			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
 		>
-			<GamePageHeader />
+			<GamePageHeader isSpectator={isSpectator} />
 			{message ? <p>Socket id: {message}</p> : null}
 			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
@@ -32,7 +45,7 @@ export default function GamePage() {
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
 				<div className="p-3 my-3">
-					<GameTextField prompt={roomState?.prompt} />
+					<GameTextField isSpectator={isSpectator} prompt={roomState?.prompt} />
 				</div>
 			</div>
 		</main>

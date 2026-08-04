@@ -31,6 +31,7 @@ export interface ClientToServerEvents {
 	completedWord: (word: string) => void;
 	joinRoom: (
 		roomId: string,
+		asSpectator: boolean,
 		callback: (success: boolean, message?: string) => void,
 	) => void;
 	startGame: () => void;
