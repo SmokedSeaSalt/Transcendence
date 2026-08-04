@@ -13,13 +13,13 @@ export default function FinishedGamePopup() {
 		new Map(),
 	);
 	const { roomState } = useSocket();
-	const [finishedStartedAt, setFinishedStartedAt] = useState<Date>(new Date());
+	const [finishedAt, setFinishedAt] = useState<Date>(new Date());
 
 	useEffect(() => {
 		if (!roomState) return;
 		if (roomState.state === RoomState.FINISHED) {
 			setOpen(true);
-			if (roomState.startedAt) setFinishedStartedAt(roomState.startedAt);
+			if (roomState.startedAt) setFinishedAt(roomState.startedAt);
 
 			const tempUserResults = new Map(
 				Object.entries(roomState.users).sort(
@@ -55,10 +55,10 @@ export default function FinishedGamePopup() {
 									</div>
 
 									<div>
-										{user.finishedAt && finishedStartedAt
+										{user.finishedAt && finishedAt
 											? (
 													(new Date(user.finishedAt).getTime() -
-														new Date(finishedStartedAt).getTime()) /
+														new Date(finishedAt).getTime()) /
 													1000
 												).toFixed(2)
 											: "N/A"}{" "}
