@@ -22,7 +22,10 @@ export const useRegistration = () => {
 				body: JSON.stringify(payload),
 			});
 			if (!res.ok) {
-				if (res.status === 502) throw new Error("The registration service is temporarily unavailable");
+				if (res.status === 502)
+					throw new Error(
+						"The registration service is temporarily unavailable",
+					);
 				throw new Error((await res.json()).error || "Registration failed");
 			}
 			await updateLoggedinUser();
