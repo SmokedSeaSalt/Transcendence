@@ -21,13 +21,17 @@ export const useRegistration = () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(payload),
 			});
-			if (!res.ok)
-				throw new Error((await res.json()).message || "Registration failed");
+			if (!res.ok) {
+				if (res.status === 502)
+					throw new Error(
+						"The registration service is temporarily unavailable",
+					);
+				throw new Error((await res.json()).error || "Registration failed");
+			}
 			await updateLoggedinUser();
 			nav("/");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : String(err));
-			throw err;
 		} finally {
 			setLoading(false);
 		}
