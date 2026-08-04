@@ -232,6 +232,7 @@ export async function getGameStatsById(id: number) {
 			average_cpm: 0,
 			average_accuracy: 0,
 			wins: 0,
+			total_games: 0,
 		};
 	}
 
@@ -270,5 +271,6 @@ export async function getGameStatsById(id: number) {
 		average_cpm: average.cpm,
 		average_accuracy: average.accuracy,
 		wins: wins,
+		total_games: length,
 	};
 }

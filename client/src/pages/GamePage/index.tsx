@@ -1,43 +1,42 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import Button from "../../components/Button";
+import ErrorBox from "./ErrorBox";
+import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
-import { RoomState, type RoomStatePayload } from "./SocketTypes";
+import { RoomState, type RoomStatePayload, RoomUser } from "./SocketTypes";
+
+function isCurrentUserSpectator(
+	roomState: RoomStatePayload | undefined,
+	socketId: string | undefined,
+) {
+	if (!roomState || !socketId) return false;
+	return !(socketId in roomState.users);
+}
 
 export default function GamePage() {
 	const [message, setMessage] = useState("");
-	const { socket, setRoomState, roomState } = useSocket();
-	useEffect(() => {
-		socket?.on("connect", () => {
-			console.log(socket.id);
-			if (socket.id === undefined) {
-				setMessage("No valid socket.id");
-			} else {
-				setMessage(socket.id);
-			}
+	const { socket, roomState, errorStatus } = useSocket();
 
-			socket.on("roomState", (payload: RoomStatePayload) => {
-				console.log("roomState received");
-				setRoomState(payload);
-			});
-		});
-	}, [socket, setRoomState]);
+	if (errorStatus) {
+		return <ErrorBox />;
+	}
+	if (!roomState) {
+		return <ErrorBox />;
+	}
 
-	if (roomState)
-		console.log(
-			"Current user count in index: ",
-			Object.keys(roomState.users).length,
-		);
+	const isSpectator = isCurrentUserSpectator(roomState, socket?.id);
 
 	return (
 		<main
 			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
 		>
-			<GamePageHeader />
+			<GamePageHeader isSpectator={isSpectator} />
 			{message ? <p>Socket id: {message}</p> : null}
+			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
 				<div>The game has finished. Room will be rejoined</div>
 			) : null}
@@ -46,7 +45,7 @@ export default function GamePage() {
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
 				<div className="p-3 my-3">
-					<GameTextField prompt={roomState?.prompt} />
+					<GameTextField isSpectator={isSpectator} prompt={roomState?.prompt} />
 				</div>
 			</div>
 		</main>

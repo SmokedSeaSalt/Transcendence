@@ -8,6 +8,7 @@ export enum RoomState {
 export interface RoomUser {
 	displayName: string;
 	progress: number;
+	finishedAt?: Date;
 }
 
 export interface RoomStatePayload {
@@ -30,6 +31,7 @@ export interface ClientToServerEvents {
 	completedWord: (word: string) => void;
 	joinRoom: (
 		roomId: string,
+		asSpectator: boolean,
 		callback: (success: boolean, message?: string) => void,
 	) => void;
 	startGame: () => void;

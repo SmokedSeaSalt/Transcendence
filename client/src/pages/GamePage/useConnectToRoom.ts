@@ -6,10 +6,11 @@ export const useConnectToRoom = () => {
 	const [message, setMessage] = useState<string>("");
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { socket, setRoomState, roomState } = useSocket();
+	const { socket, roomState } = useSocket();
 
 	const emitJoinRoom = async (
 		roomId: string,
+		joinAsSpectator: boolean,
 	): Promise<{ success: boolean; message: string }> => {
 		setLoading(true);
 		setError(null);
@@ -23,6 +24,7 @@ export const useConnectToRoom = () => {
 					socket.emit(
 						"joinRoom",
 						roomId,
+						joinAsSpectator,
 						(success: boolean, message: string | undefined) => {
 							resolve({ success, message: message ?? "" });
 						},

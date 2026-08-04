@@ -7,6 +7,7 @@ import { useConnectToRoom } from "./useConnectToRoom";
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [roomId, setRoomId] = useState<string>("");
+	const [joinAsSpectator, setJoinAsSpectator] = useState<boolean>(false);
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const { emitJoinRoom, loading, error } = useConnectToRoom();
 
@@ -27,7 +28,7 @@ export default function JoinRoomButton() {
 			setFieldErrors(errors);
 			return;
 		}
-		const { success, message } = await emitJoinRoom(roomId);
+		const { success, message } = await emitJoinRoom(roomId, joinAsSpectator);
 		if (loading) return;
 		if (!success) {
 			const errors: Record<string, string> = {};
@@ -70,6 +71,14 @@ export default function JoinRoomButton() {
 							</div>
 						)}
 					</div>
+					<label className="text-mist-100">
+						<input
+							type="checkbox"
+							checked={joinAsSpectator}
+							onChange={(e) => setJoinAsSpectator(e.target.checked)}
+						/>
+						Join as spectator
+					</label>
 					<Button loading={loading}>Connect</Button>
 				</form>
 			</Popup>
