@@ -46,16 +46,21 @@ export default function FinishedGamePopup() {
 					<div>
 						{Array.from(userResults.entries()).map(
 							([socketId, user], index) => (
-								<div key={socketId}>
-									{index + 1}. {user.displayName} :{" "}
-									{user.finishedAt && finishedStartedAt
-										? (
-												(new Date(user.finishedAt).getTime() -
-													new Date(finishedStartedAt).getTime()) /
-												1000
-											).toFixed(2)
-										: "N/A"}
-									seconds
+								<div key={socketId} className="flex justify-between">
+									<div>
+										{index + 1}. {user.displayName}
+									</div>
+
+									<div>
+										{user.finishedAt && finishedStartedAt
+											? (
+													(new Date(user.finishedAt).getTime() -
+														new Date(finishedStartedAt).getTime()) /
+													1000
+												).toFixed(2)
+											: "N/A"}{" "}
+										seconds
+									</div>
 								</div>
 							),
 						)}
