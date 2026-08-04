@@ -1,9 +1,11 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import Button from "../../components/Button";
-
+import { getLeaderboardStats } from "./getLeaderboardStats";
 
 export default function Leaderboard() {
+	const { leaderboardStats, loading } = getLeaderboardStats();
+	
+	if (leaderboardStats === null) return <div>No stats</div>;
+		
+	
 	return (
 		<table className="table-auto">
 			<thead>

@@ -1,0 +1,43 @@
+import { useCallback, useEffect, useState } from "react";
+
+export type leaderboardStats = {
+	userStats: userLeaderboardStats[];
+};
+
+export type userLeaderboardStats = {
+	name: string;
+	max_wpm: number;
+	max_cpm: number;
+	average_wpm: number;
+	average_cpm: number;
+};
+
+// hook to return either leaderboardStats object or null if user is not logged in
+export const getLeaderboardStats = () => {
+	const [leaderboardStats, setLeaderboardStats] = useState<leaderboardStats | null>(null);
+	const [loading, setLoading] = useState<boolean>(true);
+
+	const fetchData = useCallback(async () => {
+		setLoading(true);
+		try {
+			const response = await fetch("/web/leaderboard");
+			if (!response.ok) setLeaderboardStats(null);
+			else {
+				const jsonData = await response.json();
+				console.log("json data from /web/leaderboard: ", jsonData);
+				setLeaderboardStats(jsonData);
+			}
+		} catch (error) {
+			console.log(error, "error");
+			setLeaderboardStats(null);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchData();
+	}, [fetchData]);
+
+	return { leaderboardStats, loading };
+};
