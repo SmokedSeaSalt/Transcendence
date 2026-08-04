@@ -8,7 +8,6 @@ type Point = {
 
 // inspired by example chart from docs: https://recharts.github.io/?p=/en-US/api/PieChart
 export default function ArrayGraph({ data }: { data: Point[] }) {
-	console.log(data);
 	return (
 		<LineChart width={600} height={300} data={data}>
 			<CartesianGrid strokeDasharray="5 5" />
