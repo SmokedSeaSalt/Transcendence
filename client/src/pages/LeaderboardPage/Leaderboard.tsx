@@ -47,7 +47,7 @@ export default function Leaderboard() {
 		return (
 			<svg
 				className={`w-4 h-4 cursor-pointer
-					${activeColumn?.includes(sortBy) ? "text-black" : "text-gray-400 group-hover:text-black rotate-180"}
+					${activeColumn?.includes(sortBy) ? "text-highlight-colored" : "text-gray-400 group-hover:text-button-hover rotate-180"}
 				${sortedBestFirst?.includes(sortBy) ? "rotate-180" : "rotate-0"} `}
 				onClick={() => sortByColumn(sortBy)}
 				onKeyDown={() => sortByColumn(sortBy)}
@@ -85,7 +85,7 @@ export default function Leaderboard() {
 	};
 
 	const contentStyle =
-		"py-2 pl-4 font-normal text-base border-t whitespace-nowrap";
+		"py-2 pl-4 text-text border-t whitespace-nowrap";
 	/** On page load, data is taken directly from fetch. After, data is taken from
 	 * the sorted version.
 	 */
@@ -102,9 +102,9 @@ export default function Leaderboard() {
 				{dataToUse?.map((data, index) => (
 					<tr key={index}>
 						{bestFirst ? (
-							<td className={contentStyle}>{index + 1}</td>
+							<td className={contentStyle + " font-bold"}>{index + 1}</td>
 						) : (
-							<td className={contentStyle}>{dataToUse.length - index}</td>
+							<td className={contentStyle + " font-bold"}>{dataToUse.length - index}</td>
 						)}
 						<td className={contentStyle}>{data?.name}</td>
 						<td className={contentStyle}>{Number(data?.max_wpm.toFixed(1))}</td>
@@ -127,14 +127,14 @@ export default function Leaderboard() {
 	};
 
 	return (
-		<div className="h-full bg-white flex flex-col items-center justify-center">
+		<div className="h-full flex flex-col items-center justify-center">
 			{loading ? (
 				<div>Loading...</div>
 			) : (
 				<div className="w-95/100 px-2">
 					<div className="w-full overflow-x-auto mt-2">
 						<table className="table-auto overflow-auto w-full text-left">
-							<thead className="bg-gray-200">
+							<thead className="bg-background-secondary">
 								<tr>
 									<th className={headStyle}>
 										<span className="pl-1">Rank</span>
