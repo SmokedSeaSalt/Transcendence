@@ -47,6 +47,12 @@ a:active {
 
   --color-graph-cpm: var(--color-orange-600);
   --color-graph-wpm: var(--color-blue-600);
+
+  --color-typebox-untyped-text: var(--color-text);
+  --color-typebox-typed-text: var(--color-black);
+  --color-typebox-correct: var(--color-green-300);
+  --color-typebox-completed: var(--color-green-600);
+  --color-typebox-incorrect: var(--color-red-300);
 }
 
 @layer utilities {

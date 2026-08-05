@@ -103,17 +103,13 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 
 	// make it clear whether the type box is in focus or not
 	let outerClassName =
-		"outline-double outline-orange-200 relative max-h-50/100";
+		"outline-double outline-orange-200 bg-background relative max-h-50/100 rounded-md";
 	if (isInputFocused) {
-		outerClassName = "outline-solid relative outline-orange-500 max-h-50/100 ";
+		outerClassName = "outline-solid relative bg-background outline-highlight-colored rounded-md max-h-50/100 ";
 	}
 
 	// style for untyped text, with boxShadow used as caret
-	const untypedStyle: CSS.Properties = {
-		display: "inline",
-		boxShadow: "-3px 0px 0px 0px #000000",
-		color: "#393636",
-	};
+	const untypedClass = "inline text-text shadow-[-3px_0px_0px_0px_var(--color-highlight-colored)]";
 
 	// timer for countdown
 	useEffect(() => {
@@ -131,17 +127,14 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				<div className="text-center text-xl">Game starting in {counter}...</div>
 			) : (
 				<div className={outerClassName}>
-					<div
-						style={{
-							fontSize: "20px",
-							fontFamily: "monospace",
-							boxSizing: "border-box",
-						}}
-					>
-						<span className="bg-green-500 inline">{promptComplete}</span>
-						<span className="bg-green-300 inline">{promptTyped}</span>
-						<span className="bg-red-300 inline">{promptTypedWrong}</span>
-						<span style={untypedStyle}>{promptUntyped}</span>
+					<div className="text-xl font-mono box-border ">
+						<span className="text-typebox-completed inline">{promptComplete}</span>
+						<span className="text-typebox-correct inline">{promptTyped}</span>
+						<span className="text-red-600 inline">{promptTypedWrong}</span>
+						{/* <span className="bg-typebox-completed text-typebox-typed-text inline">{promptComplete}</span>
+						<span className="bg-typebox-correct text-typebox-typed-text inline">{promptTyped}</span>
+						<span className="bg-typebox-incorrect text-typebox-typed-text inline">{promptTypedWrong}</span> */}
+						<span className={untypedClass}>{promptUntyped}</span>
 					</div>
 					<div className="absolute top-0 opacity-0 size-xl w-100/100 h-100/100">
 						<input
@@ -165,8 +158,8 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 						/>
 					</div>
 					{cheating ? (
-						<div className="absolute flex items-center justify-center top-0 h-100/100 w-100/100 bg-red-800 text-white">
-							<p style={{ fontSize: "3vh" }}>NO CHEATING</p>
+						<div className="absolute flex items-center justify-center font-9xl font-bold top-0 h-100/100 w-100/100 bg-red-800 text-white">
+							<p>NO CHEATING</p>
 						</div>
 					) : (
 						""

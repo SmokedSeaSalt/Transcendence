@@ -34,8 +34,10 @@ export default function FinishedGamePopup() {
 			{open && <ReactConfetti />}
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<div className="text-mist-100">
-					<h3>Game results!</h3>
+				<div className="text-text">
+					<h3 className="text-text-colored font-bold text-xl">
+					Game Results
+					</h3>
 					<div>
 						{userResults.map((user, index) => (
 							<div key={index}>

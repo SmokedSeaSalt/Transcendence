@@ -31,14 +31,12 @@ export default function GamePage() {
 	const isSpectator = isCurrentUserSpectator(roomState, socket?.id);
 
 	return (
-		<main
-			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
-		>
+		<main className="p-8 pt-4 font-sans">
 			<GamePageHeader isSpectator={isSpectator} />
 			{message ? <p>Socket id: {message}</p> : null}
 			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
-				<div>The game has finished. Room will be rejoined</div>
+				<div>The game has finished. Please wait to go to the next lobby.</div>
 			) : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">

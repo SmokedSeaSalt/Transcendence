@@ -51,9 +51,12 @@ export default function JoinRoomButton() {
 			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
+				<h3 className="text-text-colored font-bold text-xl">
+					Join room
+				</h3>
 				<form
 					onSubmit={submit}
-					style={{ display: "flex", flexDirection: "column", gap: 8 }}
+					className="flex flex-col gap-2"
 				>
 					<h3 className="text-text">
 						Warning: you will leave your current room!
@@ -66,7 +69,7 @@ export default function JoinRoomButton() {
 							placeholder="Room ID"
 						/>
 						{fieldErrors.roomId && (
-							<div role="alert" style={{ color: "red" }}>
+							<div role="alert"  className="text-red-600">
 								{fieldErrors.roomId}
 							</div>
 						)}
@@ -76,17 +79,7 @@ export default function JoinRoomButton() {
 							type="checkbox"
 							checked={joinAsSpectator}
 							onChange={(e) => setJoinAsSpectator(e.target.checked)}
-							className="      h-5
-      w-5
-      appearance-none
-      rounded
-      border
-      border-highlight-colored
-      bg-background-secondary
-      transition
-      checked:bg-highlight-colored
-      checked:border-highlight-colored
-      focus:ring-highlight-colored"
+							className=" h-5 w-5 appearance-none rounded border border-highlight-colored bg-background-secondary transition checked:bg-highlight-colored checked:border-highlight-colored focus:ring-highlight-colored"
 						/>
 						Join as spectator
 					</label>
