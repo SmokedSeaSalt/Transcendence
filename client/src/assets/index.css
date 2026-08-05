@@ -45,3 +45,28 @@ a:active {
   --color-button-main: var(--color-orange-600);
   --color-button-hover: var(--color-blue-600);
 }
+
+@layer utilities {
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-highlight-colored) var(--color-background-secondary);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--color-highlight-colored);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: var(--color-button-hover);
+  }
+}
