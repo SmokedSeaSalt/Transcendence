@@ -33,8 +33,6 @@ export default function ProfilePage() {
 		return null;
 	}
 
-	// todo: userStats should probably be part of a larger div with graph; maybe separate component?
-
 	return (
 		<main
 			style={{

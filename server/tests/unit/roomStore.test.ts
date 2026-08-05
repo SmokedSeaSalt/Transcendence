@@ -41,6 +41,7 @@ describe("Room create(), get(), delete", () => {
 		expect(roomDataFromCreate.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},
@@ -55,6 +56,7 @@ describe("Room create(), get(), delete", () => {
 		expect(roomDataFromGet?.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},
@@ -108,6 +110,7 @@ describe("Room addUser() and deleteUser()", () => {
 		expect(roomAfterAdd?.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},

@@ -8,6 +8,7 @@ export enum RoomState {
 export interface RoomUser {
 	displayName: string;
 	progress: number;
+	invalidCharsTyped: number;
 	finishedAt?: Date;
 }
 
@@ -29,6 +30,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
 	completedWord: (word: string) => void;
+	wrongCharacter: () => void;
 	joinRoom: (
 		roomId: string,
 		asSpectator: boolean,
