@@ -51,7 +51,9 @@ const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 				score: 0,
 				wpm: calculateUnitsPM(promptWordCount, minutes),
 				cpm: calculateUnitsPM(promptCharCount, minutes),
-				accuracy: calculateAccuracy(promptCharCount, player.invalidCharsTyped),
+				accuracy: player.finishedAt
+					? calculateAccuracy(promptCharCount, player.invalidCharsTyped)
+					: 0,
 				timeMs: timeMs ?? -1,
 				placement: index + 1,
 				finished: timeMs !== undefined,

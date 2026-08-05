@@ -38,9 +38,13 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				setPromptUntyped(currentPrompt.substring(typed.length));
 				setPromptTypedWrong(currentPrompt.substring(i, typed.length));
 				setPromptTyped(currentPrompt.substring(0, i));
+				// error based on whether typedWrong got longer
+				// & that new character not matching the prompt at that position
 				if (
 					currentPrompt.substring(i, typed.length).length >
-					promptTypedWrong.length
+						promptTypedWrong.length &&
+					currentPrompt.length >= typed.length &&
+					currentPrompt[typed.length - 1] !== typed[typed.length - 1]
 				) {
 					socket?.emit("wrongCharacter");
 				}
