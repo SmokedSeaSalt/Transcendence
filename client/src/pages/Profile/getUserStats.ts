@@ -23,7 +23,6 @@ export const getUserStats = () => {
 			if (!response.ok) setUserStats(null);
 			else {
 				const jsonData = await response.json();
-				// console.log("json data from /web/me/stats: ", jsonData);
 				setUserStats(jsonData);
 			}
 		} catch (error) {
