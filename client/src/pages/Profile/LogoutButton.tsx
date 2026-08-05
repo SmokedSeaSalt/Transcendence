@@ -10,7 +10,7 @@ export default function LogoutButton() {
 	};
 
 	return (
-		<div style={{ padding: "1em" }}>
+		<div className="p-1">
 			<Button onClick={clickLogout} type={"button"} loading={loading}>
 				Logout
 			</Button>

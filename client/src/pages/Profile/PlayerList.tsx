@@ -3,10 +3,10 @@ import type { jsonGameHistory, jsonSession } from "./getGameHistory";
 export default function PlayerList({
 	gameSession,
 }: { gameSession: jsonSession }) {
-	const playerListClass = "overflow-y-auto max-h-40 pl-2";
+	const playerListClass = "overflow-y-auto max-h-40 pl-2 scrollbar-custom";
 	const playerClass =
-		"m-2 p-2 bg-red-300 grid grid-cols-2 outline-solid rounded-md";
-	const playerTimeClass = "text-right pr-5";
+		"m-2 p-2 bg-surface grid grid-cols-2 rounded-md text-text";
+	const playerTimeClass = "text-right pr-5 text-text";
 
 	const playerLists = [];
 

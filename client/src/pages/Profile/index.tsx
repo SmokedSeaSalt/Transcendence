@@ -33,30 +33,16 @@ export default function ProfilePage() {
 		return null;
 	}
 
-	// todo: userStats should probably be part of a larger div with graph; maybe separate component?
-
 	return (
-		<main
-			style={{
-				//display: "flex",
-				maxWidth: "100%",
-				//margin: "2rem auto",
-				//boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-			}}
-		>
-			<NameBar />
-			<div
-				style={{
-					display: "flex",
-					maxWidth: 960,
-					margin: "2rem auto",
-					boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-				}}
-			>
-				<UserStats />
-				<UserProgressionGraph gameHistory={gameHistory} />
-			</div>
-			<GameHistory gameHistory={gameHistory} />
-		</main>
+	<main className="max-w-full">
+		<NameBar />
+
+		<div className="flex max-w-[960px] mx-auto my-8">
+			<UserStats />
+			<UserProgressionGraph gameHistory={gameHistory} />
+		</div>
+
+		<GameHistory gameHistory={gameHistory} />
+	</main>
 	);
 }

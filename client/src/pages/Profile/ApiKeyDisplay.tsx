@@ -10,12 +10,21 @@ export default function ApiKeyDisplay({ apikey }: { apikey: string }) {
 	};
 
 	return (
+		<div className="mt-2">
 		<button
 			type="button"
 			onClick={handleCopy}
-			className="mt-2 text-sm text-orange-600 cursor-pointer break-all text-left"
+			className="p-1 rounded-md text-sm text-text-colored font-bold bg-background-secondary cursor-pointer break-all text-left"
 		>
-			{copied ? "Copied!" : apikey}
+			{apikey}
 		</button>
+		<div
+				className={`mt-1 text-sm text-green-600 ${
+					copied ? "visible" : "invisible"
+				}`}
+			>
+				Copied!
+		</div>
+		</div>
 	);
 }

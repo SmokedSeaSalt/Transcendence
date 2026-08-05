@@ -19,16 +19,16 @@ export default function ApiKeyButton() {
 	};
 
 	return (
-		<div style={{ padding: "1em" }}>
+		<div className="p-1">
 			<Button onClick={clickApikey} type={"button"} loading={loading}>
 				Generate Api Key
 			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<h3 className="text-base font-semibold text-slate-400">
+				<h3 className="text-text-colored font-bold text-xl">
 					Generated key
 				</h3>
-				<p className="mt-2 text-sm text-slate-400">
+				<p className="mt-2 text-sm text-text">
 					Save this key as you will only see it once!
 				</p>
 				<ApiKeyDisplay apikey={apikey} />

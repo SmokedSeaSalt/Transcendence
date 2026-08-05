@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo_temp_cat.png";
 import { useAuthContext } from "./AuthContext";
+import Button from "./Button";
 
 export default function Header() {
 	const { currentUser } = useAuthContext();
 
 	return (
-		<header className="bg-gray-900 border-t mt-0">
+		<header className="bg-header border-b border-highlight-colored mt-0">
 			<div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-orange-600">
 				<div className="left-30">
 					<Link to="/">
@@ -18,39 +19,35 @@ export default function Header() {
 				</div>
 				<div className="mt-3 sm:mt-0 flex items-center space-x-4">
 					<Link to="/leaderboard">
-						<button
+						<Button
 							type="button"
-							className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 						>
 							🏆 Leaderboard
-						</button>
+						</Button>
 					</Link>
 					{currentUser === null ? (
-						<Link to="/login" className="text-white hover:text-orange-600">
-							<button
+						<Link to="/login">
+							<Button
 								type="button"
-								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
 								Log in / Make an Account
-							</button>
+							</Button>
 						</Link>
 					) : currentUser === null ? (
-						<Link to="/profile" className="text-white hover:text-orange-600">
-							<button
+						<Link to="/profile">
+							<Button
 								type="button"
-								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
 								Your Profile
-							</button>
+							</Button>
 						</Link>
 					) : (
-						<Link to="/profile" className="text-white hover:text-orange-600">
-							<button
+						<Link to="/profile">
+							<Button
 								type="button"
-								className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-xl"
 							>
 								{currentUser.name}'s Profile
-							</button>
+							</Button>
 						</Link>
 					)}
 				</div>
