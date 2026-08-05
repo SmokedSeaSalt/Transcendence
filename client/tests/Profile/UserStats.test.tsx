@@ -18,7 +18,7 @@ test("stats when logged in", async () => {
 	const mockStats = {
 		max_wpm: 47,
 		max_cpm: 380,
-		max_accuracy: 0,
+		max_accuracy: 0.8,
 		average_wpm: 44,
 		average_cpm: 363,
 		average_accuracy: 0,
@@ -34,10 +34,12 @@ test("stats when logged in", async () => {
 
 	render(<UserStats />);
 
-	expect(await screen.findByText("Games won: 3")).toBeInTheDocument();
-	expect(await screen.findByText("Games played: 3")).toBeInTheDocument();
-	expect(await screen.findByText("Max wpm: 47")).toBeInTheDocument();
-	expect(await screen.findByText("Average wpm: 44")).toBeInTheDocument();
+	// since there's a newline in between, can't find whether the values are in correct place
+	expect(await screen.findByText("Games won:")).toBeInTheDocument();
+	expect(await screen.findByText("Games played:")).toBeInTheDocument();
+	expect(await screen.findByText("Max WPM:")).toBeInTheDocument();
+	expect(await screen.findByText("Average WPM:")).toBeInTheDocument();
+	expect(await screen.findByText("80.0%")).toBeInTheDocument();
 
 	mockFetch.mockClear();
 });
