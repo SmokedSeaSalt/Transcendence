@@ -8,8 +8,10 @@ export type userForLeaderboard = {
 	name: string;
 	max_wpm: number;
 	max_cpm: number;
+	max_accuracy: number;
 	avg_wpm: number;
 	avg_cpm: number;
+	avg_accuracy: number;
 };
 
 // hook to return either leaderboardStats object or null if user is not logged in

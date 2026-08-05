@@ -111,10 +111,16 @@ export default function Leaderboard() {
 						<td className={contentStyle}>{Number(data?.avg_wpm.toFixed(1))}</td>
 						<td className={contentStyle}>{Number(data?.max_cpm.toFixed(1))}</td>
 						<td className={contentStyle}>{Number(data?.avg_cpm.toFixed(1))}</td>
+						<td className={contentStyle}>
+							{Number(data?.max_accuracy * 100).toFixed(1)}%
+						</td>
+						<td className={contentStyle}>
+							{Number(data?.avg_accuracy * 100).toFixed(1)}%
+						</td>
 					</tr>
 				))}
 				<tr>
-					<td colSpan={6} className="border-t" />
+					<td colSpan={8} className="border-t" />
 				</tr>
 			</tbody>
 		);
@@ -140,6 +146,8 @@ export default function Leaderboard() {
 									{tableHeadWithSort("avg_wpm", "Average WPM")}
 									{tableHeadWithSort("max_cpm", "Max CPM")}
 									{tableHeadWithSort("avg_cpm", "Average CPM")}
+									{tableHeadWithSort("max_accuracy", "Max accuracy")}
+									{tableHeadWithSort("avg_accuracy", "Average accuracy")}
 								</tr>
 							</thead>
 							{tableBody(sortedData !== null)}

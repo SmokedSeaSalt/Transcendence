@@ -18,6 +18,13 @@ export default function UserStats() {
 						Average wpm: {Number(userStats.average_wpm.toFixed(1))}
 					</div>
 					<div className={statClass}>Max wpm: {userStats.max_wpm} </div>
+					<div className={statClass}>
+						Average accuracy:{" "}
+						{Number(userStats.average_accuracy * 100).toFixed(1)}%
+					</div>
+					<div className={statClass}>
+						Max accuracy: {Number(userStats.max_accuracy * 100).toFixed(1)}%
+					</div>
 				</div>
 			)}
 		</>

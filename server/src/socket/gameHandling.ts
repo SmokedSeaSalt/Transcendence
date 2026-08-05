@@ -4,6 +4,7 @@ import {
 	finishAndSaveGameIfDone,
 	validateIncomingWord,
 } from "../services/gameService.js";
+import { roomStore } from "../services/roomStore.js";
 import { endGame } from "./gameLifecycle.js";
 
 export function registerGameHandlers(io: Server, socket: Socket) {
@@ -23,6 +24,18 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		if (user.progress >= room.wordCount) {
 			finishAndSaveGameIfDone(room, io);
 		}
+		io.to(socket.data.roomId).emit("roomState", room);
+	});
+
+	socket.on("wrongCharacter", async () => {
+		if (socket.data.isSpectator) return;
+
+		const room = roomStore.get(socket.data.roomId);
+		if (!room) return;
+
+		const user = room.users[socket.id];
+
+		user.invalidCharsTyped += 1;
 		io.to(socket.data.roomId).emit("roomState", room);
 	});
 }
