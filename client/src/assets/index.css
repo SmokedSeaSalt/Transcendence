@@ -44,6 +44,9 @@ a:active {
   --color-highlight-colored: var(--color-orange-600);
   --color-button-main: var(--color-orange-600);
   --color-button-hover: var(--color-blue-600);
+
+  --color-graph-cpm: var(--color-orange-600);
+  --color-graph-wpm: var(--color-blue-600);
 }
 
 @layer utilities {
@@ -69,4 +72,9 @@ a:active {
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     background: var(--color-button-hover);
   }
+}
+
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+	outline: none;
 }

@@ -37,9 +37,14 @@ export default function ProfilePage() {
 	<main className="max-w-full">
 		<NameBar />
 
-		<div className="flex max-w-[960px] mx-auto my-8">
-			<UserStats />
-			<UserProgressionGraph gameHistory={gameHistory} />
+		<div className="flex flex-col md:flex-row mx-auto my-8 justify-center items-center mx-auto">
+			<div className="w-full md:w-2/5">
+				<UserStats />
+			</div>
+
+			<div className="w-full md:w-3/5 flex justify-center">
+				<UserProgressionGraph gameHistory={gameHistory} />
+			</div>
 		</div>
 
 		<GameHistory gameHistory={gameHistory} />

@@ -6,14 +6,15 @@ export default function UserStats() {
 	if (userStats === null) return <div>No stats</div>;
 
 	const statClass =
-		"w-50/100 m-2 bg-blue-100 rounded-md content-evenly text-center";
-	const rowClass = "flex w-100/100 h-30/100";
+		"flex-1 m-2 py-3 bg-surface rounded-md content-evenly text-center";
+	const rowClass = "flex flex-1";
+
 	return (
 		<>
 			{loading ? (
-				<div className="p-2 m-2 w-30/100">Loading stats...</div>
+				<div className="p-2 m-2">Loading stats...</div>
 			) : (
-				<div className="p-2 m-2 w-40/100 min-h-100/100 content-evenly">
+				<div className="flex flex-col flex-1 p-2 m-2">
 					<div className={rowClass}>
 						<div className={statClass}>
 							<p>Games played:</p>
@@ -24,6 +25,7 @@ export default function UserStats() {
 							{userStats.wins}
 						</div>
 					</div>
+
 					<div className={rowClass}>
 						<div className={statClass}>
 							<p>Average WPM:</p>
@@ -31,9 +33,10 @@ export default function UserStats() {
 						</div>
 						<div className={statClass}>
 							<p>Max WPM:</p>
-							{userStats.max_wpm}{" "}
+							{userStats.max_wpm}
 						</div>
 					</div>
+
 					<div className={rowClass}>
 						<div className={statClass}>
 							<p>Average accuracy:</p>

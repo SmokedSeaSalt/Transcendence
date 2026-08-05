@@ -1,4 +1,4 @@
-import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 type Point = {
 	index: number;
@@ -9,30 +9,35 @@ type Point = {
 // inspired by example chart from docs: https://recharts.github.io/?p=/en-US/api/PieChart
 export default function ArrayGraph({ data }: { data: Point[] }) {
 	return (
-		<LineChart width={600} height={300} data={data}>
-			<CartesianGrid strokeDasharray="5 5" />
-			<YAxis yAxisId="wpm" orientation="left" stroke="#3b82f6" />
+		<ResponsiveContainer width="100%" height={300}>
+			<LineChart data={data} className="outline-none">
+				<CartesianGrid strokeDasharray="5 5" />
 
-			<YAxis yAxisId="cpm" orientation="right" stroke="orange" />
-			<Line
-				yAxisId="wpm"
-				dataKey="wpm"
-				stroke="#3b82f6"
-				dot={{
-					fill: "#3b82f6",
-				}}
-				name="wpm"
-			/>
-			<Line
-				yAxisId="cpm"
-				dataKey="cpm"
-				stroke="orange"
-				dot={{
-					fill: "orange",
-				}}
-				name="cpm"
-			/>
-			<Legend />
-		</LineChart>
+				<YAxis yAxisId="wpm" orientation="left" stroke="var(--color-graph-wpm)" />
+				<YAxis yAxisId="cpm" orientation="right" stroke="var(--color-graph-cpm)" />
+
+				<Line
+					yAxisId="wpm"
+					dataKey="wpm"
+					stroke="var(--color-graph-wpm)"
+					dot={{
+						fill: "var(--color-graph-wpm)",
+					}}
+					name="wpm"
+					isAnimationActive={false}
+				/>
+				<Line
+					yAxisId="cpm"
+					dataKey="cpm"
+					stroke="var(--color-graph-cpm)"
+					dot={{
+						fill: "var(--color-graph-cpm)",
+					}}
+					name="cpm"
+					isAnimationActive={false}
+				/>
+				<Legend />
+			</LineChart>
+		</ResponsiveContainer>
 	);
 }

@@ -16,7 +16,7 @@ export default function UserProgressionGraph({
 
 	return (
 		<>
-			<div className="p-2 m-3 w-20/100">
+			<div className="p-2 m-3 w-full">
 				<ArrayGraph data={data} />
 			</div>
 		</>
