@@ -146,6 +146,9 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onBlur={() => setIsInputFocused(false)}
 							maxLength={promptIncomplete.length}
 							autoComplete="off"
+							autoCapitalize="none"
+							spellCheck={false}
+							autoCorrect="off"
 							disabled={
 								roomState?.state !== RoomState.IN_PROGRESS || props.isSpectator
 							}
