@@ -31,6 +31,20 @@ export const getAllUsersInOrderWpm = async () => {
 
 	for (const user of userStats) {
 		const stats = user.gameResults;
+		const length = stats.length;
+		if (length === 0) {
+			const thisUser: userForLeaderboard = {
+				name: user.name,
+				max_wpm: 0,
+				max_cpm: 0,
+				max_accuracy: 0,
+				avg_cpm: 0,
+				avg_wpm: 0,
+				avg_accuracy: 0,
+			};
+			leaderboardStats.push(thisUser);
+			continue;
+		}
 		const largest = {
 			wpm: Math.max(...stats.map((result) => result.wpm)),
 			cpm: Math.max(...stats.map((result) => result.cpm)),
@@ -44,7 +58,6 @@ export const getAllUsersInOrderWpm = async () => {
 			}),
 			{ wpm: 0, cpm: 0, accuracy: 0 },
 		);
-		const length = stats.length;
 		const averages = {
 			wpm: totals.wpm / length,
 			cpm: totals.cpm / length,

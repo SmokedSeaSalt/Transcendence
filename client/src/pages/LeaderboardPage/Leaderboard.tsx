@@ -111,8 +111,12 @@ export default function Leaderboard() {
 						<td className={contentStyle}>{Number(data?.avg_wpm.toFixed(1))}</td>
 						<td className={contentStyle}>{Number(data?.max_cpm.toFixed(1))}</td>
 						<td className={contentStyle}>{Number(data?.avg_cpm.toFixed(1))}</td>
-						<td className={contentStyle}>{Number(data?.max_accuracy * 100).toFixed(1)}%</td>
-						<td className={contentStyle}>{Number(data?.avg_accuracy * 100).toFixed(1)}%</td>
+						<td className={contentStyle}>
+							{Number(data?.max_accuracy * 100).toFixed(1)}%
+						</td>
+						<td className={contentStyle}>
+							{Number(data?.avg_accuracy * 100).toFixed(1)}%
+						</td>
 					</tr>
 				))}
 				<tr>
