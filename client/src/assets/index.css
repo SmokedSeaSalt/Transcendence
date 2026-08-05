@@ -12,17 +12,17 @@ body {
 	color: var(--color-text);
 }
 
-a {
+a:not(.unstyled-link) {
 	color: #1d4ed8;
 	text-decoration: underline;
 }
 
-a:visited {
+a:not(.unstyled-link):visited {
 	color: #480e9a;
 }
 
-a:hover,
-a:active {
+a:not(.unstyled-link):hover,
+a:not(.unstyled-link):active {
 	color: #2563eb;
 }
 
