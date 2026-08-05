@@ -23,7 +23,7 @@ export default function UserStats() {
 						{Number(userStats.average_accuracy * 100).toFixed(1)}%
 					</div>
 					<div className={statClass}>
-						Max accuracy: {(userStats.max_accuracy * 100).toFixed(1)}%
+						Max accuracy: {Number(userStats.max_accuracy * 100).toFixed(1)}%
 					</div>
 				</div>
 			)}
