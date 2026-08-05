@@ -16,37 +16,31 @@ export default function UserStats() {
 				<div className="p-2 m-2 w-40/100 min-h-100/100 content-evenly">
 					<div className={rowClass}>
 						<div className={statClass}>
-							Games played:
-							<br />
+							<p>Games played:</p>
 							{userStats.total_games}
 						</div>
 						<div className={statClass}>
-							Games won:
-							<br />
+							<p>Games won:</p>
 							{userStats.wins}
 						</div>
 					</div>
 					<div className={rowClass}>
 						<div className={statClass}>
-							Average WPM:
-							<br />
+							<p>Average WPM:</p>
 							{Number(userStats.average_wpm.toFixed(1))}
 						</div>
 						<div className={statClass}>
-							Max WPM:
-							<br />
+							<p>Max WPM:</p>
 							{userStats.max_wpm}{" "}
 						</div>
 					</div>
 					<div className={rowClass}>
 						<div className={statClass}>
-							Average accuracy:
-							<br />
+							<p>Average accuracy:</p>
 							{Number(userStats.average_accuracy * 100).toFixed(1)}%
 						</div>
 						<div className={statClass}>
-							Max accuracy:
-							<br />
+							<p>Max accuracy:</p>
 							{Number(userStats.max_accuracy * 100).toFixed(1)}%
 						</div>
 					</div>
