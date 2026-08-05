@@ -29,6 +29,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
 	completedWord: (word: string) => void;
+	wrongCharacter: () => void;
 	joinRoom: (
 		roomId: string,
 		asSpectator: boolean,
