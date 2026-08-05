@@ -1,10 +1,10 @@
 import MyStats from "./MyStats";
 import PlayerList from "./PlayerList";
-import getGameHistory from "./getGameHistory";
+import type { jsonGameHistory } from "./getGameHistory";
 
-export default function GameHistory() {
-	const gameHistory = getGameHistory();
-
+export default function GameHistory({
+	gameHistory,
+}: { gameHistory: jsonGameHistory | null }) {
 	if (gameHistory === null) {
 		return <></>;
 	}
@@ -16,8 +16,8 @@ export default function GameHistory() {
 	for (let index = gameHistory.gameResults.length - 1; index >= 0; index -= 1) {
 		gameHistoryList.push(
 			<div className="grid grid-cols-2 bg-blue-600 m-3 rounded-md">
-				<MyStats gameHistory={gameHistory} index={index} />
-				<PlayerList gameHistory={gameHistory} index={index} />
+				<MyStats gameResults={gameHistory.gameResults[index]} />
+				<PlayerList gameSession={gameHistory.gameResults[index].session} />
 			</div>,
 		);
 	}

@@ -1,9 +1,8 @@
-import type { jsonGameHistory } from "./getGameHistory";
+import type { jsonGameHistory, jsonSession } from "./getGameHistory";
 
 export default function PlayerList({
-	gameHistory,
-	index,
-}: { gameHistory: jsonGameHistory; index: number }) {
+	gameSession,
+}: { gameSession: jsonSession }) {
 	const playerListClass = "overflow-y-auto max-h-40 pl-2";
 	const playerClass =
 		"m-2 p-2 bg-red-300 grid grid-cols-2 outline-solid rounded-md";
@@ -11,24 +10,18 @@ export default function PlayerList({
 
 	const playerLists = [];
 
-	for (
-		let jndex = 0;
-		jndex < gameHistory.gameResults[index].session.results.length;
-		jndex += 1
-	) {
+	for (let index = 0; index < gameSession.results.length; index += 1) {
 		playerLists.push(
 			<div className={playerClass}>
 				<div>
-					{gameHistory.gameResults[index].session.results[jndex].placement}
+					{gameSession.results[index].placement}
 					{". "}
-					{
-						gameHistory.gameResults[index].session.results[jndex].displayName
-					}{" "}
+					{gameSession.results[index].displayName}{" "}
 				</div>
 				<div className={playerTimeClass}>
-					{gameHistory.gameResults[index].session.results[jndex].timeMs === -1
+					{gameSession.results[index].timeMs === -1
 						? "DNF"
-						: `${(gameHistory.gameResults[index].session.results[jndex].timeMs / 1000).toFixed(2)} sec`}
+						: `${(gameSession.results[index].timeMs / 1000).toFixed(2)} sec`}
 				</div>
 			</div>,
 		);

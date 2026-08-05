@@ -1,9 +1,8 @@
-import type { jsonGameHistory } from "./getGameHistory";
+import type { jsonGameResults } from "./getGameHistory";
 
 export default function MyStats({
-	gameHistory,
-	index,
-}: { gameHistory: jsonGameHistory; index: number }) {
+	gameResults,
+}: { gameResults: jsonGameResults }) {
 	const myStatsClass = "grid grid-cols-2 py-1 pr-2 content-center";
 	const childMyStatsClass =
 		"bg-red-300 m-1 p-2 outline-solid rounded-md text-center";
@@ -11,26 +10,24 @@ export default function MyStats({
 	return (
 		<div className={myStatsClass}>
 			<div className={childMyStatsClass}>
-				Placement: {gameHistory.gameResults[index].placement}
+				Placement: {gameResults.placement}
 			</div>
 			<div className={childMyStatsClass}>
 				Time:
-				{gameHistory.gameResults[index].timeMs === -1
+				{gameResults.timeMs === -1
 					? " DNF"
-					: ` ${(gameHistory.gameResults[index].timeMs / 1000).toFixed(2)} sec`}
+					: ` ${(gameResults.timeMs / 1000).toFixed(2)} sec`}
 			</div>
 			<div className={childMyStatsClass}>
-				Words per minute: {gameHistory.gameResults[index].wpm}
+				Words per minute: {gameResults.wpm}
 			</div>
 			<div className={childMyStatsClass}>
-				Characters per minute: {gameHistory.gameResults[index].cpm}
+				Characters per minute: {gameResults.cpm}
 			</div>
 			<div className="col-span-2">
 				<div className={childMyStatsClass}>
 					Date:{" "}
-					{new Date(
-						gameHistory.gameResults[index].session.finishedAt,
-					).toLocaleString("en-NL")}
+					{new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
 				</div>
 			</div>
 		</div>
