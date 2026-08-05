@@ -19,6 +19,13 @@ export const calculateUnitsPM = (
 	return minutes ? units / minutes : 0;
 };
 
+export const calculateAccuracy = (
+	totalChars: number,
+	mistypedChars: number,
+) => {
+	return totalChars / (totalChars + mistypedChars);
+};
+
 const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 	const promptWordCount = roomData.wordCount;
 	const startedAt = roomData.startedAt;
@@ -44,7 +51,9 @@ const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 				score: 0,
 				wpm: calculateUnitsPM(promptWordCount, minutes),
 				cpm: calculateUnitsPM(promptCharCount, minutes),
-				accuracy: 0,
+				accuracy: player.finishedAt
+					? calculateAccuracy(promptCharCount, player.invalidCharsTyped)
+					: 0,
 				timeMs: timeMs ?? -1,
 				placement: index + 1,
 				finished: timeMs !== undefined,
