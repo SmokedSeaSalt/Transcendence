@@ -39,4 +39,3 @@ export function registerGameHandlers(io: Server, socket: Socket) {
 		io.to(socket.data.roomId).emit("roomState", room);
 	});
 }
-

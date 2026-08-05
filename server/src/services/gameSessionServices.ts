@@ -24,7 +24,7 @@ export const calculateAccuracy = (
 	mistypedChars: number,
 ) => {
 	return totalChars / (totalChars + mistypedChars);
-}
+};
 
 const getGameResults = (roomData: RoomData, promptCharCount: number) => {
 	const promptWordCount = roomData.wordCount;
