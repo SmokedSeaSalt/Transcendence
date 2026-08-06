@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as userController from "../../controllers/web/userControllers.js";
 import { checkCookieStatus } from "../../middleware/cookieAuthentication.js";
+import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 import { webRegistry } from "../../swagger/webRegistry.js";
 import {
 	createUserValidation,
@@ -12,7 +13,6 @@ import {
 	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
-import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 
 const router = Router();
 
@@ -60,8 +60,18 @@ webRegistry.registerPath({
 		},
 	},
 });
-router.post("/register", normalizeEmail, createUserValidation(), userController.createUser);
-router.post("/login", normalizeEmail, loginUserValidation(), userController.loginUser);
+router.post(
+	"/register",
+	normalizeEmail,
+	createUserValidation(),
+	userController.createUser,
+);
+router.post(
+	"/login",
+	normalizeEmail,
+	loginUserValidation(),
+	userController.loginUser,
+);
 router.get("/logout", userController.logoutUser);
 router.get("/update-apikey", userController.updateApiKey);
 

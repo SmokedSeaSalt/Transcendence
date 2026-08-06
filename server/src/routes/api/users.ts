@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as userController from "../../controllers/api/userControllers.js";
 import { isValidIdFormat } from "../../middleware/apiAuthentication.js";
+import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 import { apiRegistry } from "../../swagger/apiRegistry.js";
 import { createUserValidation } from "../../validators/userValidators.js";
 import {
@@ -9,7 +10,6 @@ import {
 	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
-import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 
 const router = Router();
 
@@ -68,7 +68,12 @@ apiRegistry.registerPath({
 		},
 	},
 });
-router.post("/register", normalizeEmail, createUserValidation(), userController.createUser);
+router.post(
+	"/register",
+	normalizeEmail,
+	createUserValidation(),
+	userController.createUser,
+);
 
 apiRegistry.registerPath({
 	method: "get",

@@ -217,9 +217,7 @@ describe("email normalization", () => {
 	const password = "ValidPassword123!";
 	const unhashedApiKey = "thisisanewkey";
 
-	const emailWithUpper = "Test@example.com"
-
-
+	const emailWithUpper = "Test@example.com";
 
 	// create regular user
 	beforeAll(async () => {
@@ -249,13 +247,14 @@ describe("email normalization", () => {
 	});
 
 	it("Can login with correct email and different case", async () => {
-		const response = await request(app).post("/web/users/login").send({ email: emailWithUpper, password: password });
-		
+		const response = await request(app)
+			.post("/web/users/login")
+			.send({ email: emailWithUpper, password: password });
+
 		expect(response.status).toBe(200);
 	});
 
 	it("Cannot register with same email but different case API", async () => {
-
 		const response = await postRegister(
 			"/api/users/register",
 			{ email: emailWithUpper, name: name, password: password },
@@ -265,7 +264,6 @@ describe("email normalization", () => {
 	});
 
 	it("Cannot register with same email but different case API", async () => {
-
 		const response = await postRegister(
 			"/api/users/register",
 			{ email: emailWithUpper, name: name, password: password },
@@ -275,7 +273,6 @@ describe("email normalization", () => {
 	});
 
 	it("Can register wiht capital letters in api register and then login with lowercase", async () => {
-
 		const response1 = await postRegister(
 			"/api/users/register",
 			{ email: "HelloWorld@gmail.com", name: name, password: password },
@@ -283,7 +280,9 @@ describe("email normalization", () => {
 		);
 		expect(response1.status).toBe(201);
 
-		const response2 = await request(app).post("/web/users/login").send({ email: "helloworld@gmail.com", password: password });
+		const response2 = await request(app)
+			.post("/web/users/login")
+			.send({ email: "helloworld@gmail.com", password: password });
 		expect(response2.status).toBe(200);
 	});
 
@@ -291,6 +290,5 @@ describe("email normalization", () => {
 		await deleteUser(email);
 		await deleteUser("email");
 		await deleteUser("helloworld@gmail.com");
-
 	});
 });
