@@ -1,6 +1,5 @@
 import { Router } from "express";
 import * as userController from "../../controllers/web/userControllers.js";
-import { checkCookieStatus } from "../../middleware/cookieAuthentication.js";
 import { webRegistry } from "../../swagger/webRegistry.js";
 import {
 	createUserValidation,

@@ -1,9 +1,8 @@
 import request from "supertest";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
 import {
-	createUserWithRoleAndApiKey,
 	deleteUser,
 } from "../helpers/dbHelpers.js";
 

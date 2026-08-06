@@ -1,4 +1,4 @@
-import type { jsonGameHistory, jsonSession } from "./getGameHistory";
+import type { jsonSession } from "./getGameHistory";
 
 export default function PlayerList({
 	gameSession,

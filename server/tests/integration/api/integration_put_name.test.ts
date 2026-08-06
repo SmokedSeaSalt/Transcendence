@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import request from "supertest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../../../src/app.js";
@@ -6,7 +5,6 @@ import {
 	createUserWithRoleAndApiKey,
 	deleteUser,
 	getUserByEmail,
-	userExists,
 } from "../../helpers/dbHelpers.js";
 
 describe("PUT /api/me to update name", () => {

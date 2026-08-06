@@ -1,6 +1,5 @@
 import type React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LoginButton from "../../components/Button";
 import Input from "../../components/Input";
 import { loginSchema } from "./schemas";

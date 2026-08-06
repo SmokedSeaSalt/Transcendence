@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { NotFoundError, UnauthorizedError } from "../errors/errorTypes.js";
+import { UnauthorizedError } from "../errors/errorTypes.js";
 import {
 	getUserSession,
 	invalidateSession,

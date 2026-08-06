@@ -1,21 +1,12 @@
-import request from "supertest";
 import {
 	afterAll,
 	afterEach,
-	beforeAll,
 	beforeEach,
 	describe,
 	expect,
 	it,
 } from "vitest";
-import { app } from "../../src/app.js";
-import {
-	deleteSession,
-	deleteUser,
-	shortenExpiration,
-} from "../helpers/dbHelpers.js";
 
-import { DatabaseSync } from "node:sqlite";
 import { RoomState } from "../../src/config/socket.js";
 import { type RoomData, roomStore } from "../../src/services/roomStore.js";
 

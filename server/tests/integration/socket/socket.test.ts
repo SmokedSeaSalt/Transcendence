@@ -3,14 +3,12 @@ import { Server } from "socket.io";
 import { io as Client, type Socket } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { io } from "../../../src/app";
 import {
 	type ClientToServerEvents,
 	RoomState,
 	type ServerToClientEvents,
 } from "../../../src/config/socket";
 import { roomStore } from "../../../src/services/roomStore";
-import { RoomData } from "../../../src/services/roomStore";
 import { registerSocketHandlers } from "../../../src/socket/";
 
 function joinRoom(client: Socket, roomId: string): Promise<void> {
