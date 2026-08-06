@@ -28,7 +28,7 @@ export default function MyStats({
 				Date: {new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
 			</div>
 			<div className={childMyStatsClass}>
-				Accuracy: {Number(gameResults.accuracy * 100).toFixed(1)}
+				Accuracy: {Number(gameResults.accuracy * 100).toFixed(1)}%
 			</div>
 		</div>
 	);
