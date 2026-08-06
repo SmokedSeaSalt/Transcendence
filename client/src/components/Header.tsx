@@ -12,7 +12,13 @@ export default function Header() {
 				<div className="left-30">
 					<Link to="/">
 						<div className="bg-surface outline-2 rounded-md p-2">
-							<img className="hue-rotate-160" src={logo} alt="typeracer logo" width="120" height="120" />
+							<img
+								className="hue-rotate-160"
+								src={logo}
+								alt="typeracer logo"
+								width="120"
+								height="120"
+							/>
 						</div>
 					</Link>
 				</div>
