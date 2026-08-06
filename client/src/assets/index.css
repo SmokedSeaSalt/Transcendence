@@ -18,7 +18,7 @@ a:not(.unstyled-link) {
 }
 
 a:not(.unstyled-link):visited {
-	color: #480e9a;
+	color: var(--color-highlight-colored);
 }
 
 a:not(.unstyled-link):hover,
