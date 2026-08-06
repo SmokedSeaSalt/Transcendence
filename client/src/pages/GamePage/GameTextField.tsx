@@ -12,7 +12,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	if (props.prompt === undefined)
 		return (
 			<div className="text-center text-xl">
-				Waiting for the game to start...
+				Waiting for the room leader to start the game!
 			</div>
 		);
 	const prompt = props.prompt.join(" ");
