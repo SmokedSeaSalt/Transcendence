@@ -2,16 +2,23 @@ import { Link } from "react-router-dom";
 import logo from "../assets/bike.svg";
 import { useAuthContext } from "./AuthContext";
 import Button from "./Button";
+import type * as CSS from "csstype";
 
 export default function Header() {
 	const { currentUser } = useAuthContext();
+
+	const checkerStyle: CSS.Properties = 
+	{
+		background: "repeating-conic-gradient(white 0 25%, black 0 50%) 0% / 50px 50px",
+	}
 
 	return (
 		<header className="bg-header border-b border-highlight-colored mt-0">
 			<div className="px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-highlight-colored">
 				<div className="left-30">
 					<Link to="/">
-						<div className="bg-surface outline-2 rounded-md p-2">
+						{/* <div className="bg-surface bg-[radial-gradient(closest-side,theme(colors.rose.100),theme(colors.pink.400),theme(colors.purple.500))] outline-2 rounded-md p-2"> */}
+						<div style={checkerStyle} className="bg-surface outline-2 rounded-md p-2">
 							<img
 								className="hue-rotate-160"
 								src={logo}
