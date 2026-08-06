@@ -4,10 +4,11 @@ import { prisma } from "../db.js";
 export async function createAdminUser() {
 	const email = process.env.ADMIN_EMAIL;
 	const password = process.env.ADMIN_PASSWORD;
+	const name = process.env.ADMIN_NAME;
 
-	if (!email || !password) {
+	if (!email || !password || !name) {
 		console.log(
-			"ADMIN_EMAIL and ADMIN_PASSWORD not set in .env file. Continuing without creating admin user.",
+			"ADMIN_EMAIL, ADMIN_PASSWORD or ADMIN_NAME not set in .env file. Continuing without creating admin user.",
 		);
 		return;
 	}
@@ -21,7 +22,7 @@ export async function createAdminUser() {
 		const user = await prisma.user.create({
 			data: {
 				email: email,
-				name: "I am very important",
+				name: name,
 				hashedPassword: hashedPassword,
 				role: "admin",
 			},
