@@ -60,7 +60,7 @@ export const loginUser = async (
 
 		const response = toPublicUser(user);
 
-		res.status(201).json(response);
+		res.status(200).json(response);
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
@@ -89,7 +89,7 @@ export const logoutUser = async (
 			sameSite: "strict",
 			secure: true,
 		});
-		res.status(201).json({ message: "logged out" });
+		res.status(200).json({ message: "logged out" });
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			next(error);
