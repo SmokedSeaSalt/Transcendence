@@ -32,14 +32,14 @@ a:not(.unstyled-link):active {
   --color-background-secondary: var(--color-slate-900);
   --color-surface: var(--color-slate-800);
 
-  
+
   --color-text: var(--color-stone-100);
   --color-text-secondary: var(--color-stone-400);
   --color-text-colored: var(--color-orange-600);
   --color-hyperlink: var(--color-blue-600);
   --color-hyperlink-hover: var(--color-blue-400);
   --color-hyperlink-visited: var(--color-violet-600);
-  
+
   --color-highlight-white: var(--color-stone-400);
   --color-highlight-colored: var(--color-orange-600);
   --color-button-main: var(--color-orange-600);
@@ -80,7 +80,7 @@ a:not(.unstyled-link):active {
   }
 }
 
-.recharts-wrapper:focus,
-.recharts-surface:focus {
+.recharts-wrapper *:focus,
+.recharts-surface *:focus {
 	outline: none;
 }
