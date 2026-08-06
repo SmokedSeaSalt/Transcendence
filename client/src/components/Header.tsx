@@ -11,8 +11,8 @@ export default function Header() {
 			<div className="px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-highlight-colored">
 				<div className="left-30">
 					<Link to="/">
-						<div className="bg-background-secondary outline-2 rounded-md p-2">
-							<img src={logo} alt="typeracer logo" width="120" height="120" />
+						<div className="bg-surface outline-2 rounded-md p-2">
+							<img className="hue-rotate-160" src={logo} alt="typeracer logo" width="120" height="120" />
 						</div>
 					</Link>
 				</div>
