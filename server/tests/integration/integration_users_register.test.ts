@@ -210,3 +210,43 @@ describe("POST /api/users/register with user API key", () => {
 		await deleteUser(email);
 	});
 });
+
+describe("email normalization", () => {
+	const email = "test@example.com";
+	const name = "Test User";
+	const password = "ValidPassword123!";
+	const unhashedApiKey = "key";
+
+	const emailWithUpper = "Test@example.com"
+
+
+
+	// create regular user
+	beforeAll(async () => {
+		const res1 = await postRegister(
+			"/web/users/register",
+			{ email: email, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(res1.status).toBe(201);
+	});
+
+	it("Cannot register with same email but different case", async () => {
+		const res2 = await postRegister(
+			"/web/users/register",
+			{ email: emailWithUpper, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(res2.status).toBe(409);
+	});
+
+	it("Can login with correct email and different case", async () => {
+		const response = await request(app).post("/web/users/login").send({ email: emailWithUpper, password: password });
+		
+		expect(response.status).toBe(200);
+	});
+
+	afterAll(async () => {
+		await deleteUser(email);
+	});
+});
