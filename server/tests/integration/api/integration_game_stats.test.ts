@@ -13,7 +13,6 @@ describe("get /api/me/stats", async () => {
 	const name = "Test User";
 	const unhashedPassword = "ValidPassword123!";
 	const unhashedApiKey = "Api";
-	let currentCookie: string;
 
 	beforeAll(async () => {
 		await createUserWithRoleAndApiKey(

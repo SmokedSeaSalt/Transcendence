@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { afterEach, expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 import GameHistory from "../../src/pages/Profile/GameHistory";
-import getGameHistory from "../../src/pages/Profile/getGameHistory";
 import type { jsonGameHistory } from "../../src/pages/Profile/getGameHistory";
 
 function makeGameHistory(count: number): jsonGameHistory {

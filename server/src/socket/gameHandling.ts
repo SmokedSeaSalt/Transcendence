@@ -1,11 +1,9 @@
 import type { Server, Socket } from "socket.io";
-import { RoomState } from "../config/socket.js";
 import {
 	finishAndSaveGameIfDone,
 	validateIncomingWord,
 } from "../services/gameService.js";
 import { roomStore } from "../services/roomStore.js";
-import { endGame } from "./gameLifecycle.js";
 
 export function registerGameHandlers(io: Server, socket: Socket) {
 	socket.on("completedWord", async (typedWord: string) => {

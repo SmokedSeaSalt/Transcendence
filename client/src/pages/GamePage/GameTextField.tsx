@@ -1,4 +1,3 @@
-import type * as CSS from "csstype";
 import { useEffect, useState } from "react";
 import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";

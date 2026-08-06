@@ -1,10 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { redirect } from "react-router-dom";
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { expect, test, vi } from "vitest";
 import UserStats from "../../src/pages/Profile/UserStats";
-import { getUserStats } from "../../src/pages/Profile/getUserStats";
 
 type VitestMock = ReturnType<typeof vi.fn>;
 

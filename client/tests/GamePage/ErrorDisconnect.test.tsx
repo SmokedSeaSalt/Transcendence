@@ -2,18 +2,9 @@
 // this page should be visible when a disconnect is not immediately followed by a connect
 
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { afterEach, expect, test, vi } from "vitest";
+import { expect, test } from "vitest";
 import ErrorBox from "../../src/pages/GamePage/ErrorBox";
 import { SocketProvider } from "../../src/pages/GamePage/SocketContext";
-import GamePage from "../../src/pages/GamePage/index";
-// import { io as Client, type Socket } from "socket.io-client";
-// import { type Server as HttpServer, createServer } from "node:http";
-// import { beforeEach } from "node:test";
-// import { ServerToClientEvents } from "../../src/pages/GamePage/SocketTypes";
-// import { ClientToServerEvents } from "../../src/pages/GamePage/SocketTypes";
-// // import { registerSocketHandlers } from "../../../server/src/socket";
-// // import { Server } from "socket.io";
 
 test("force disconnect should give error page", async () => {
 	// let httpServer: HttpServer;
