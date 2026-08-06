@@ -34,26 +34,19 @@ export default function ProfilePage() {
 	}
 
 	return (
-		<main
-			style={{
-				//display: "flex",
-				maxWidth: "100%",
-				//margin: "2rem auto",
-				//boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-			}}
-		>
+		<main className="max-w-full">
 			<NameBar />
-			<div
-				style={{
-					display: "flex",
-					maxWidth: 960,
-					margin: "2rem auto",
-					boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-				}}
-			>
-				<UserStats />
-				<UserProgressionGraph gameHistory={gameHistory} />
+
+			<div className="flex flex-col md:flex-row mx-auto my-8 justify-center items-center mx-auto">
+				<div className="w-full md:w-2/5">
+					<UserStats />
+				</div>
+
+				<div className="w-full md:w-3/5 flex justify-center">
+					<UserProgressionGraph gameHistory={gameHistory} />
+				</div>
 			</div>
+
 			<GameHistory gameHistory={gameHistory} />
 		</main>
 	);

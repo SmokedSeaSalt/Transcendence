@@ -6,14 +6,19 @@ export default function NameBar() {
 	const { currentUser } = useAuthContext();
 
 	return (
-		<section style={{ display: "flex", alignItems: "center" }}>
-			<div style={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
+		<section className="flex items-center">
+			<div className="flex-1 flex justify-start">
 				<ApiKeyButton />
 			</div>
-			<h1 style={{ padding: "1em" }} id="profile-title">
+
+			<h1
+				className="p-4 text-highlight-colored text-3xl font-bold"
+				id="profile-title"
+			>
 				{currentUser === null ? "Your" : currentUser.name}'s Profile
 			</h1>
-			<div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+
+			<div className="flex-1 flex justify-end">
 				<LogoutButton />
 			</div>
 		</section>

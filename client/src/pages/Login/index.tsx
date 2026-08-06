@@ -32,25 +32,11 @@ export default function LoginPage() {
 
 	return (
 		<main>
-			<div
-				style={{
-					display: "flex",
-					maxWidth: 960,
-					margin: "2rem auto",
-					boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-				}}
-			>
+			<div className="flex max-w-[960px] mx-auto my-8">
 				<RegistrationForm />
 				<LoginForm />
 			</div>
-			<div
-				style={{
-					display: "flex",
-					maxWidth: 960,
-					margin: "2rem auto",
-					boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-				}}
-			>
+			<div className="flex max-w-[960px] mx-auto my-8">
 				<DisplayNameForm />
 			</div>
 		</main>

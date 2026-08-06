@@ -11,12 +11,12 @@ export default function UserProgressionGraph({
 	const data = gameHistoryList.map((gameResult, index) => ({
 		index,
 		wpm: gameResult.wpm,
-		cpm: gameResult.cpm,
+		accuracy: Number(Number(gameResult.accuracy * 100).toFixed(1)),
 	}));
 
 	return (
 		<>
-			<div className="p-2 m-3 w-20/100">
+			<div className="p-2 m-3 w-full">
 				<ArrayGraph data={data} />
 			</div>
 		</>

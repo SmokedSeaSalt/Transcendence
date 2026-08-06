@@ -5,7 +5,7 @@ export default function MyStats({
 }: { gameResults: jsonGameResults }) {
 	const myStatsClass = "grid grid-cols-2 py-1 pr-2 content-center";
 	const childMyStatsClass =
-		"bg-red-300 m-1 p-2 outline-solid rounded-md text-center";
+		"bg-surface m-1 p-2 rounded-md text-center text-text";
 
 	return (
 		<div className={myStatsClass}>
@@ -24,11 +24,11 @@ export default function MyStats({
 			<div className={childMyStatsClass}>
 				Characters per minute: {gameResults.cpm}
 			</div>
-			<div className="col-span-2">
-				<div className={childMyStatsClass}>
-					Date:{" "}
-					{new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
-				</div>
+			<div className={childMyStatsClass}>
+				Date: {new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
+			</div>
+			<div className={childMyStatsClass}>
+				Accuracy: {Number(gameResults.accuracy * 100).toFixed(1)}%
 			</div>
 		</div>
 	);

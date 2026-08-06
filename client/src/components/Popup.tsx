@@ -23,7 +23,7 @@ export default function Popup({ open, onClose, children }: PopupProps) {
 			/>
 
 			{/* Panel */}
-			<div className="relative w-full max-w-lg bg-neutral-900">
+			<div className="relative w-full rounded-md max-w-lg bg-background">
 				<div className="px-4 pt-5 pb-4 sm:p-6">{children}</div>
 
 				<div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">

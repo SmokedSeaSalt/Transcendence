@@ -9,13 +9,13 @@ export default function GameHistory({
 		return <></>;
 	}
 
-	const gameHistoryClass = " bg-blue-800 text-lg py-1";
+	const gameHistoryClass = " bg-background text-lg py-1";
 
 	const gameHistoryList = [];
 
 	for (let index = gameHistory.gameResults.length - 1; index >= 0; index -= 1) {
 		gameHistoryList.push(
-			<div className="grid grid-cols-2 bg-blue-600 m-3 rounded-md">
+			<div className="grid grid-cols-1 md:grid-cols-2 bg-background-secondary outline m-3 rounded-md">
 				<MyStats gameResults={gameHistory.gameResults[index]} />
 				<PlayerList gameSession={gameHistory.gameResults[index].session} />
 			</div>,
@@ -23,8 +23,11 @@ export default function GameHistory({
 	}
 
 	return (
-		<section>
-			<div className={gameHistoryClass}>{gameHistoryList}</div>
-		</section>
+		<div className="text-2xl font-bold text-highlight-colored">
+			<h1 className="pl-3">Game History</h1>
+			<section>
+				<div className={gameHistoryClass}>{gameHistoryList}</div>
+			</section>
+		</div>
 	);
 }

@@ -1,17 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function TermsOfService() {
 	return (
 		<main
 			aria-labelledby="tos-heading"
-			style={{ padding: "1rem", maxWidth: 800, margin: "0 auto" }}
+			className="text-text bg-background width-800 p-4 max-w-[800px] mx-auto"
 		>
-			<h1 id="tos-heading">Terms of Service</h1>
+			<h1
+				className="text-text-colored font-bold text-4xl mb-1"
+				id="tos-heading"
+			>
+				Terms of Service
+			</h1>
 
 			<p>Last updated: 2026-07-08</p>
 
 			<section aria-labelledby="intro">
-				<h2 id="intro">Introduction</h2>
+				<h2 className="text-text-colored font-bold text-2xl mb-1" id="intro">
+					Introduction
+				</h2>
 				<p>
 					Welcome to Transcendence Typeracer. These Terms of Service ("Terms")
 					govern your access to and use of our multiplayer typing game and
@@ -21,7 +29,9 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="accounts">
-				<h2 id="accounts">Accounts & Authentication</h2>
+				<h2 className="text-text-colored font-bold text-2xl mb-1" id="accounts">
+					Accounts & Authentication
+				</h2>
 				<p>
 					You must register an account to use certain features (profile and game
 					history). Keep your credentials secure. You are responsible for
@@ -30,7 +40,12 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="user-conduct">
-				<h2 id="user-conduct">User Conduct</h2>
+				<h2
+					className="text-text-colored font-bold text-2xl mb-1"
+					id="user-conduct"
+				>
+					User Conduct
+				</h2>
 				<ul>
 					<li>Use the Service lawfully and respectfully.</li>
 					<li>
@@ -44,7 +59,12 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="multiplayer">
-				<h2 id="multiplayer">Multiplayer & Matches</h2>
+				<h2
+					className="text-text-colored font-bold text-2xl mb-1"
+					id="multiplayer"
+				>
+					Multiplayer & Matches
+				</h2>
 				<p>
 					Matches are live and may be moderated. The operator may remove or
 					disqualify players who violate these Terms or behave abusively.
@@ -54,7 +74,9 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="content">
-				<h2 id="content">Content & Intellectual Property</h2>
+				<h2 className="text-text-colored font-bold text-2xl mb-1" id="content">
+					Content & Intellectual Property
+				</h2>
 				<p>
 					You retain ownership of any content you submit (profiles), but by
 					submitting you grant us a license to host and display it within the
@@ -64,19 +86,29 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="privacy">
-				<h2 id="privacy">Privacy</h2>
+				<h2 className="text-text-colored font-bold text-2xl mb-1" id="privacy">
+					Privacy
+				</h2>
 				<p>
-					We collect account and gameplay data needed to run the Service. See
-					our See our{" "}
-					<a color="blue" href="/privacy-policy">
-						Privacy Policy
-					</a>{" "}
-					for details on what is collected, how it is used, and your rights.
+					<span>
+						We collect account and gameplay data needed to run the Service. See
+						our See our{" "}
+					</span>
+					<Link to="/privacy-policy">Privacy Policy</Link>
+					<span>
+						{" "}
+						for details on what is collected, how it is used, and your rights.
+					</span>
 				</p>
 			</section>
 
 			<section aria-labelledby="disclaimer">
-				<h2 id="disclaimer">Disclaimer & Liability</h2>
+				<h2
+					className="text-text-colored font-bold text-2xl mb-1"
+					id="disclaimer"
+				>
+					Disclaimer & Liability
+				</h2>
 				<p>
 					The Service is provided "as is." We do not guarantee uninterrupted or
 					error-free operation. To the maximum extent permitted by law, the
@@ -86,20 +118,26 @@ export default function TermsOfService() {
 			</section>
 
 			<section aria-labelledby="termination">
-				<h2 id="termination">Termination</h2>
+				<h2
+					className="text-text-colored font-bold text-2xl mb-1"
+					id="termination"
+				>
+					Termination
+				</h2>
 				<p>
-					We may suspend or terminate access for violations of these Terms or
-					for operational reasons. You may delete your account according to the
-					instructions in the{" "}
-					<a color="blue" href="/privacy-policy">
-						Privacy Policy
-					</a>
-					.
+					<span>
+						We may suspend or terminate access for violations of these Terms or
+						for operational reasons. You may delete your account according to
+						the instructions in the{" "}
+					</span>
+					<Link to="/privacy-policy">Privacy Policy</Link>.
 				</p>
 			</section>
 
 			<section aria-labelledby="changes">
-				<h2 id="changes">Changes to Terms</h2>
+				<h2 className="text-text-colored font-bold text-2xl mb-1" id="changes">
+					Changes to Terms
+				</h2>
 				<p>
 					We may update these Terms. Significant changes will be posted with a
 					new "Last updated" date. Continued use after changes constitutes
