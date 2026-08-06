@@ -36,7 +36,7 @@ export default function GamePage() {
 			{message ? <p>Socket id: {message}</p> : null}
 			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
-				<div>The game has finished. Please wait to go to the next lobby.</div>
+				<div className="flex pt-4 justify-center">The game has finished. Please wait to be moved to the next lobby.</div>
 			) : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
