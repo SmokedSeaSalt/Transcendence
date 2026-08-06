@@ -1,21 +1,5 @@
-import request from "supertest";
-import {
-	afterAll,
-	afterEach,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-} from "vitest";
-import { app } from "../../src/app.js";
-import {
-	deleteSession,
-	deleteUser,
-	shortenExpiration,
-} from "../helpers/dbHelpers.js";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { DatabaseSync } from "node:sqlite";
 import { RoomState } from "../../src/config/socket.js";
 import { type RoomData, roomStore } from "../../src/services/roomStore.js";
 
@@ -41,6 +25,7 @@ describe("Room create(), get(), delete", () => {
 		expect(roomDataFromCreate.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},
@@ -55,6 +40,7 @@ describe("Room create(), get(), delete", () => {
 		expect(roomDataFromGet?.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},
@@ -108,6 +94,7 @@ describe("Room addUser() and deleteUser()", () => {
 		expect(roomAfterAdd?.users).toEqual({
 			[socketId]: {
 				userId,
+				invalidCharsTyped: 0,
 				progress: 0,
 				displayName,
 			},

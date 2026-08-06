@@ -1,7 +1,6 @@
 import type * as CSS from "csstype";
 import type React from "react";
 import bikePic from "../../assets/bike.svg";
-import bongoCatPic from "../../assets/logo_temp_cat.png";
 import type { RoomUser } from "./SocketTypes";
 
 interface ProgressBarProps {

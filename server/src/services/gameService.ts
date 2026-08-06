@@ -1,9 +1,7 @@
 import type { Server } from "socket.io";
-import { io } from "../app.js";
-import { WORD_LIST, promtSize } from "../config/gameSettings.js";
+import { WORD_LIST, promptSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { endGame } from "../socket/gameLifecycle.js";
-import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
@@ -105,7 +103,10 @@ function isRoomDone(activePlayerSocketIds: Set<string>, room: RoomData) {
 	return true;
 }
 
-async function getActiveUserSocketIdsFromRoom(roomId: string, io: Server) {
+export async function getActiveUserSocketIdsFromRoom(
+	roomId: string,
+	io: Server,
+) {
 	const activeSockets = await io.in(roomId).fetchSockets();
 	const activePlayerSocketIds = new Set(
 		activeSockets
@@ -125,7 +126,7 @@ function getRandomWords(size: number): string[] {
 }
 
 export const createPrompt = (): string[] => {
-	const prompt = getRandomWords(promtSize);
+	const prompt = getRandomWords(promptSize);
 
 	return prompt;
 };

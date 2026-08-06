@@ -184,6 +184,7 @@ export async function getGameHistoryById(id: number) {
 									wpm: true,
 									cpm: true,
 									accuracy: true,
+									timeMs: true,
 									placement: true,
 									displayName: true,
 								},

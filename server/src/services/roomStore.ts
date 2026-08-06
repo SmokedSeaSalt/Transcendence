@@ -3,6 +3,7 @@ import { RoomState } from "../config/socket.js";
 export interface userInfo {
 	userId: number | undefined;
 	progress: number;
+	invalidCharsTyped: number;
 	displayName: string;
 	finishedAt?: Date;
 }
@@ -53,6 +54,7 @@ export const roomStore = {
 		room.users[socketId] = {
 			displayName: name,
 			progress: 0,
+			invalidCharsTyped: 0,
 			userId: userId,
 		};
 	},

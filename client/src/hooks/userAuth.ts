@@ -1,10 +1,9 @@
-// import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 
 export type jsonUser = {
 	name: string;
 	email: string;
-	createdAt: string; // todo: change to actual type
+	createdAt: string;
 };
 
 // hook to return either user object or null if user is not logged in
@@ -19,7 +18,6 @@ export const userAuth = () => {
 			if (!response.ok) setData(null);
 			else {
 				const jsonData = await response.json();
-				console.log("json data from /web/me: ", jsonData);
 				setData(jsonData);
 			}
 		} catch (error) {

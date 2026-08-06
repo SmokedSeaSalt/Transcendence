@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from "../../components/Button";
+import Input from "../../components/Input";
 import Popup from "../../components/Popup";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
@@ -7,6 +8,7 @@ import { useConnectToRoom } from "./useConnectToRoom";
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
 	const [roomId, setRoomId] = useState<string>("");
+	const [joinAsSpectator, setJoinAsSpectator] = useState<boolean>(false);
 	const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 	const { emitJoinRoom, loading, error } = useConnectToRoom();
 
@@ -27,7 +29,7 @@ export default function JoinRoomButton() {
 			setFieldErrors(errors);
 			return;
 		}
-		const { success, message } = await emitJoinRoom(roomId);
+		const { success, message } = await emitJoinRoom(roomId, joinAsSpectator);
 		if (loading) return;
 		if (!success) {
 			const errors: Record<string, string> = {};
@@ -49,27 +51,33 @@ export default function JoinRoomButton() {
 			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<form
-					onSubmit={submit}
-					style={{ display: "flex", flexDirection: "column", gap: 8 }}
-				>
-					<h3 className="text-gray-200">
+				<h3 className="text-text-colored font-bold text-xl">Join room</h3>
+				<form onSubmit={submit} className="flex flex-col gap-2">
+					<h3 className="text-text">
 						Warning: you will leave your current room!
 					</h3>
 					<div>
-						<input
+						<Input
 							autoFocus
 							value={roomId}
 							onChange={(e) => setRoomId(e.target.value)}
 							placeholder="Room ID"
-							className="bg-white w-100/100"
 						/>
 						{fieldErrors.roomId && (
-							<div role="alert" style={{ color: "red" }}>
+							<div role="alert" className="text-red-600">
 								{fieldErrors.roomId}
 							</div>
 						)}
 					</div>
+					<label className="flex items-center gap-2 text-text">
+						<input
+							type="checkbox"
+							checked={joinAsSpectator}
+							onChange={(e) => setJoinAsSpectator(e.target.checked)}
+							className=" h-5 w-5 appearance-none rounded border border-highlight-colored bg-background-secondary transition checked:bg-highlight-colored checked:border-highlight-colored focus:ring-highlight-colored"
+						/>
+						Join as spectator
+					</label>
 					<Button loading={loading}>Connect</Button>
 				</form>
 			</Popup>

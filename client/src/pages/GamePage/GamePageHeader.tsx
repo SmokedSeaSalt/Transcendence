@@ -5,7 +5,11 @@ import { RoomState } from "./SocketTypes";
 import { useLeaveRoom } from "./useLeaveRoom";
 import { useStartGame } from "./useStartGame";
 
-export default function GamePageHeader() {
+export default function GamePageHeader({
+	isSpectator,
+}: {
+	isSpectator: boolean;
+}) {
 	const { socket, roomState } = useSocket();
 	const { leaveRoom, loading, error } = useLeaveRoom();
 	// todo: change back to regular loading when separate files for buttons are made
@@ -26,6 +30,9 @@ export default function GamePageHeader() {
 	return (
 		<>
 			<div className="flex place-content-end m-1 space-x-2">
+				<div className="flex items-center place-content-end m-1 space-x-2 font-bold">
+					{isSpectator && <h3>You are spectating.</h3>}
+				</div>
 				<JoinRoomButton />
 				<div>
 					<Button type="button" onClick={handleLeaveClick}>

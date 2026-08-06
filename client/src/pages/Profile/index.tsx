@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../components/AuthContext";
+import GameHistory from "./GameHistory";
 import NameBar from "./NameBar";
+import UserProgressionGraph from "./UserProgressionGraph";
 import UserStats from "./UserStats";
+import getGameHistory from "./getGameHistory";
 
 export default function ProfilePage() {
+	const gameHistory = getGameHistory();
 	const { updateLoggedinUser, currentUser, loading } = useAuthContext();
 	const nav = useNavigate();
 
@@ -29,22 +33,21 @@ export default function ProfilePage() {
 		return null;
 	}
 
-	// todo: userStats should probably be part of a larger div with graph; maybe separate component?
-
 	return (
-		<main
-			style={{
-				//display: "flex",
-				maxWidth: "100%",
-				//margin: "2rem auto",
-				//boxShadow: "0 2px 8px rgba(222, 39, 39, 0.06)",
-			}}
-		>
+		<main className="max-w-full">
 			<NameBar />
-			<div>
-				<UserStats />
-				{/* graph goes here */}
+
+			<div className="flex flex-col md:flex-row mx-auto my-8 justify-center items-center mx-auto">
+				<div className="w-full md:w-2/5">
+					<UserStats />
+				</div>
+
+				<div className="w-full md:w-3/5 flex justify-center">
+					<UserProgressionGraph gameHistory={gameHistory} />
+				</div>
 			</div>
+
+			<GameHistory gameHistory={gameHistory} />
 		</main>
 	);
 }

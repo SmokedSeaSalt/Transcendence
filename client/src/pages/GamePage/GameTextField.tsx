@@ -1,17 +1,17 @@
-import type * as CSS from "csstype";
 import { useEffect, useState } from "react";
 import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";
 
 interface TextFieldProps {
 	prompt: string[] | undefined;
+	isSpectator: boolean;
 }
 
 const GameTextField: React.FC<TextFieldProps> = (props) => {
 	if (props.prompt === undefined)
 		return (
 			<div className="text-center text-xl">
-				Waiting for the game to start...
+				Waiting for the room leader to start the game!
 			</div>
 		);
 	const prompt = props.prompt.join(" ");
@@ -37,6 +37,16 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				setPromptUntyped(currentPrompt.substring(typed.length));
 				setPromptTypedWrong(currentPrompt.substring(i, typed.length));
 				setPromptTyped(currentPrompt.substring(0, i));
+				// error based on whether typedWrong got longer
+				// & that new character not matching the prompt at that position
+				if (
+					currentPrompt.substring(i, typed.length).length >
+						promptTypedWrong.length &&
+					currentPrompt.length >= typed.length &&
+					currentPrompt[typed.length - 1] !== typed[typed.length - 1]
+				) {
+					socket?.emit("wrongCharacter");
+				}
 				return;
 			}
 			if (typed[i] === " ") {
@@ -92,17 +102,15 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 
 	// make it clear whether the type box is in focus or not
 	let outerClassName =
-		"outline-double outline-orange-200 relative max-h-50/100";
+		"outline-double outline-orange-200 bg-background relative max-h-50/100 rounded-md";
 	if (isInputFocused) {
-		outerClassName = "outline-solid relative outline-orange-500 max-h-50/100 ";
+		outerClassName =
+			"outline-solid relative bg-background outline-highlight-colored rounded-md max-h-50/100 ";
 	}
 
 	// style for untyped text, with boxShadow used as caret
-	const untypedStyle: CSS.Properties = {
-		display: "inline",
-		boxShadow: "-3px 0px 0px 0px #000000",
-		color: "#393636",
-	};
+	const untypedClass =
+		"inline text-text shadow-[-3px_0px_0px_0px_var(--color-highlight-colored)]";
 
 	// timer for countdown
 	useEffect(() => {
@@ -120,17 +128,15 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				<div className="text-center text-xl">Game starting in {counter}...</div>
 			) : (
 				<div className={outerClassName}>
-					<div
-						style={{
-							fontSize: "20px",
-							fontFamily: "monospace",
-							boxSizing: "border-box",
-						}}
-					>
-						<span className="bg-green-500 inline">{promptComplete}</span>
-						<span className="bg-green-300 inline">{promptTyped}</span>
-						<span className="bg-red-300 inline">{promptTypedWrong}</span>
-						<span style={untypedStyle}>{promptUntyped}</span>
+					<div className="text-xl font-mono box-border ">
+						<span className="text-typebox-completed font-bold inline">
+							{promptComplete}
+						</span>
+						<span className="text-typebox-correct inline">{promptTyped}</span>
+						<span className="text-red-600 inline font-bold ">
+							{promptTypedWrong}
+						</span>
+						<span className={untypedClass}>{promptUntyped}</span>
 					</div>
 					<div className="absolute top-0 opacity-0 size-xl w-100/100 h-100/100">
 						<input
@@ -145,12 +151,17 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							onBlur={() => setIsInputFocused(false)}
 							maxLength={promptIncomplete.length}
 							autoComplete="off"
-							disabled={roomState?.state !== RoomState.IN_PROGRESS}
+							autoCapitalize="none"
+							spellCheck={false}
+							autoCorrect="off"
+							disabled={
+								roomState?.state !== RoomState.IN_PROGRESS || props.isSpectator
+							}
 						/>
 					</div>
 					{cheating ? (
-						<div className="absolute flex items-center justify-center top-0 h-100/100 w-100/100 bg-red-800 text-white">
-							<p style={{ fontSize: "3vh" }}>NO CHEATING</p>
+						<div className="absolute flex items-center justify-center font-9xl font-bold top-0 h-100/100 w-100/100 bg-red-800 text-white">
+							<p>NO CHEATING</p>
 						</div>
 					) : (
 						""

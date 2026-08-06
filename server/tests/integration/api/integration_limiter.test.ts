@@ -1,10 +1,7 @@
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "../../../src/app.js";
-import {
-	RATE_LIMIT_MAX_REQUESTS,
-	RATE_LIMIT_WINDOW_MS,
-} from "../../../src/config/rateLimit.js";
+import { RATE_LIMIT_MAX_REQUESTS } from "../../../src/config/rateLimit.js";
 import {
 	createUserWithRoleAndApiKey,
 	deleteUser,

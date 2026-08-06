@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import Button from "../../components/Button";
 import ErrorBox from "./ErrorBox";
 import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
@@ -9,6 +7,14 @@ import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
 import { RoomState, type RoomStatePayload } from "./SocketTypes";
 
+function isCurrentUserSpectator(
+	roomState: RoomStatePayload | undefined,
+	socketId: string | undefined,
+) {
+	if (!roomState || !socketId) return false;
+	return !(socketId in roomState.users);
+}
+
 export default function GamePage() {
 	const [message, setMessage] = useState("");
 	const { socket, roomState, errorStatus } = useSocket();
@@ -16,23 +22,28 @@ export default function GamePage() {
 	if (errorStatus) {
 		return <ErrorBox />;
 	}
+	if (!roomState) {
+		return <ErrorBox />;
+	}
+
+	const isSpectator = isCurrentUserSpectator(roomState, socket?.id);
 
 	return (
-		<main
-			style={{ padding: "2rem", paddingTop: "1em", fontFamily: "sans-serif" }}
-		>
-			<GamePageHeader />
+		<main className="p-8 pt-4 font-sans">
+			<GamePageHeader isSpectator={isSpectator} />
 			{message ? <p>Socket id: {message}</p> : null}
 			<FinishedGamePopup />
 			{roomState?.state === RoomState.FINISHED ? (
-				<div>The game has finished. Room will be rejoined</div>
+				<div className="flex pt-4 justify-center">
+					The game has finished. Please wait to be moved to the next lobby.
+				</div>
 			) : null}
 			<div className="max-h-100/100">
 				<div className="p-3 my-3">
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
 				<div className="p-3 my-3">
-					<GameTextField prompt={roomState?.prompt} />
+					<GameTextField isSpectator={isSpectator} prompt={roomState?.prompt} />
 				</div>
 			</div>
 		</main>

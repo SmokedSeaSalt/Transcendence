@@ -15,7 +15,8 @@ const router = Router();
 apiRegistry.registerPath({
 	method: "post",
 	path: "/api/users/register",
-	tags: ["Api"],
+	tags: ["Admin Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {
 		body: {
@@ -71,7 +72,8 @@ router.post("/register", createUserValidation(), userController.createUser);
 apiRegistry.registerPath({
 	method: "get",
 	path: "/api/users",
-	tags: ["Api"],
+	tags: ["Admin Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 	responses: {
@@ -92,7 +94,8 @@ router.get("/", userController.getAllUsers);
 apiRegistry.registerPath({
 	method: "get",
 	path: "/api/users/{id}",
-	tags: ["Api"],
+	tags: ["Admin Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 	responses: {
@@ -131,7 +134,8 @@ router.get("/:id", isValidIdFormat, userController.getUser);
 apiRegistry.registerPath({
 	method: "delete",
 	path: "/api/users/{id}",
-	tags: ["Api"],
+	tags: ["Admin Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 	responses: {
@@ -169,7 +173,8 @@ router.delete("/:id", isValidIdFormat, userController.deleteUser);
 apiRegistry.registerPath({
 	method: "delete",
 	path: "/api/users/{id}/api-key",
-	tags: ["Api"],
+	tags: ["Admin Api"],
+	security: [{ ApiKeyAuth: [] }],
 
 	request: {},
 	responses: {

@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LoginButton from "../../components/Button";
+import Input from "../../components/Input";
 import { loginSchema } from "./schemas";
 import { useLogin } from "./useLogin";
 
@@ -28,39 +28,36 @@ export default function LoginForm() {
 	};
 
 	return (
-		<section style={{ flex: 1, padding: 24 }}>
-			<h2 id="login-title">Login</h2>
-			<form
-				onSubmit={submit}
-				style={{ display: "flex", flexDirection: "column", gap: 8 }}
-			>
+		<section className="flex-1 p-6">
+			<h2 className="text-text-colored font-bold text-2xl mb-1">Login</h2>
+			<form onSubmit={submit} className="flex flex-col gap-2">
 				<div>
-					<input
+					<Input
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 						placeholder="Email"
 					/>
 					{fieldErrors.email && (
-						<div role="alert" style={{ color: "red" }}>
+						<div role="alert" className="text-red-600">
 							{fieldErrors.email}
 						</div>
 					)}
 				</div>
 				<div>
-					<input
+					<Input
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						placeholder="Password"
 						type="password"
 					/>
 					{fieldErrors.password && (
-						<div role="alert" style={{ color: "red" }}>
+						<div role="alert" className="text-red-600">
 							{fieldErrors.password}
 						</div>
 					)}
 				</div>
 				{error ? (
-					<div role="alert" style={{ color: "red" }}>
+					<div role="alert" className="text-red-600">
 						{error}
 					</div>
 				) : null}

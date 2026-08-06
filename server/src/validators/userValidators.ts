@@ -97,6 +97,7 @@ const sessionResultSchema = z.object({
 	wpm: z.number(),
 	cpm: z.number(),
 	accuracy: z.number(),
+	timeMs: z.number(),
 	placement: z.number(),
 	displayName: z.string(),
 });
@@ -149,6 +150,7 @@ export const playerStatsSchema = z
 		average_cpm: z.number(),
 		average_accuracy: z.number(),
 		wins: z.number(),
+		total_games: z.number(),
 	})
 	.openapi("PlayerStats");
 
