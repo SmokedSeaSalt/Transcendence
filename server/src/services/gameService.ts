@@ -1,6 +1,6 @@
 import type { Server } from "socket.io";
 import { io } from "../app.js";
-import { WORD_LIST, promtSize } from "../config/gameSettings.js";
+import { WORD_LIST, promptSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { endGame } from "../socket/gameLifecycle.js";
 import { saveGameSession } from "./gameSessionServices.js";
@@ -128,7 +128,7 @@ function getRandomWords(size: number): string[] {
 }
 
 export const createPrompt = (): string[] => {
-	const prompt = getRandomWords(promtSize);
+	const prompt = getRandomWords(promptSize);
 
 	return prompt;
 };
