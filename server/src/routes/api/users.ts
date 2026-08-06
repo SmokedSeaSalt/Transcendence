@@ -9,6 +9,7 @@ import {
 	userResponseSchema,
 	zodValidationErrorSchema,
 } from "../../validators/userValidators.js";
+import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 
 const router = Router();
 
@@ -67,7 +68,7 @@ apiRegistry.registerPath({
 		},
 	},
 });
-router.post("/register", createUserValidation(), userController.createUser);
+router.post("/register", normalizeEmail, createUserValidation(), userController.createUser);
 
 apiRegistry.registerPath({
 	method: "get",
