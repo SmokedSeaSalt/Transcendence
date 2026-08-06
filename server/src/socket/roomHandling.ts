@@ -203,6 +203,6 @@ export function registerRoomHandlers(io: Server, socket: Socket) {
 		roomStore.setState(room.roomId, RoomState.IN_PROGRESS);
 		io.to(room.roomId).emit("roomState", room);
 
-		startTimeout(socket.data.roomId, gameTimeout);
+		startTimeout(room.roomId, gameTimeout);
 	});
 }
