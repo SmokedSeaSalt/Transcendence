@@ -1,8 +1,8 @@
 import { io } from "../app.js";
-import { gameTimeout, postGameCountDownMs } from "../config/gameSettings.js";
+import { postGameCountDownMs } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { saveGameSession } from "../services/gameSessionServices.js";
-import { type RoomData, roomStore } from "../services/roomStore.js";
+import { roomStore } from "../services/roomStore.js";
 import { handleRoomReset } from "./roomHandling.js";
 
 // after postGameCountDownMs, the still active users will be in a reset lobby together. Clients will then be informed by an emit of the new roomstate

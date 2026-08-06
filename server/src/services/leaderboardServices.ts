@@ -1,5 +1,4 @@
 import { prisma } from "../db.js";
-import { getUserByID } from "./userServices.js";
 
 type userForLeaderboard = {
 	name: string;

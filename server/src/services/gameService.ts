@@ -1,9 +1,7 @@
 import type { Server } from "socket.io";
-import { io } from "../app.js";
 import { WORD_LIST, promptSize } from "../config/gameSettings.js";
 import { RoomState } from "../config/socket.js";
 import { endGame } from "../socket/gameLifecycle.js";
-import { saveGameSession } from "./gameSessionServices.js";
 import { type RoomData, roomStore } from "./roomStore.js";
 
 //create a new roomstore room with unique id
