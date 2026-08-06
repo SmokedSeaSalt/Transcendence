@@ -8,7 +8,7 @@ export default function Header() {
 
 	return (
 		<header className="bg-header border-b border-highlight-colored mt-0">
-			<div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-orange-600">
+			<div className="px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-highlight-colored">
 				<div className="left-30">
 						<Link to="/">
 					<div className="bg-surface rounded-md p-2">
@@ -50,7 +50,8 @@ export default function Header() {
 							<Button
 								type="button"
 							>
-								{currentUser.name}'s Profile
+								{/*{currentUser.name}'s Profile*/}
+								Profile
 							</Button>
 						</Link>
 					)}

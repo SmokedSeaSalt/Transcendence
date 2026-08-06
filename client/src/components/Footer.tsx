@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
 	return (
 		<footer className="bg-header border-t border-highlight-white mt-8">
-			<div className="max-w-7xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between text-sm text-text">
+			<div className="px-4 py-2 flex flex-col sm:flex-row items-center justify-between text-sm text-text">
 				<div>© {new Date().getFullYear()} Transcendence</div>
 				<div className="mt-3 sm:mt-0 flex items-center space-x-4">
 					<Link
