@@ -1,4 +1,12 @@
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+	CartesianGrid,
+	Legend,
+	Line,
+	LineChart,
+	ResponsiveContainer,
+	XAxis,
+	YAxis,
+} from "recharts";
 
 type Point = {
 	index: number;
@@ -13,8 +21,18 @@ export default function ArrayGraph({ data }: { data: Point[] }) {
 			<LineChart data={data} className="outline-none">
 				<CartesianGrid strokeDasharray="5 5" className="outline-none" />
 
-				<YAxis yAxisId="wpm" orientation="left" stroke="var(--color-graph-wpm)"  className="outline-none"/>
-				<YAxis yAxisId="accuracy" orientation="right" stroke="var(--color-graph-cpm)"  className="outline-none"/>
+				<YAxis
+					yAxisId="wpm"
+					orientation="left"
+					stroke="var(--color-graph-wpm)"
+					className="outline-none"
+				/>
+				<YAxis
+					yAxisId="accuracy"
+					orientation="right"
+					stroke="var(--color-graph-cpm)"
+					className="outline-none"
+				/>
 
 				<Line
 					yAxisId="wpm"
@@ -38,7 +56,7 @@ export default function ArrayGraph({ data }: { data: Point[] }) {
 					isAnimationActive={false}
 					className="outline-none"
 				/>
-				<Legend className="outline-none"/>
+				<Legend className="outline-none" />
 			</LineChart>
 		</ResponsiveContainer>
 	);

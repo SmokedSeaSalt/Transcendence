@@ -2,9 +2,9 @@ import type React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../../components/Button";
+import Input from "../../components/Input";
 import { createUserSchema } from "./schemas";
 import { useRegistration } from "./useRegistration";
-import Input from "../../components/Input";
 
 export default function RegistrationForm() {
 	const [email, setEmail] = useState("");
@@ -31,11 +31,10 @@ export default function RegistrationForm() {
 
 	return (
 		<section className="flex-1 p-6">
-			<h2 className="text-text-colored font-bold text-2xl mb-1">Create account</h2>
-			<form
-				onSubmit={submit}
-				className="flex flex-col gap-2"
-			>
+			<h2 className="text-text-colored font-bold text-2xl mb-1">
+				Create account
+			</h2>
+			<form onSubmit={submit} className="flex flex-col gap-2">
 				<div>
 					<Input
 						value={email}

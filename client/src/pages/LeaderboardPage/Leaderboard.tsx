@@ -84,8 +84,7 @@ export default function Leaderboard() {
 		);
 	};
 
-	const contentStyle =
-		"py-2 pl-4 text-text border-t whitespace-nowrap";
+	const contentStyle = "py-2 pl-4 text-text border-t whitespace-nowrap";
 	/** On page load, data is taken directly from fetch. After, data is taken from
 	 * the sorted version.
 	 */
@@ -102,9 +101,11 @@ export default function Leaderboard() {
 				{dataToUse?.map((data, index) => (
 					<tr key={index}>
 						{bestFirst ? (
-							<td className={contentStyle + " font-bold"}>{index + 1}</td>
+							<td className={`${contentStyle}·font-bold`}>{index + 1}</td>
 						) : (
-							<td className={contentStyle + " font-bold"}>{dataToUse.length - index}</td>
+							<td className={`${contentStyle}·font-bold`}>
+								{dataToUse.length - index}
+							</td>
 						)}
 						<td className={contentStyle}>{data?.name}</td>
 						<td className={contentStyle}>{Number(data?.max_wpm.toFixed(1))}</td>

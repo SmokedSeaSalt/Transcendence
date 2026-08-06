@@ -25,9 +25,7 @@ export default function ApiKeyButton() {
 			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<h3 className="text-text-colored font-bold text-xl">
-					Generated key
-				</h3>
+				<h3 className="text-text-colored font-bold text-xl">Generated key</h3>
 				<p className="mt-2 text-sm text-text">
 					Save this key as you will only see it once!
 				</p>

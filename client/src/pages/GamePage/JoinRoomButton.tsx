@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Button from "../../components/Button";
+import Input from "../../components/Input";
 import Popup from "../../components/Popup";
 import { chooseRoomIdSchema } from "./schemas";
 import { useConnectToRoom } from "./useConnectToRoom";
-import Input from "../../components/Input";
 
 export default function JoinRoomButton() {
 	const [open, setOpen] = useState<boolean>(false);
@@ -51,13 +51,8 @@ export default function JoinRoomButton() {
 			</Button>
 
 			<Popup open={open} onClose={() => setOpen(false)}>
-				<h3 className="text-text-colored font-bold text-xl">
-					Join room
-				</h3>
-				<form
-					onSubmit={submit}
-					className="flex flex-col gap-2"
-				>
+				<h3 className="text-text-colored font-bold text-xl">Join room</h3>
+				<form onSubmit={submit} className="flex flex-col gap-2">
 					<h3 className="text-text">
 						Warning: you will leave your current room!
 					</h3>
@@ -69,7 +64,7 @@ export default function JoinRoomButton() {
 							placeholder="Room ID"
 						/>
 						{fieldErrors.roomId && (
-							<div role="alert"  className="text-red-600">
+							<div role="alert" className="text-red-600">
 								{fieldErrors.roomId}
 							</div>
 						)}

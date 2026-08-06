@@ -105,11 +105,13 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	let outerClassName =
 		"outline-double outline-orange-200 bg-background relative max-h-50/100 rounded-md";
 	if (isInputFocused) {
-		outerClassName = "outline-solid relative bg-background outline-highlight-colored rounded-md max-h-50/100 ";
+		outerClassName =
+			"outline-solid relative bg-background outline-highlight-colored rounded-md max-h-50/100 ";
 	}
 
 	// style for untyped text, with boxShadow used as caret
-	const untypedClass = "inline text-text shadow-[-3px_0px_0px_0px_var(--color-highlight-colored)]";
+	const untypedClass =
+		"inline text-text shadow-[-3px_0px_0px_0px_var(--color-highlight-colored)]";
 
 	// timer for countdown
 	useEffect(() => {
@@ -128,7 +130,9 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 			) : (
 				<div className={outerClassName}>
 					<div className="text-xl font-mono box-border ">
-						<span className="text-typebox-completed inline">{promptComplete}</span>
+						<span className="text-typebox-completed inline">
+							{promptComplete}
+						</span>
 						<span className="text-typebox-correct inline">{promptTyped}</span>
 						<span className="text-red-600 inline">{promptTypedWrong}</span>
 						{/* <span className="bg-typebox-completed text-typebox-typed-text inline">{promptComplete}</span>

@@ -1,9 +1,9 @@
 import type React from "react";
 import { useState } from "react";
 import SetNameButton from "../../components/Button";
+import Input from "../../components/Input";
 import { setDisplayNameSchema } from "./schemas";
 import { useSetDisplayName } from "./useSetDisplayName";
-import Input from "../../components/Input";
 
 export default function DisplayNameForm() {
 	const [displayName, setDisplayName] = useState("");
@@ -32,11 +32,10 @@ export default function DisplayNameForm() {
 
 	return (
 		<section className="flex-1 p-6">
-			<h2 className="text-text-colored font-bold text-2xl mb-1">Stay a guest</h2>
-			<form
-				onSubmit={submit}
-				className="flex flex-col gap-2"
-			>
+			<h2 className="text-text-colored font-bold text-2xl mb-1">
+				Stay a guest
+			</h2>
+			<form onSubmit={submit} className="flex flex-col gap-2">
 				<div>
 					<Input
 						value={displayName}

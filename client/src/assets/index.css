@@ -27,57 +27,57 @@ a:not(.unstyled-link):active {
 }
 
 @theme {
-  --color-header: #010409;
-  --color-background: #0d1117;
-  --color-background-secondary: var(--color-slate-900);
-  --color-surface: var(--color-slate-800);
+	--color-header: #010409;
+	--color-background: #0d1117;
+	--color-background-secondary: var(--color-slate-900);
+	--color-surface: var(--color-slate-800);
 
+	--color-text: var(--color-stone-100);
+	--color-text-secondary: var(--color-stone-400);
+	--color-text-colored: var(--color-orange-600);
+	--color-hyperlink: var(--color-blue-600);
+	--color-hyperlink-hover: var(--color-blue-400);
+	--color-hyperlink-visited: var(--color-violet-600);
 
-  --color-text: var(--color-stone-100);
-  --color-text-secondary: var(--color-stone-400);
-  --color-text-colored: var(--color-orange-600);
-  --color-hyperlink: var(--color-blue-600);
-  --color-hyperlink-hover: var(--color-blue-400);
-  --color-hyperlink-visited: var(--color-violet-600);
+	--color-highlight-white: var(--color-stone-400);
+	--color-highlight-colored: var(--color-orange-600);
+	--color-button-main: var(--color-orange-600);
+	--color-button-hover: var(--color-blue-600);
 
-  --color-highlight-white: var(--color-stone-400);
-  --color-highlight-colored: var(--color-orange-600);
-  --color-button-main: var(--color-orange-600);
-  --color-button-hover: var(--color-blue-600);
+	--color-graph-cpm: var(--color-orange-600);
+	--color-graph-wpm: var(--color-blue-600);
 
-  --color-graph-cpm: var(--color-orange-600);
-  --color-graph-wpm: var(--color-blue-600);
-
-  --color-typebox-untyped-text: var(--color-text);
-  --color-typebox-typed-text: var(--color-black);
-  --color-typebox-correct: var(--color-green-300);
-  --color-typebox-completed: var(--color-green-600);
-  --color-typebox-incorrect: var(--color-red-300);
+	--color-typebox-untyped-text: var(--color-text);
+	--color-typebox-typed-text: var(--color-black);
+	--color-typebox-correct: var(--color-green-300);
+	--color-typebox-completed: var(--color-green-600);
+	--color-typebox-incorrect: var(--color-red-300);
 }
 
 @layer utilities {
-  .scrollbar-custom {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-highlight-colored) var(--color-background-secondary);
-  }
+	.scrollbar-custom {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-highlight-colored)
+			var(--color-background-secondary);
+	}
 
-  .scrollbar-custom::-webkit-scrollbar {
-    width: 8px;
-  }
+	.scrollbar-custom::-webkit-scrollbar {
+		width: 8px;
+	}
 
-  .scrollbar-custom::-webkit-scrollbar-track {
-    background: var(--color-background-secondary);
-    border-radius: 9999px;
-  }
+	.scrollbar-custom::-webkit-scrollbar-track {
+		background: var(--color-background-secondary);
+		border-radius: 9999px;
+	}
 
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: var(--color-highlight-colored);
-    border-radius: 9999px;
-  }
+	.scrollbar-custom::-webkit-scrollbar-thumb {
+		background: var(--color-highlight-colored);
+		border-radius: 9999px;
+	}
 
-  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background: var(--color-button-hover);
-  }
+	.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+		background: var(--color-button-hover);
+	}
 }
 
 .recharts-wrapper *:focus,

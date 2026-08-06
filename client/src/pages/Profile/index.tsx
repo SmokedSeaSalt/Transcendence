@@ -34,20 +34,20 @@ export default function ProfilePage() {
 	}
 
 	return (
-	<main className="max-w-full">
-		<NameBar />
+		<main className="max-w-full">
+			<NameBar />
 
-		<div className="flex flex-col md:flex-row mx-auto my-8 justify-center items-center mx-auto">
-			<div className="w-full md:w-2/5">
-				<UserStats />
+			<div className="flex flex-col md:flex-row mx-auto my-8 justify-center items-center mx-auto">
+				<div className="w-full md:w-2/5">
+					<UserStats />
+				</div>
+
+				<div className="w-full md:w-3/5 flex justify-center">
+					<UserProgressionGraph gameHistory={gameHistory} />
+				</div>
 			</div>
 
-			<div className="w-full md:w-3/5 flex justify-center">
-				<UserProgressionGraph gameHistory={gameHistory} />
-			</div>
-		</div>
-
-		<GameHistory gameHistory={gameHistory} />
-	</main>
+			<GameHistory gameHistory={gameHistory} />
+		</main>
 	);
 }

@@ -45,9 +45,7 @@ export default function FinishedGamePopup() {
 
 			<Popup open={open} onClose={() => setOpen(false)}>
 				<div className="text-text">
-					<h3 className="text-text-colored font-bold text-xl">
-					Game Results
-					</h3>
+					<h3 className="text-text-colored font-bold text-xl">Game Results</h3>
 					<div>
 						{Array.from(userResults.entries()).map(
 							([socketId, user], index) => (
