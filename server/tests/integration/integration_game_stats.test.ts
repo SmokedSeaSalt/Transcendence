@@ -2,9 +2,7 @@ import request from "supertest";
 import { afterAll, describe, expect, it } from "vitest";
 import { app } from "../../src/app.js";
 import { prisma } from "../../src/db.js";
-import {
-	deleteUser,
-} from "../helpers/dbHelpers.js";
+import { deleteUser } from "../helpers/dbHelpers.js";
 
 describe("/web/me/stats", async () => {
 	const statsPath = "/web/me/stats";

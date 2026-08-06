@@ -1,8 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import {
-	RoomState,
-} from "../../../src/config/socket";
+import { RoomState } from "../../../src/config/socket";
 import { saveGameSession } from "../../../src/services/gameSessionServices";
 import { roomStore } from "../../../src/services/roomStore";
 import {

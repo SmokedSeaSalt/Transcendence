@@ -1,11 +1,4 @@
-import {
-	afterAll,
-	afterEach,
-	beforeEach,
-	describe,
-	expect,
-	it,
-} from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { RoomState } from "../../src/config/socket.js";
 import { type RoomData, roomStore } from "../../src/services/roomStore.js";
