@@ -101,10 +101,12 @@ This team member has contributed/worked with the following modules:
 and the following features:
 - User page to view results and progress.
 - Public leaderboard.
-- API for getting user results.
+- API for getting user results and information.
+- API for deleting user profiles and API keys.
 
-Personal challenged faced and overcome:
-// todo dbakker
+Personal challenges faced and overcome:
+- The challenge to learn Typescript by overcoming it with the power of the internet.
+
 
 #### egrisel
 This team member has contributed/worked with the following modules:
@@ -126,7 +128,7 @@ and the following features:
 - User page to view results and progress.
 - API for getting user results.
 
-Personal challenged faced and overcome:
+Personal challenges faced and overcome:
 // todo dbakker
 
 #### mgroos
@@ -146,7 +148,7 @@ and the following features:
 - User page to view results and progress.
 - Public leaderboard.
 
-Personal challenged faced and overcome:
+Personal challenges faced and overcome:
 // todo dbakker
 
 #### mvan-rij
@@ -168,7 +170,7 @@ and the following features:
 - User page to view results and progress.
 - API for getting user results.
 
-Personal challenged faced and overcome:
+Personal challenges faced and overcome:
 // todo dbakker
 
 ## Resources
