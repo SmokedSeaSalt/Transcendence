@@ -11,7 +11,7 @@ export default function UserProgressionGraph({
 	const data = gameHistoryList.map((gameResult, index) => ({
 		index,
 		wpm: gameResult.wpm,
-		cpm: gameResult.cpm,
+		accuracy: Number(Number(gameResult.accuracy * 100).toFixed(1)),
 	}));
 
 	return (

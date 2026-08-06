@@ -24,11 +24,12 @@ export default function MyStats({
 			<div className={childMyStatsClass}>
 				Characters per minute: {gameResults.cpm}
 			</div>
-			<div className="col-span-2">
-				<div className={childMyStatsClass}>
-					Date:{" "}
-					{new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
-				</div>
+			<div className={childMyStatsClass}>
+				Date:{" "}
+				{new Date(gameResults.session.finishedAt).toLocaleString("en-NL")}
+			</div>
+			<div className={childMyStatsClass}>
+			Accuracy: {Number(gameResults.accuracy * 100).toFixed(1)}
 			</div>
 		</div>
 	);
