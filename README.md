@@ -7,7 +7,7 @@
 [//]: <> (section should also contain a clear name for the project and its key features.)
 
 This project is a web application for a (multiplayer) typing speed game.
-"Hit keys on your keyboard to type characters faster than the competition"
+Hit keys on your keyboard to type words faster than the competition, develop your typing skills and climb the leaderboard.
 
 ### Features
 [//]: <> (Brief description of each feature’s functionality.)
