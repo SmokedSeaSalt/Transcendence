@@ -16,6 +16,7 @@ This project is a web application for a (multiplayer) typing speed game.
 - Multiplayer rooms.
 - User login for result logging.
 - User page to view results and progress.
+- Option to view match as non-player
 - Public leaderboard.
 - API for getting user results.
 
@@ -39,8 +40,8 @@ This project is a web application for a (multiplayer) typing speed game.
 ## Technical Stack
 [//]: <> (Todo add better justification.)
 
-| Architechture | Tech Stack | Justification |
-| :------------ | :--------- | :------------ |
+| Architecture | Tech Stack | Justification |
+| :----------- | :--------- | :------------ |
 | Frontend      | React + TypeScript is used as the primary framework. For our styling solution we are using Tailwind CSS. To serve the static compiled pages we are using NGINX as the webserver. We are using Socket.io for the client side handling of the WebSockets. Npm is used as package manager for development and to run setup/start scripts. | Industry standard and suitable for our usecase. |
 | Backend       | Express + TypeScript is used as the primary framework. We are using Prisma ORM as our bridge to the database. To document our API we use OpenAPI for the specification and Swagger to create our documentation pages. We are using Socket.io for the server side handling of the WebSockets. Npm is used as package manager for development and to run setup/start scripts. | Industry standard and suitable for our usecase. |
 | Database      | A default postgress installation is used as the database. | Industry standard and suitable for our usecase. |
@@ -55,18 +56,18 @@ This project is a web application for a (multiplayer) typing speed game.
 [//]: <> (◦ Which team member(s) worked on each module)
 [//]: <> (◦ todo better justification)
 
-| Modules | Points | Implementation | Justification | Contrubuted |
+| Modules | Points | Implementation | Justification | Contributed |
 | :------ | :----- | :------------- | :------------ | :---------- |
 | **WEB** Use a framework for both the frontend and backend. | 2 | We are using React for the frontend and Express for the backend. | Justification | All team members have contributed/worked with both frameworks. |
 | **WEB** Implement real-time features using WebSockets or similar technology. | 2 | The game logic communicates via WebSockets to receive and send updates to clients and the server. | Justification | egrisel and mvan-rij have implemented and worked with the backend logic for the sockets. mgroos and mvan-rij have implemented and worked with the socket for the frontend. |
 | **WEB** use ORM for the database. | 1 | Prisma is used for an ORM compatible database. | Justification | All team members have contributed/worked with the ORM database. |
 | **WEB** A public API to interact with the database with a secured API key, rate limiting, documentation, and at least 5 endpoints. | 2 | The api has secure hashed API tokens, rate limiting middleware, industry standard Swagger documentation and enough endpoints. | Justification | dbakker and egrisel have implemented API endpoints. egrisel has implemented the API key, rate limiting and documentation. |
-| **Accessibility and Internationalization**  Support for additional browsers. | 1 | During development only browser features that are industry standard and widely supported. | Justification | All team members have worked on keeping the code flexible across browsers. |
-| **User Management** Game statistics and match history. | 1 | We track the users wins, losses and wpm(words per minute). These are displayed on their profile. This is also where a user can access their match history and wpm progression over time. | Justification | All team members have contributed/worked with the user game statistics and history. |
-| **Gaming and user experience** Implement a complete web-based game where users can play against each other. | 2 | We made a realtime multiplayer typing speed game. You win by typing the prompt the fastest without errors. | Justification | egrisel, mgroos and mvan-rij contributed/worked on the implementation of the game. |
-| **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time. | 2 | Multiple players from within the same network can play together. With proper setup like DNS and port forwarding remote players from different networks is also possible. | Justification | egrisel and mvan-rij have worked on the project configuration to make this possible. egrisel, mgroos and mvan-rij have implemented code logic for this module to work. |
+| **Accessibility and Internationalization**  Support for additional browsers. | 1 | During development only browser features that are industry standard and widely supported were used. | Justification | All team members have worked on keeping the code flexible across browsers. |
+| **User Management** Game statistics and match history. | 1 | We track the users wins, total games, wpm(words per minute) cpm (characters per minute) and accuracy (correctly typed characters out of all typed characters). These are displayed on their profile. This is also where a user can access their match history and wpm/accuracy progression over time. | Justification | All team members have contributed/worked with the user game statistics and history. |
+| **Gaming and user experience** Implement a complete web-based game where users can play against each other. | 2 | We made a realtime multiplayer typing speed game. You win by typing the prompt the fastest, and can't continue until you fix your own errors. | Justification | egrisel, mgroos and mvan-rij contributed/worked on the implementation of the game. |
+| **Gaming and user experience** Remote players — Enable two players on separate computers to play the same game in real-time. | 2 | Multiple players from within the same network can play together. With proper setup like DNS and port-forwarding, remote players from different networks are also possible. | Justification | egrisel and mvan-rij have worked on the project configuration to make this possible. egrisel, mgroos and mvan-rij have implemented code logic for this module to work. |
 | **Gaming and user experience** Multiplayer game (more than two players). | 2 | The game supports up to a server side configurable amount of players (default 100) per lobby that are all playing against each other. | Justification | egrisel and mvan-rij have worked on the project configuration to make this possible. egrisel, mgroos and mvan-rij have implemented code logic for this module to work. |
-| **Gaming and user experience** Implement spectator mode for games. | 1 | You can join a room as spectator at any time and get updates about the players in thar room. | Justification | egrisel and mvan-rij have implemented the code logic for this module to work. |
+| **Gaming and user experience** Implement spectator mode for games. | 1 | You can join a room as spectator at any time and get updates about the players in that room. | Justification | egrisel and mvan-rij have implemented the code logic for this module to work. |
 | | **Total points: 16** | | |
 
 ## The Team
@@ -105,7 +106,7 @@ and the following features:
 - Admin API for getting users, deleting users and API keys.
 
 Personal challenges faced and overcome:
-- The challenge to learn Typescript by overcoming it with the power of the internet.
+- The challenge to learn Typescript was overcome with the power of the internet.
 
 
 #### egrisel
@@ -129,7 +130,7 @@ and the following features:
 - API for getting user results.
 
 Personal challenges faced and overcome:
-// todo dbakker
+// todo egrisel
 
 #### mgroos
 This team member has contributed/worked with the following modules:
@@ -149,7 +150,7 @@ and the following features:
 - Public leaderboard.
 
 Personal challenges faced and overcome:
-// todo dbakker
+Documentation was less helpful than usual due to the combination of languages/styling/etc used (example: ReactJS solutions only work once also transposed to TypeScript). I had to rely more on forum posts and help from peers.
 
 #### mvan-rij
 This team member has contributed/worked with the following modules:
@@ -171,10 +172,27 @@ and the following features:
 - API for getting user results.
 
 Personal challenges faced and overcome:
-// todo dbakker
+// todo mvan-rij
 
 ## Resources
 [//]: <> (A “Resources” section listing classic references related to the topic (documentation, articles, tutorials, etc.), as well as a description of how AI was used — specifying for which tasks and which parts of the project.)
+
+ReactJS:
+- https://www.geeksforgeeks.org/reactjs/reactjs-classname-attribute/
+- https://react.dev/reference/react/useState
+- https://dev.to/madv/usecontext-with-typescript-23ln
+- https://lovetrivedi.medium.com/unlocking-the-full-potential-of-react-context-with-custom-hooks-f3d7e3a3d403
+- https://medium.com/@kimtai.developer/react-typescript-authentication-guide-using-context-api-5c82f2530eb1
+
+Tailwind / CSS
+- https://github.com/tailwindlabs/tailwindcss/discussions/1507
+- https://www.reddit.com/r/tailwindcss/comments/14cc9m1/tailwind_styles_not_working_when_passed_as_a/?solution=423c8a6a6c39a0c5423c8a6a6c39a0c5&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9eccb9064a97031e5cc54bfc1a0ca9f0e4b&jsc_orig_r=
+- https://www.geeksforgeeks.org/css/how-to-add-a-box-shadow-on-one-side-of-an-element-using-css/
+- https://www.material-tailwind.com/docs/react/table
+
+ExpressJS
+- https://www.youtube.com/watch?v=SccSCuHhOw0
+
 
 ### Special mentions
 Inspiration:
