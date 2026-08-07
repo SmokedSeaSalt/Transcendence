@@ -12,13 +12,12 @@ This project is a web application for a (multiplayer) typing speed game.
 ### Features
 [//]: <> (Brief description of each feature’s functionality.)
 
-- Simple single player.
-- Multiplayer rooms.
-- User login for result logging.
-- User page to view results and progress.
-- Option to view match as non-player
-- Public leaderboard.
-- API for getting user results.
+- Simple single player: On the home page, you will automatically be in your own room and you can just click start game. When the prompt shows up, type all the words correctly as fast as possible. You will then be shown your score at the end.
+- Multiplayer rooms with spectators: Players can invite others by sharing a unique 6-digit room ID. Invited users can join the room either as a player or as a spectator by entering the room ID and selecting the appropriate option before connecting. You can then start the game and play against the other users. You will then be shown the scores and rankings of the users.
+- User login for result logging: You can click the login/make and account button in the top right. This will take you to a page where you can login as an existing user or register as a new user. Now when you play a game while logged in, your game history and stats will be saved and users can see you username in the game room.
+- User page to view results and progress: When logged in you can click the profile button and see your stats such as words per minute typed and your match history.
+- Public leaderboard: You can click the leaderboard button where it will show you a ranking of other players based on stats such as words per minute and accuracy.
+- API for getting user results: With the api generated from the profile page after logging in, users can programmatically interact with our service, make profile changes and view profile details.
 
 
 ## Instructions
