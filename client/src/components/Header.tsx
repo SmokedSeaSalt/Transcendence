@@ -11,7 +11,7 @@ export default function Header() {
 			<div className="px-4 py-6 flex flex-col sm:flex-row items-center justify-between text-sm text-highlight-colored">
 				<div className="left-30">
 					<Link to="/">
-						<div className="bg-[repeating-linear-gradient(#ff9100_0%_5%,_#ffba63_5%_10%,_#ff9100_10%_15%,_#FF7300_15%_20%)] rounded-md p-2">
+						<div className="bg-[repeating-linear-gradient(#ff9100_0%_5%,_#ffba63_5%_10%,_#ff9100_10%_15%,_#FF7300_15%_20%)] rounded-md p-2 outline-2">
 							<img
 								// className="hue-rotate-160"
 								src={logo}
@@ -41,9 +41,7 @@ export default function Header() {
 						</Link>
 					) : (
 						<Link to="/profile">
-							<Button type="button">
-								Profile
-							</Button>
+							<Button type="button">Profile</Button>
 						</Link>
 					)}
 				</div>
