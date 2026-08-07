@@ -1,13 +1,11 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import Button from "../../components/Button";
 import ErrorBox from "./ErrorBox";
 import FinishedGamePopup from "./FinishedGamePopup";
 import GamePageHeader from "./GamePageHeader";
 import GameTextField from "./GameTextField";
 import ProgressField from "./ProgressField";
 import { useSocket } from "./SocketContext";
-import { RoomState, type RoomStatePayload, RoomUser } from "./SocketTypes";
+import { RoomState, type RoomStatePayload } from "./SocketTypes";
 
 function isCurrentUserSpectator(
 	roomState: RoomStatePayload | undefined,

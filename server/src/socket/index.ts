@@ -3,12 +3,9 @@ import { parse } from "cookie";
 import type { Server, Socket } from "socket.io";
 import { RoomState } from "../config/socket.js";
 import {
-	areAllActivePlayersFinished,
-	createPrompt,
 	createUniqueRoom,
 	finishAndSaveGameIfDone,
 } from "../services/gameService.js";
-import { saveGameSession } from "../services/gameSessionServices.js";
 import { handleLeftoverSpectators } from "../services/roomService.js";
 import { roomStore } from "../services/roomStore.js";
 import { getUserFromSession } from "../services/userServices.js";

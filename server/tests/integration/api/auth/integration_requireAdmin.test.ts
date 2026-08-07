@@ -1,10 +1,7 @@
-import { createHash } from "node:crypto";
 import request from "supertest";
 import { afterEach, describe, expect, it } from "vitest";
 import { app } from "../../../../src/app.js";
 import {
-	createApiKey,
-	createUser,
 	createUserWithRoleAndApiKey,
 	deleteUser,
 } from "../../../helpers/dbHelpers.js";

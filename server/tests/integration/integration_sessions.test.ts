@@ -1,5 +1,5 @@
 import type { Session, User } from "@prisma/client";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { prisma } from "../../src/db.js";
 import { updateSession } from "../../src/services/sessionServices.js";
 import { createUser, deleteUser } from "../helpers/dbHelpers.js";

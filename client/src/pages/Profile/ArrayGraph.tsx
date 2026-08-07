@@ -4,7 +4,6 @@ import {
 	Line,
 	LineChart,
 	ResponsiveContainer,
-	XAxis,
 	YAxis,
 } from "recharts";
 

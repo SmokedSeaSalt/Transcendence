@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as userController from "../../controllers/web/userControllers.js";
-import { checkCookieStatus } from "../../middleware/cookieAuthentication.js";
+import { normalizeEmail } from "../../middleware/normalizeEmail.js";
 import { webRegistry } from "../../swagger/webRegistry.js";
 import {
 	createUserValidation,
@@ -59,8 +59,18 @@ webRegistry.registerPath({
 		},
 	},
 });
-router.post("/register", createUserValidation(), userController.createUser);
-router.post("/login", loginUserValidation(), userController.loginUser);
+router.post(
+	"/register",
+	normalizeEmail,
+	createUserValidation(),
+	userController.createUser,
+);
+router.post(
+	"/login",
+	normalizeEmail,
+	loginUserValidation(),
+	userController.loginUser,
+);
 router.get("/logout", userController.logoutUser);
 router.get("/update-apikey", userController.updateApiKey);
 
