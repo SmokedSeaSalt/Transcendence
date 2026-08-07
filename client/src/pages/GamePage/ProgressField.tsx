@@ -25,7 +25,7 @@ export default function ProgressField() {
 	if (roomState) {
 		for (const [key, value] of Object.entries(roomState.users)) {
 			progressBars.push(
-				<div className="flex h-10">
+				<div className="flex content-center items-center h-10">
 					<div className="w-5/100 h-100/100 content-center">
 						<p className="truncate">{value.displayName}</p>
 					</div>
@@ -35,6 +35,9 @@ export default function ProgressField() {
 							totalWords={totalWords}
 							user={value}
 						/>
+					</div>
+					<div className="relative h-100/100 content-center">
+						<div className="absolute w-16 h-30/100 z-0 bg-[repeating-conic-gradient(_black_0_25%,_white_25%_50%)] bg-[length:15px] bg-top-left" />
 					</div>
 				</div>,
 			);
