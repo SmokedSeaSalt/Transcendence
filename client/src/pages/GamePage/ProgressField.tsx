@@ -20,7 +20,6 @@ export default function ProgressField() {
 
 	// adds one bar per user
 	const progressBars = [];
-	console.log("Resetting progress bars");
 	let i = 0; // for colour choices
 	if (roomState) {
 		for (const [key, value] of Object.entries(roomState.users)) {
