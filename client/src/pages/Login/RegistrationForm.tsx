@@ -82,4 +82,3 @@ export default function RegistrationForm() {
 	);
 }
 
-// todo: input validation and password checking

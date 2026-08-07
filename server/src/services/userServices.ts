@@ -109,9 +109,8 @@ export const getUserFromSession = async (
 		}
 		return sessionWithUser.user;
 	} catch {
-		// todo: throw error
 		console.log("getUserFromSession: threw error searching prisma sessions");
-		return null;
+		throw new Error("Error searching prisma sessions");
 	}
 };
 
