@@ -1,6 +1,5 @@
 import ProgressBar from "./ProgressBar";
 import { useSocket } from "./SocketContext";
-import type * as CSS from "csstype";
 
 // [bar colour, marker colour, bike colour starting from blue]
 const colourPalettes: [string, string, string][] = [
@@ -17,11 +16,6 @@ export default function ProgressField() {
 	let totalWords = 1;
 	if (roomState?.wordCount !== undefined) {
 		totalWords = roomState.wordCount;
-	}
-
-	const finishStyle: CSS.Properties = 
-	{
-		background: "repeating-conic-gradient(white 0 25%, black 0 50%) 0% / 20px 20px",
 	}
 
 	// adds one bar per user
@@ -43,7 +37,7 @@ export default function ProgressField() {
 						/>
 					</div>
 					<div className="relative h-100/100 content-center">
-						<div style={finishStyle} className="absolute w-16 h-30/100 z-0" />
+						<div className="absolute w-16 h-30/100 z-0 bg-[repeating-conic-gradient(_black_0_25%,_white_25%_50%)] bg-[length:15px] bg-top-left"/>
 					</div>
 				</div>,
 			);
