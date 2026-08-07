@@ -1,16 +1,13 @@
 *This project has been created as part of the 42 curriculum by dbakker, egrisel, mgroos, mvan-rij.*
 
-# Gotta type(bike) fast!
+# Gotta Bike Fast!
 
 ## Description
-[//]: <> (A “Description” section that clearly presents the project, including its goal and a brief overview.)
-[//]: <> (section should also contain a clear name for the project and its key features.)
 
 This project is a web application for a (multiplayer) typing speed game.
 Hit keys on your keyboard to type words faster than the competition, develop your typing skills and climb the leaderboard.
 
 ### Features
-[//]: <> (Brief description of each feature’s functionality.)
 
 - Simple single player: On the home page, you will automatically be in your own room and you can just click start game. When the prompt shows up, type all the words correctly as fast as possible. You will then be shown your score at the end.
 - Multiplayer rooms with spectators: Players can invite others by sharing a unique 6-digit room ID. Invited users can join the room either as a player or as a spectator by entering the room ID and selecting the appropriate option before connecting. You can then start the game and play against the other users. You will then be shown the scores and rankings of the users.
@@ -21,8 +18,6 @@ Hit keys on your keyboard to type words faster than the competition, develop you
 
 
 ## Instructions
-[//]: <> (An “Instructions” section containing any relevant information about compilation, installation, and/or execution.)
-[//]: <> (The “Instructions” section should mention all the needed prerequisites (software, tools, versions, configuration like .env setup, etc.), and step-by-step instructions to run the project.)
 
 ### Requirements
 - [Docker](https://www.docker.com/) For containerization.
@@ -35,6 +30,8 @@ Hit keys on your keyboard to type words faster than the competition, develop you
 3. Create a .env (an .env.example is provided with all neccecary information).
 3. `npm run prod`
 
+### Certs
+If no HTTPS certs (localhost.crt and localhost.key) are provided in ./.certs the project will create some selfsigned localhost certs.
 
 ## Technical Stack
 [//]: <> (Todo add better justification.)
@@ -47,13 +44,10 @@ Hit keys on your keyboard to type words faster than the competition, develop you
 | Webserver | NGINX is used as the primary webserver to route traffic from outside to each of our containers. | Industry standard and makes implemeting https easy. Also some teammates already used nginx in a previous project, so there was less time spent learning how it works. |
 
 ### Database Schema
-[//]: <> (Visual representation or description of the database structure.)
-[//]: <> (Tables/collections and their relationships.)
-[//]: <> (Key fields and data types.)
+
+<img src="./server/prisma/ERD.svg" width="700">
 
 ## Subject Modules
-[//]: <> (◦ Which team member(s) worked on each module)
-[//]: <> (◦ todo better justification)
 
 | Modules | Points | Implementation | Justification | Contributed |
 | :------ | :----- | :------------- | :------------ | :---------- |
@@ -129,7 +123,7 @@ and the following features:
 - API for getting user results.
 
 Personal challenges faced and overcome:
-// todo egrisel
+- Getting things to be where they should be on the frontend with tailwindcss was solved by asking my peers how they would do it.
 
 #### mgroos
 This team member has contributed/worked with the following modules:
@@ -149,7 +143,7 @@ and the following features:
 - Public leaderboard.
 
 Personal challenges faced and overcome:
-Documentation was less helpful than usual due to the combination of languages/styling/etc used (example: ReactJS solutions only work once also transposed to TypeScript). I had to rely more on forum posts and help from peers.
+- Documentation was less helpful than usual due to the combination of languages/styling/etc used (example: ReactJS solutions only work once also transposed to TypeScript). I had to rely more on forum posts and help from peers.
 
 #### mvan-rij
 This team member has contributed/worked with the following modules:
@@ -171,32 +165,48 @@ and the following features:
 - API for getting user results.
 
 Personal challenges faced and overcome:
-// todo mvan-rij
+- When setting up the tech stack there was a lot of version collision specifically with the combination: Prisma, ExpressJS and Postgres. This was overcome by googling a lot and in the end downgrading Prisma to a more stable version.
+- Understanding how npm works and finaly figuring out you can run npm install on the host system and don't need to develop in a vscode devcontainer. This was overcome by luck and running npm install on the host by accident.
 
 ## Resources
-[//]: <> (A “Resources” section listing classic references related to the topic (documentation, articles, tutorials, etc.), as well as a description of how AI was used — specifying for which tasks and which parts of the project.)
 
 ReactJS:
-- https://www.geeksforgeeks.org/reactjs/reactjs-classname-attribute/
-- https://react.dev/reference/react/useState
-- https://dev.to/madv/usecontext-with-typescript-23ln
-- https://lovetrivedi.medium.com/unlocking-the-full-potential-of-react-context-with-custom-hooks-f3d7e3a3d403
-- https://medium.com/@kimtai.developer/react-typescript-authentication-guide-using-context-api-5c82f2530eb1
+- [Classnames](https://www.geeksforgeeks.org/reactjs/reactjs-classname-attribute/)
+- [Docs](https://react.dev/)
+- [useContext](https://dev.to/madv/usecontext-with-typescript-23ln)
+- [Context](https://lovetrivedi.medium.com/unlocking-the-full-potential-of-react-context-with-custom-hooks-f3d7e3a3d403)
+- [Autentification Context](https://medium.com/@kimtai.developer/react-typescript-authentication-guide-using-context-api-5c82f2530eb1)
 
-Tailwind / CSS
-- https://github.com/tailwindlabs/tailwindcss/discussions/1507
-- https://www.reddit.com/r/tailwindcss/comments/14cc9m1/tailwind_styles_not_working_when_passed_as_a/?solution=423c8a6a6c39a0c5423c8a6a6c39a0c5&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9eccb9064a97031e5cc54bfc1a0ca9f0e4b&jsc_orig_r=
-- https://www.geeksforgeeks.org/css/how-to-add-a-box-shadow-on-one-side-of-an-element-using-css/
-- https://www.material-tailwind.com/docs/react/table
+Tailwind / CSS:
+- [Controlling Tailwind trough ReactJS Github post](https://github.com/tailwindlabs/tailwindcss/discussions/1507)
+- [Controlling Tailwind trough ReactJS Reddit post](https://www.reddit.com/r/tailwindcss/comments/14cc9m1/tailwind_styles_not_working_when_passed_as_a/?solution=423c8a6a6c39a0c5423c8a6a6c39a0c5&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9eccb9064a97031e5cc54bfc1a0ca9f0e4b&jsc_orig_r=)
+- [Cursor Shadowbox](https://www.geeksforgeeks.org/css/how-to-add-a-box-shadow-on-one-side-of-an-element-using-css/)
+- [Tables](https://www.material-tailwind.com/docs/react/table)
 
-ExpressJS
-- https://www.youtube.com/watch?v=SccSCuHhOw0
+ExpressJS:
+- [Youtube Tutorials](https://www.youtube.com/@WebDevSimplified)
+- [ExpressJS basics](https://medium.com/@dwincahya8/best-practices-for-structuring-and-writing-express-js-applications-0fa4fe127f07)
 
+API:
+ - [OpenAPI](https://swagger.io/specification/)
+ - [Swagger](https://swagger.io/docs/)
+
+Backend:
+- [Folder Structure](https://oneuptime.com/blog/post/2026-01-26-expressjs-structure-scale/view#application-layer-architecture)
+- [Prisma](https://www.prisma.io/docs/prisma-orm/quickstart/postgresql)
+- [Prisma visual scematic generation](https://www.npmjs.com/package/prisma-erd-generator)
+
+Tech Stack:
+- [Docker](https://docs.docker.com/)
+- [npm](https://docs.npmjs.com/)
+- [SocketIo](https://socket.io/docs/v4/)
+- [vitest](https://vitest.dev/guide/)
 
 ### Special mentions
-Inspiration:
-[TypeRacer](https://play.typeracer.com/)
-[monkeytype](https://monkeytype.com/)
+
+- [TypeRacer](https://play.typeracer.com/)
+- [monkeytype](https://monkeytype.com/)
+- [Queen](https://www.youtube.com/watch?v=xt0V0_1MS0Q)
 
 ### AI Usage
 AI was used for ideation, researching, explanation and debugging. In some cases example snippets of code provided by AI were used and adapted to our use case. AI was NOT used to create complete features, only provide examples and feedback.
