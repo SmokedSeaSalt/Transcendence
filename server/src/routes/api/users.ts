@@ -1,4 +1,5 @@
 import { Router } from "express";
+import z from "zod";
 import * as userController from "../../controllers/api/userControllers.js";
 import { isValidIdFormat } from "../../middleware/apiAuthentication.js";
 import { normalizeEmail } from "../../middleware/normalizeEmail.js";
@@ -41,7 +42,7 @@ apiRegistry.registerPath({
 		},
 
 		400: {
-			description: "Validation error",
+			description: "Bad Request",
 			content: {
 				"application/json": {
 					schema: zodValidationErrorSchema,
@@ -49,8 +50,17 @@ apiRegistry.registerPath({
 			},
 		},
 
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -59,7 +69,7 @@ apiRegistry.registerPath({
 		},
 
 		409: {
-			description: "User already exists with this email.",
+			description: "Conflict. User already exists with this email.",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -83,10 +93,26 @@ apiRegistry.registerPath({
 
 	request: {},
 	responses: {
-		200: { description: "List of Users returned" },
+		200: {
+			description: "List of Users returned",
+			content: {
+				"application/json": {
+					schema: z.array(userResponseSchema),
+				},
+			},
+		},
+
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -103,9 +129,23 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
-		200: { description: "User returned" },
+		200: {
+			description: "User returned",
+			content: {
+				"application/json": {
+					schema: userResponseSchema,
+				},
+			},
+		},
 
 		400: {
 			description: "{id} is not a number",
@@ -116,8 +156,17 @@ apiRegistry.registerPath({
 			},
 		},
 
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -126,7 +175,7 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -143,7 +192,14 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
 		204: { description: "User deleted" },
 
@@ -155,8 +211,18 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -165,7 +231,17 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		409: {
+			description:
+				"Conflict. User is currently in game. Unable to delete user.",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -182,7 +258,14 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
 		204: { description: "Api-Key of the user deleted" },
 
@@ -194,8 +277,18 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -204,7 +297,7 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,

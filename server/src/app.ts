@@ -13,8 +13,6 @@ import webRoutes from "./routes/web/index.js";
 // This import must be after apiRoutes is imported as it is dependent on it.
 import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 
-import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
-
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import type {
@@ -47,11 +45,7 @@ registerSocketHandlers(io);
 
 // when in dev mode with NODE_ENV=development in the .env file, it will also generate docs for /web endpoints in addition to /api endpoints
 const isDev = process.env.NODE_ENV === "development";
-app.use(
-	"/api/docs",
-	swaggerUi.serve,
-	swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()),
-);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(getApiSwaggerSpec()));
 
 if (isDev) {
 	//runtime import so this can be a dev dependency

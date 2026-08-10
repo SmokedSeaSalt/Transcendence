@@ -60,3 +60,10 @@ export class BadRequestError extends Error {
 		this.name = "BadRequestError";
 	}
 }
+
+export class UserCurrentlyInGameError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "UserCurrentlyInGameError";
+	}
+}

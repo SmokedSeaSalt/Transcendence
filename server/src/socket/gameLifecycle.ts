@@ -23,7 +23,11 @@ export async function endGame(roomId: string, reason: string) {
 
 	const room = roomStore.get(roomId);
 	if (!room) return;
-	await saveGameSession(room);
+	try {
+		await saveGameSession(room);
+	} catch (error) {
+		console.log(`Error when saving game session to database. Error: ${error}`);
+	}
 
 	io.to(roomId).emit("roomState", room);
 
