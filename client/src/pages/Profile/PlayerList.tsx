@@ -12,7 +12,7 @@ export default function PlayerList({
 
 	for (let index = 0; index < gameSession.results.length; index += 1) {
 		playerLists.push(
-			<div className={playerClass}>
+			<div key={index} className={playerClass}>
 				<div>
 					{gameSession.results[index].placement}
 					{". "}
