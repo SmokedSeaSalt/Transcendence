@@ -1,4 +1,5 @@
 import { Router } from "express";
+import z from "zod";
 import * as userController from "../../controllers/api/userControllers.js";
 import { isValidIdFormat } from "../../middleware/apiAuthentication.js";
 import { normalizeEmail } from "../../middleware/normalizeEmail.js";
@@ -83,7 +84,14 @@ apiRegistry.registerPath({
 
 	request: {},
 	responses: {
-		200: { description: "List of Users returned" },
+		200: {
+			description: "List of Users returned",
+			content: {
+				"application/json": {
+					schema: z.array(userResponseSchema),
+				},
+			},
+		},
 
 		403: {
 			description: "Forbidden",
@@ -103,9 +111,23 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
-		200: { description: "User returned" },
+		200: {
+			description: "User returned",
+			content: {
+				"application/json": {
+					schema: userResponseSchema,
+				},
+			},
+		},
 
 		400: {
 			description: "{id} is not a number",
@@ -143,7 +165,14 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
 		204: { description: "User deleted" },
 
@@ -182,7 +211,14 @@ apiRegistry.registerPath({
 	tags: ["Admin Api"],
 	security: [{ ApiKeyAuth: [] }],
 
-	request: {},
+	request: {
+		params: z.object({
+			id: z.coerce.number().openapi({
+				description: "The ID of the user",
+				example: 123,
+			}),
+		}),
+	},
 	responses: {
 		204: { description: "Api-Key of the user deleted" },
 
