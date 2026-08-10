@@ -36,7 +36,7 @@ export const useAuthContext = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
 		throw new Error("useAuthContext used inappropriately");
-		// todo: catch somewhere?
+		// this throw is meant to crash on purpose during development, this cannot happen during prod
 	}
 	return context;
 };

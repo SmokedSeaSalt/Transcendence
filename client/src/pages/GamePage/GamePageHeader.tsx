@@ -11,9 +11,8 @@ export default function GamePageHeader({
 	isSpectator: boolean;
 }) {
 	const { socket, roomState } = useSocket();
-	const { leaveRoom, loading, error } = useLeaveRoom();
-	// todo: change back to regular loading when separate files for buttons are made
-	const { startGame, loadingStart, errorStart } = useStartGame();
+	const { leaveRoom, error } = useLeaveRoom();
+	const { startGame, errorStart } = useStartGame();
 
 	const startDisabled =
 		roomState?.roomLeader !== socket?.id ||
@@ -21,10 +20,12 @@ export default function GamePageHeader({
 
 	const handleLeaveClick = async () => {
 		leaveRoom();
+		if (error) console.log(error);
 	};
 
 	const handleStartClick = async () => {
 		startGame();
+		if (errorStart) console.log(errorStart);
 	};
 
 	return (

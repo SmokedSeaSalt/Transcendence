@@ -3,19 +3,11 @@ import { useSocket } from "./SocketContext";
 import { RoomState } from "./SocketTypes";
 
 interface TextFieldProps {
-	prompt: string[] | undefined;
+	prompt: string;
 	isSpectator: boolean;
 }
 
 const GameTextField: React.FC<TextFieldProps> = (props) => {
-	if (props.prompt === undefined)
-		return (
-			<div className="text-center text-xl">
-				Waiting for the room leader to start the game!
-			</div>
-		);
-	const prompt = props.prompt.join(" ");
-
 	const { socket, roomState } = useSocket();
 	const [cheating, setCheating] = useState<boolean>(false);
 	const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
@@ -24,9 +16,11 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 	// complete contains words that should no longer be touched; incomplete is everything else
 	// typed & untyped & typedWrong are for marking what the player is doing with incomplete
 	const [promptComplete, setPromptComplete] = useState<string>("");
-	const [promptIncomplete, setPromptIncomplete] = useState<string>(prompt);
+	const [promptIncomplete, setPromptIncomplete] = useState<string>(
+		props.prompt,
+	);
 	const [promptTyped, setPromptTyped] = useState<string>("");
-	const [promptUntyped, setPromptUntyped] = useState<string>(prompt);
+	const [promptUntyped, setPromptUntyped] = useState<string>(props.prompt);
 	const [promptTypedWrong, setPromptTypedWrong] = useState<string>("");
 	const [counter, setCounter] = useState<number>(5);
 
@@ -54,13 +48,13 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 				setTypedText(typed.substring(i + 1));
 				extraLength = extraLength + i + 1;
 				setPromptComplete(
-					prompt.substring(0, promptComplete.length + extraLength),
+					props.prompt.substring(0, promptComplete.length + extraLength),
 				);
 				setPromptIncomplete(
-					prompt.substring(promptComplete.length + extraLength),
+					props.prompt.substring(promptComplete.length + extraLength),
 				);
 				compare(
-					prompt.substring(promptComplete.length + extraLength),
+					props.prompt.substring(promptComplete.length + extraLength),
 					typed.substring(i + 1),
 				);
 				return;
@@ -69,7 +63,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 		if (currentPrompt.length === typed.length) {
 			socket?.emit("completedWord", typed);
 			setTypedText("");
-			setPromptComplete(prompt);
+			setPromptComplete(props.prompt);
 			setPromptIncomplete("");
 			setPromptUntyped("");
 			setPromptTyped("");
@@ -133,7 +127,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							{promptComplete}
 						</span>
 						<span className="text-typebox-correct inline">{promptTyped}</span>
-						<span className="text-red-600 inline font-bold ">
+						<span className="bg-typebox-incorrect inline font-bold ">
 							{promptTypedWrong}
 						</span>
 						<span className={untypedClass}>{promptUntyped}</span>
