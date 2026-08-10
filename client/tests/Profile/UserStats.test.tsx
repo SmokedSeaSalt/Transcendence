@@ -30,7 +30,7 @@ test("stats when logged in", async () => {
 
 	render(<UserStats />);
 
-	// since there's a newline in between, can't find whether the values are in correct place
+	// since there's a newline in between, checking value won't work
 	expect(await screen.findByText("Games won:")).toBeInTheDocument();
 	expect(await screen.findByText("Games played:")).toBeInTheDocument();
 	expect(await screen.findByText("Max WPM:")).toBeInTheDocument();

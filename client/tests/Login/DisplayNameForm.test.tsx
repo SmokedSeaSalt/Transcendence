@@ -3,11 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, expect, test, vi } from "vitest";
 import DisplayNameForm from "../../src/pages/Login/DisplayNameForm.tsx";
 
-// const getItemSpy = vi.spyOn(Storage.prototype, "getItem"); // for if we want tests where we set a value
 const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
 
 afterEach(() => {
-	// getItemSpy.mockClear();
 	setItemSpy.mockClear();
 	localStorage.clear();
 });

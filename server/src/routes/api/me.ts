@@ -169,8 +169,4 @@ apiRegistry.registerPath({
 });
 router.delete("/", meController.deleteUser);
 
-// router.put("/", meController.updateMyProfile);
-
-// router.get("/games", meController.getMyGameHistory);
-
 export default router;
