@@ -22,12 +22,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		updateLoggedinUser: refetch,
 	};
 
-	//optional to not display stuff while we check if the user is logged in:
-	// WARNING: results in flashing homepage when doing logged in related stuff.
-	//if (loading) {
-	//	return <AuthContext value={value}>{}</AuthContext>;
-	//}
-
 	return <AuthContext value={value}>{children}</AuthContext>;
 };
 

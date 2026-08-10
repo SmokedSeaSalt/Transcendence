@@ -14,7 +14,7 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 	if (props.user) currentWords = props.user.progress;
 	let progress: number = (currentWords / props.totalWords) * 100;
 
-	// for error handling, but something would be very wrong before this happens -> currently keep for testing
+	// for error handling, but something would be very wrong before this happens
 	if (progress > 100) progress = 100;
 
 	// automatically updates distance from top when markerSize is updated so it's always centered
@@ -25,7 +25,6 @@ const ProgressBar: React.FC<ProgressBarProps> = (props) => {
 		height: `${markerSize}%`,
 		aspectRatio: 1 / 1,
 		position: "absolute",
-		// backgroundColor: `${props.colourPalette[1]}`,
 		left: `${progress}%`,
 		top: `${topDistance}%`,
 		borderRadius: "100%",

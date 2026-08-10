@@ -15,8 +15,6 @@ describe("GET /me", () => {
 		const unhashedPassword = "Password1!";
 		const unhashedApiKey = "key";
 
-		// await deleteUser(email);
-
 		const user = await createUserWithRoleAndApiKey(
 			email,
 			name,

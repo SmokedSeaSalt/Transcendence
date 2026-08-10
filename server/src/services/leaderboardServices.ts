@@ -10,7 +10,7 @@ type userForLeaderboard = {
 	avg_accuracy: number;
 };
 
-/** return all users (name & wpm & cpm only), sorted by max wpm */
+/** return all users (name & wpm & cpm & accuracy), sorted by max wpm */
 export const getAllUsersInOrderWpm = async () => {
 	const userStats = await prisma.user.findMany({
 		select: {
