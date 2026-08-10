@@ -51,7 +51,7 @@ a:not(.unstyled-link):active {
 	--color-typebox-typed-text: var(--color-black);
 	--color-typebox-correct: var(--color-green-600);
 	--color-typebox-completed: var(--color-green-600);
-	--color-typebox-incorrect: var(--color-red-300);
+	--color-typebox-incorrect: var(--color-red-600);
 }
 
 @layer utilities {
