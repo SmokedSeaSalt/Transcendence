@@ -41,6 +41,15 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		404: {
+			description: "Not Found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 	},
 });
 router.get("/", meController.getMyProfile);
@@ -65,6 +74,15 @@ apiRegistry.registerPath({
 
 		401: {
 			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -195,7 +213,5 @@ apiRegistry.registerPath({
 	},
 });
 router.delete("/", meController.deleteUser);
-
-// router.put("/", meController.updateMyProfile);
 
 export default router;
