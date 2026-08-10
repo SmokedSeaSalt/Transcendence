@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfService from "./pages/TermsOfService";
+import Errorpage from "./pages/Errorpage";
 
 export default function App() {
 	return (
@@ -31,6 +32,7 @@ export default function App() {
 								}
 							/>
 							<Route path="/leaderboard" element={<LeaderboardPage />} />
+							<Route path="*" element={<Errorpage />} />
 						</Routes>
 					</main>
 				</AuthProvider>
