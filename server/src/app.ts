@@ -13,8 +13,6 @@ import webRoutes from "./routes/web/index.js";
 // This import must be after apiRoutes is imported as it is dependent on it.
 import { getApiSwaggerSpec } from "./swagger/apiSpec.js";
 
-import { getDocsSwaggerSpec } from "./swagger/docsSpec.js";
-
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import type {
@@ -50,7 +48,7 @@ const isDev = process.env.NODE_ENV === "development";
 app.use(
 	"/api/docs",
 	swaggerUi.serve,
-	swaggerUi.setup(isDev ? getDocsSwaggerSpec() : getApiSwaggerSpec()),
+	swaggerUi.setup(getApiSwaggerSpec()),
 );
 
 if (isDev) {
