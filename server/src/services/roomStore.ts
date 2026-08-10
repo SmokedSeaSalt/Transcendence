@@ -109,4 +109,16 @@ export const roomStore = {
 	delete: (roomId: string): void => {
 		rooms.delete(roomId);
 	},
+
+	getUserRoom: (userId: number): string | undefined => {
+		for (const [, room] of rooms) {
+			for (const [, user] of Object.entries(room.users)) {
+				if (user.userId === userId) {
+					return room.roomId;
+				}
+			}
+		}
+		return undefined;
+	},
+
 };
