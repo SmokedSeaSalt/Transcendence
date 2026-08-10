@@ -1,0 +1,13 @@
+import type { NextFunction, Request, Response } from "express";
+
+export function normalizeEmail(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	if (req.body.email) {
+		req.body.email = req.body.email.trim().toLowerCase();
+	}
+
+	next();
+}

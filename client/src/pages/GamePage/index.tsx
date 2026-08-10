@@ -15,6 +15,14 @@ function isCurrentUserSpectator(
 	return !(socketId in roomState.users);
 }
 
+function isCurrentUserLeader(
+	roomState: RoomStatePayload | undefined,
+	socketId: string | undefined,
+) {
+	if (!roomState || !socketId) return false;
+	return socketId === roomState.roomLeader;
+}
+
 export default function GamePage() {
 	const [message, setMessage] = useState("");
 	const { socket, roomState, errorStatus } = useSocket();
@@ -27,6 +35,12 @@ export default function GamePage() {
 	}
 
 	const isSpectator = isCurrentUserSpectator(roomState, socket?.id);
+
+	let lobbyMessage = "Waiting for the room leader to start the game!";
+	if (isCurrentUserLeader(roomState, socket?.id))
+		lobbyMessage = "Waiting for you to start the game!";
+	let prompt = "";
+	if (roomState?.prompt !== undefined) prompt = roomState?.prompt.join(" ");
 
 	return (
 		<main className="p-8 pt-4 font-sans">
@@ -43,7 +57,11 @@ export default function GamePage() {
 					{roomState ? <ProgressField /> : <h1>No room state.</h1>}
 				</div>
 				<div className="p-3 my-3">
-					<GameTextField isSpectator={isSpectator} prompt={roomState?.prompt} />
+					{!prompt ? (
+						<div className="text-center text-xl">{lobbyMessage}</div>
+					) : (
+						<GameTextField isSpectator={isSpectator} prompt={prompt} />
+					)}
 				</div>
 			</div>
 		</main>

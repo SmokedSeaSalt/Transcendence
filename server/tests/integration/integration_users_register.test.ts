@@ -79,7 +79,7 @@ describe.each(registerPaths)("POST %s", (path) => {
 	const adminEmail = "testAdmin@example.com";
 	const adminName = "Test Admin User";
 	const adminPassword = "ValidPassword123!";
-	const unhashedApiKey = "key";
+	const unhashedApiKey = "adminkey";
 
 	beforeAll(async () => {
 		const adminUser = await createUserWithRoleAndApiKey(
@@ -178,7 +178,7 @@ describe("POST /api/users/register with user API key", () => {
 	const email = "test@example.com";
 	const name = "Test User";
 	const password = "ValidPassword123!";
-	const unhashedApiKey = "key";
+	const unhashedApiKey = "userkey";
 
 	const emailToCreate = "willFail@example.com";
 	const nameToCreate = "Failed User";
@@ -207,5 +207,87 @@ describe("POST /api/users/register with user API key", () => {
 
 	afterAll(async () => {
 		await deleteUser(email);
+	});
+});
+
+describe("email normalization", () => {
+	const email = "test@example.com";
+	const name = "Test User";
+	const password = "ValidPassword123!";
+	const unhashedApiKey = "thisisanewkey";
+
+	const emailWithUpper = "Test@example.com";
+
+	// create regular user
+	beforeAll(async () => {
+		await createUserWithRoleAndApiKey(
+			"email",
+			"name",
+			"Password1!",
+			unhashedApiKey,
+			"admin",
+		);
+
+		const res1 = await postRegister(
+			"/web/users/register",
+			{ email: email, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(res1.status).toBe(201);
+	});
+
+	it("Cannot register with same email but different case web", async () => {
+		const res2 = await postRegister(
+			"/web/users/register",
+			{ email: emailWithUpper, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(res2.status).toBe(409);
+	});
+
+	it("Can login with correct email and different case", async () => {
+		const response = await request(app)
+			.post("/web/users/login")
+			.send({ email: emailWithUpper, password: password });
+
+		expect(response.status).toBe(200);
+	});
+
+	it("Cannot register with same email but different case API", async () => {
+		const response = await postRegister(
+			"/api/users/register",
+			{ email: emailWithUpper, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(response.status).toBe(409);
+	});
+
+	it("Cannot register with same email but different case API", async () => {
+		const response = await postRegister(
+			"/api/users/register",
+			{ email: emailWithUpper, name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(response.status).toBe(409);
+	});
+
+	it("Can register wiht capital letters in api register and then login with lowercase", async () => {
+		const response1 = await postRegister(
+			"/api/users/register",
+			{ email: "HelloWorld@gmail.com", name: name, password: password },
+			unhashedApiKey,
+		);
+		expect(response1.status).toBe(201);
+
+		const response2 = await request(app)
+			.post("/web/users/login")
+			.send({ email: "helloworld@gmail.com", password: password });
+		expect(response2.status).toBe(200);
+	});
+
+	afterAll(async () => {
+		await deleteUser(email);
+		await deleteUser("email");
+		await deleteUser("helloworld@gmail.com");
 	});
 });

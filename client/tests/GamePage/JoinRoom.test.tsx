@@ -4,8 +4,6 @@ import { expect, test } from "vitest";
 import GamePageHeader from "../../src/pages/GamePage/GamePageHeader";
 import { SocketProvider } from "../../src/pages/GamePage/SocketContext";
 
-// todo: add more tests when room connection is functional
-
 test("click join room and open field", async () => {
 	render(
 		<SocketProvider>

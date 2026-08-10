@@ -134,7 +134,7 @@ describe("Room addUser() and deleteUser()", () => {
 		// Delete the remaining user
 		roomStore.deleteUser(roomId, secondsocketId);
 
-		// Check room is delete after last user is deleted
+		// Check room is deleted after last user is deleted
 		const roomAfterDelete = roomStore.get(roomId);
 		expect(roomAfterDelete).toBeUndefined();
 	});
@@ -176,10 +176,6 @@ describe("updateProgress", () => {
 });
 
 describe("updateProgress", () => {
-	const socketId = "user1";
-	const displayName = "bob";
-	const userId = 123;
-
 	const roomId = "room1";
 
 	beforeEach(async () => {

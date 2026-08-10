@@ -1,7 +1,7 @@
 import ProgressBar from "./ProgressBar";
 import { useSocket } from "./SocketContext";
 
-// [bar colour, marker colour, bike colour starting from blue]
+// [bar colour, marker colour (currently not using, but for other themes), bike colour starting from blue]
 const colourPalettes: [string, string, string][] = [
 	["bg-blue-400", "#1665ee", "hue-rotate-0"],
 	["bg-pink-400", "#bc4b8b", "hue-rotate-100"],
@@ -12,7 +12,6 @@ const colourPalettes: [string, string, string][] = [
 
 export default function ProgressField() {
 	const { socket, roomState } = useSocket();
-	// only grab once from room info
 	let totalWords = 1;
 	if (roomState?.wordCount !== undefined) {
 		totalWords = roomState.wordCount;
@@ -20,12 +19,11 @@ export default function ProgressField() {
 
 	// adds one bar per user
 	const progressBars = [];
-	console.log("Resetting progress bars");
 	let i = 0; // for colour choices
 	if (roomState) {
 		for (const [key, value] of Object.entries(roomState.users)) {
 			progressBars.push(
-				<div className="flex h-10">
+				<div key={key} className="flex h-10">
 					<div className="w-5/100 h-100/100 content-center">
 						<p className="truncate">{value.displayName}</p>
 					</div>
@@ -35,6 +33,9 @@ export default function ProgressField() {
 							totalWords={totalWords}
 							user={value}
 						/>
+					</div>
+					<div className="relative h-100/100 content-center">
+						<div className="absolute w-16 h-30/100 z-0 bg-[repeating-conic-gradient(_black_0_25%,_white_25%_50%)] bg-[length:15px] bg-top-left" />
 					</div>
 				</div>,
 			);

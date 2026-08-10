@@ -22,12 +22,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		updateLoggedinUser: refetch,
 	};
 
-	//optional to not display stuff while we check if the user is logged in:
-	// WARNING: results in flashing homepage when doing logged in related stuff.
-	//if (loading) {
-	//	return <AuthContext value={value}>{}</AuthContext>;
-	//}
-
 	return <AuthContext value={value}>{children}</AuthContext>;
 };
 
@@ -36,7 +30,7 @@ export const useAuthContext = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
 		throw new Error("useAuthContext used inappropriately");
-		// todo: catch somewhere?
+		// this throw is meant to crash on purpose during development, this cannot happen during prod
 	}
 	return context;
 };

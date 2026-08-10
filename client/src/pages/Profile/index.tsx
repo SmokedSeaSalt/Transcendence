@@ -28,7 +28,7 @@ export default function ProfilePage() {
 		return <div>Loading...</div>;
 	}
 
-	//dont load anything if we will be redirecting
+	//don't load anything if we will be redirecting
 	if (currentUser === null) {
 		return null;
 	}
