@@ -81,5 +81,3 @@ export default function RegistrationForm() {
 		</section>
 	);
 }
-
-// todo: input validation and password checking

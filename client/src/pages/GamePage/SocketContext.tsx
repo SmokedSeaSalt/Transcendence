@@ -70,7 +70,7 @@ export function useSocket() {
 	const socket = useContext(SocketContext);
 	if (!socket) {
 		throw new Error("useSocket must be used within a SocketProvider");
-		// todo: catch somewhere?
+		// this throw is meant to crash on purpose during development, this cannot happen during prod
 	}
 	return socket;
 }
