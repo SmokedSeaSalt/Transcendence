@@ -13,7 +13,7 @@ export default function RegistrationForm() {
 	const { register, loading, error } = useRegistration();
 
 	const submit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-		e.preventDefault(); // prevent default page reload
+		e.preventDefault();
 		const result = createUserSchema.safeParse({ email, name, password });
 		if (!result.success) {
 			const errors: Record<string, string> = {};
@@ -81,5 +81,3 @@ export default function RegistrationForm() {
 		</section>
 	);
 }
-
-// todo: input validation and password checking

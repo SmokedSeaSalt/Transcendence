@@ -12,7 +12,7 @@ export default function DisplayNameForm() {
 	const [fieldUpdated, setFieldUpdated] = useState("");
 
 	const submit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-		e.preventDefault(); // prevent default page reload
+		e.preventDefault();
 		const result = setDisplayNameSchema.safeParse({ displayName });
 		if (!result.success) {
 			const errors: Record<string, string> = {};

@@ -40,7 +40,7 @@ export interface ClientToServerEvents {
 	leaveRoom: () => void;
 }
 
-//create a empty map to make typescript happy
+//create an empty map to make typescript happy
 export type InterServerEvents = Record<string, never>;
 
 export interface SocketData {

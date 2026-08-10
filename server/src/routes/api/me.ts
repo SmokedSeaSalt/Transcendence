@@ -34,7 +34,16 @@ apiRegistry.registerPath({
 		},
 
 		401: {
-			description: "Unauthorized error",
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -64,7 +73,16 @@ apiRegistry.registerPath({
 		},
 
 		401: {
-			description: "Unauthorized error",
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -94,7 +112,16 @@ apiRegistry.registerPath({
 		},
 
 		401: {
-			description: "Unauthorized error",
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -135,7 +162,16 @@ apiRegistry.registerPath({
 		},
 
 		401: {
-			description: "Unauthorized error",
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		404: {
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -157,8 +193,27 @@ apiRegistry.registerPath({
 	responses: {
 		204: { description: "User deleted" },
 
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		404: {
-			description: "User not found",
+			description: "Not Found",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		409: {
+			description:
+				"Conflict. User is currently in game. Unable to delete user.",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -168,9 +223,5 @@ apiRegistry.registerPath({
 	},
 });
 router.delete("/", meController.deleteUser);
-
-// router.put("/", meController.updateMyProfile);
-
-// router.get("/games", meController.getMyGameHistory);
 
 export default router;
