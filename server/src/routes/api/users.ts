@@ -50,6 +50,15 @@ apiRegistry.registerPath({
 			},
 		},
 
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
 			description: "Forbidden",
 			content: {
@@ -93,6 +102,15 @@ apiRegistry.registerPath({
 			},
 		},
 
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
 			description: "Forbidden",
 			content: {
@@ -131,6 +149,15 @@ apiRegistry.registerPath({
 
 		400: {
 			description: "{id} is not a number",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+		401: {
+			description: "Unauthorized",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -184,6 +211,16 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
 		403: {
 			description: "Forbidden",
 			content: {
@@ -230,6 +267,17 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		401: {
+			description: "Unauthorized",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
+
+
 		403: {
 			description: "Forbidden",
 			content: {
