@@ -45,11 +45,7 @@ registerSocketHandlers(io);
 
 // when in dev mode with NODE_ENV=development in the .env file, it will also generate docs for /web endpoints in addition to /api endpoints
 const isDev = process.env.NODE_ENV === "development";
-app.use(
-	"/api/docs",
-	swaggerUi.serve,
-	swaggerUi.setup(getApiSwaggerSpec()),
-);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(getApiSwaggerSpec()));
 
 if (isDev) {
 	//runtime import so this can be a dev dependency
