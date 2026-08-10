@@ -35,6 +35,9 @@ export default function ProgressField() {
 							user={value}
 						/>
 					</div>
+					<div className="relative h-100/100 content-center">
+						<div className="absolute w-16 h-30/100 z-0 bg-[repeating-conic-gradient(_black_0_25%,_white_25%_50%)] bg-[length:15px] bg-top-left" />
+					</div>
 				</div>,
 			);
 			i++;
