@@ -16,8 +16,6 @@ export default function Errorpage() {
 					className="w-full max-w-md h-auto"
 				/>
 			</div>
-
-
 		</main>
 	);
 }
