@@ -41,7 +41,7 @@ apiRegistry.registerPath({
 		},
 
 		400: {
-			description: "Validation error",
+			description: "Bad Request",
 			content: {
 				"application/json": {
 					schema: zodValidationErrorSchema,
@@ -50,7 +50,7 @@ apiRegistry.registerPath({
 		},
 
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -59,7 +59,7 @@ apiRegistry.registerPath({
 		},
 
 		409: {
-			description: "User already exists with this email.",
+			description: "Conflict. User already exists with this email.",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -86,7 +86,7 @@ apiRegistry.registerPath({
 		200: { description: "List of Users returned" },
 
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -117,7 +117,7 @@ apiRegistry.registerPath({
 		},
 
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -126,7 +126,7 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -156,7 +156,7 @@ apiRegistry.registerPath({
 			},
 		},
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -165,7 +165,7 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -195,7 +195,7 @@ apiRegistry.registerPath({
 			},
 		},
 		403: {
-			description: "Forbidden due to lacking priviledges",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
@@ -204,7 +204,7 @@ apiRegistry.registerPath({
 		},
 
 		404: {
-			description: "User not found",
+			description: "Not Found",
 			content: {
 				"application/json": {
 					schema: singleErrorSchema,
