@@ -45,7 +45,8 @@ export const errorHandler = (
 		return res.status(500).json({ error: error.message });
 	}
 
-	if (error instanceof EmailAlreadyExistsError ||
+	if (
+		error instanceof EmailAlreadyExistsError ||
 		error instanceof UserCurrentlyInGameError
 	) {
 		return res.status(409).json({ error: error.message });

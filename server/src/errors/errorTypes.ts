@@ -67,5 +67,3 @@ export class UserCurrentlyInGameError extends Error {
 		this.name = "UserCurrentlyInGameError";
 	}
 }
-
-

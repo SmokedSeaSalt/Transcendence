@@ -10,7 +10,9 @@ export const useApiKey = () => {
 		try {
 			const res = await fetch("/web/users/update-apikey");
 			if (!res.ok)
-				throw new Error((await res.json()).message || "Failed to generate API key.");
+				throw new Error(
+					(await res.json()).message || "Failed to generate API key.",
+				);
 			//return api key
 			return (await res.json()).apikey;
 		} catch (err) {

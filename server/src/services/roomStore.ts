@@ -120,5 +120,4 @@ export const roomStore = {
 		}
 		return undefined;
 	},
-
 };
