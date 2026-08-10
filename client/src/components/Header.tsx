@@ -22,7 +22,7 @@ export default function Header() {
 						</div>
 					</Link>
 				</div>
-				<div className="text-7xl font-bold">
+				<div className="text-7xl font-bold text-center">
 					<Link to="/" className="unstyled-link">
 						<h1>Gotta Bike Fast!</h1>
 					</Link>
