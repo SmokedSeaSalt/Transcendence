@@ -458,7 +458,6 @@ describe("socket disconnect", () => {
 		user2.userId = 123;
 		console.log("client2");
 		await expect(joinRoom(client2, roomId)).rejects.toThrow();
-		// await joinRoom(client2, roomId);
 	});
 
 	it("users are only allowed to join during lobby state", async () => {

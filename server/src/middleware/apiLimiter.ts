@@ -9,7 +9,7 @@ export const limiter = rateLimit({
 	limit: RATE_LIMIT_MAX_REQUESTS,
 	keyGenerator: (req) => {
 		if (!req.user || !req.user.hashedApiKey) {
-			return ipKeyGenerator(req.ip ?? "unknown"); // in theory should never default to ip because it is set in auth middleware.
+			return ipKeyGenerator(req.ip ?? "unknown");
 		}
 		return req.user.hashedApiKey;
 	},

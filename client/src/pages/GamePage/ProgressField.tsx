@@ -1,7 +1,7 @@
 import ProgressBar from "./ProgressBar";
 import { useSocket } from "./SocketContext";
 
-// [bar colour, marker colour, bike colour starting from blue]
+// [bar colour, marker colour (currently not using, but for other themes), bike colour starting from blue]
 const colourPalettes: [string, string, string][] = [
 	["bg-blue-400", "#1665ee", "hue-rotate-0"],
 	["bg-pink-400", "#bc4b8b", "hue-rotate-100"],
@@ -12,7 +12,6 @@ const colourPalettes: [string, string, string][] = [
 
 export default function ProgressField() {
 	const { socket, roomState } = useSocket();
-	// only grab once from room info
 	let totalWords = 1;
 	if (roomState?.wordCount !== undefined) {
 		totalWords = roomState.wordCount;

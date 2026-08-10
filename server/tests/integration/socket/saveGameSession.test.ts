@@ -33,7 +33,6 @@ describe("Save gameSession in db", () => {
 	});
 
 	it("save roomData as gameSession in db for one logged in user and one guest", async () => {
-		// roomStore.create(roomId);
 		const room = roomStore.get(roomId);
 		if (!room) throw new Error("Room undefined");
 
