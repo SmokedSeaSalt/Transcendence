@@ -210,6 +210,15 @@ apiRegistry.registerPath({
 				},
 			},
 		},
+
+		409: {
+			description: "Conflict. User is currently in game. Unable to delete user.",
+			content: {
+				"application/json": {
+					schema: singleErrorSchema,
+				},
+			},
+		},
 	},
 });
 router.delete("/", meController.deleteUser);
