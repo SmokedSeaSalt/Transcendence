@@ -15,7 +15,10 @@ export default function GameHistory({
 
 	for (let index = gameHistory.gameResults.length - 1; index >= 0; index -= 1) {
 		gameHistoryList.push(
-			<div key={index} className="grid grid-cols-1 md:grid-cols-2 bg-background-secondary outline m-3 rounded-md">
+			<div
+				key={index}
+				className="grid grid-cols-1 md:grid-cols-2 bg-background-secondary outline m-3 rounded-md"
+			>
 				<MyStats gameResults={gameHistory.gameResults[index]} />
 				<PlayerList gameSession={gameHistory.gameResults[index].session} />
 			</div>,
