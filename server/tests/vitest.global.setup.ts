@@ -24,7 +24,6 @@ export async function setup() {
 }
 
 export async function teardown() {
-
 	await adminClient.$executeRawUnsafe(`DROP DATABASE IF EXISTS ${TEST_DB};`);
 	console.log(`database ${TEST_DB} deleted`);
 	await adminClient.$disconnect();
