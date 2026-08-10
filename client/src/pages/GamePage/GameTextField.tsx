@@ -133,7 +133,7 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 							{promptComplete}
 						</span>
 						<span className="text-typebox-correct inline">{promptTyped}</span>
-						<span className="text-red-600 inline font-bold ">
+						<span className="bg-typebox-incorrect inline font-bold ">
 							{promptTypedWrong}
 						</span>
 						<span className={untypedClass}>{promptUntyped}</span>
