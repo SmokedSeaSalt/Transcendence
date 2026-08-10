@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { toPublicUser } from "../../dto/user.mapper.js";
-import { NotFoundError } from "../../errors/errorTypes.js";
+import { NotFoundError, UserCurrentlyInGameError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
+import { roomStore } from "../../services/roomStore.js";
 
 export const createUser = async (
 	req: Request,
@@ -54,6 +55,10 @@ export const deleteUser = async (
 	next: NextFunction,
 ) => {
 	try {
+		if (roomStore.getUserRoom(Number(req.params.id)) !== undefined) {
+			return next(new UserCurrentlyInGameError("User is currently in a game lobby. User cannot be deleted."));
+		}
+
 		const count = await userServices.deleteUserById(Number(req.params.id));
 
 		if (count === 0) {

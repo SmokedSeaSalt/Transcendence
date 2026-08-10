@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { toPublicUser } from "../../dto/user.mapper.js";
-import { NotFoundError, UnauthorizedError } from "../../errors/errorTypes.js";
+import { NotFoundError, UnauthorizedError, UserCurrentlyInGameError } from "../../errors/errorTypes.js";
 import * as userServices from "../../services/userServices.js";
+import { roomStore } from "../../services/roomStore.js";
 
 export const getMyProfile = async (
 	req: Request,
@@ -67,6 +68,9 @@ export const deleteUser = async (
 			return next(new UnauthorizedError("Invalid token"));
 		}
 		const { id } = req.user;
+		if (roomStore.getUserRoom(id) !== undefined) {
+			return next(new UserCurrentlyInGameError("User is currently in a game lobby. User cannot be deleted."));
+		}
 		const count = await userServices.deleteUserById(id);
 
 		if (count === 0) {
