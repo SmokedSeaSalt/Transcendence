@@ -27,11 +27,11 @@ Hit keys on your keyboard to type words faster than the competition, develop you
 ### Installation steps
 1. `git clone <project_url> [local_folder_name]`
 2. `cd [local_folder_name]`
-3. Create a .env (an .env.example is provided with all neccecary information).
+3. Create a .env (an .env.example is provided with all necessary information).
 3. `npm run prod`
 
 ### Certs
-If no HTTPS certs (localhost.crt and localhost.key) are provided in ./.certs the project will create some selfsigned localhost certs.
+If no HTTPS certs (localhost.crt and localhost.key) are provided in ./.certs the project will create some self-signed localhost certs.
 
 ## Technical Stack
 [//]: <> (Todo add better justification.)
@@ -81,7 +81,7 @@ If no HTTPS certs (localhost.crt and localhost.key) are provided in ./.certs the
 
 ### Project Management
 
-The team organized the work by dividing the work into smaller tasks. These were then distributed to the team by preference per team member. These tasks were managed using GitHub Issues to keep track of progress and responsibility. For communications, we relied on a mix of in-person (impromptu) meetings and Slack. A small progress meeting (standup) was held almost daily. In these meetings, the progress and any roadblocks were discussed.
+The team organized the work by dividing the work into smaller tasks. These were then distributed to the team by preference per team member. These tasks were managed using GitHub Issues to keep track of progress and responsibility. For communications, we relied on a mix of in-person (impromptu) meetings and Slack. A small progress meeting (stand-up) was held almost daily. In these meetings, the progress and any roadblocks were discussed.
 
 ### Individual Contributions
 #### dbakker
