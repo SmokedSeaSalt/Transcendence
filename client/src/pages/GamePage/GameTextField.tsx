@@ -82,8 +82,10 @@ const GameTextField: React.FC<TextFieldProps> = (props) => {
 
 	const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
 		e.preventDefault();
-		setCheating(true);
-		setTimeout(() => setCheating(false), 2000);
+		if (!props.isSpectator) {
+			setCheating(true);
+			setTimeout(() => setCheating(false), 2000);
+		}
 	};
 
 	// automatically forces cursor to end of input

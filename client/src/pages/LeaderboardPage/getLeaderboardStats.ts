@@ -14,7 +14,7 @@ export type userForLeaderboard = {
 	avg_accuracy: number;
 };
 
-// hook to return either leaderboardStats object or null if user is not logged in
+// hook to return either leaderboardStats object or null
 export const getLeaderboardStats = () => {
 	const [leaderboardStats, setLeaderboardStats] =
 		useState<leaderboardStats | null>(null);
