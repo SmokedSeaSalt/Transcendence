@@ -14,7 +14,7 @@ Hit keys on your keyboard to type words faster than the competition, develop you
 - User login for result logging: You can click the login/make an account button in the top right. This will take you to a page where you can login as an existing user or register as a new user. Now when you play a game while logged in, your game history and stats will be saved and users can see you username in the game room. (egrisel, mgroos, mvan-rij)
 - User page to view results and progress: When logged in you can click the profile button and see your stats such as words per minute typed and your match history. (dbakker, egrisel, mgroos, mvan-rij)
 - Public leaderboard: You can click the leaderboard button where it will show you a ranking of all account-having players based on stats such as words per minute and accuracy. (dbakker, mgroos)
-- API for getting user results: With the API generated from the profile page after logging in, users can programmatically interact with our service, make profile changes and view profile details. (dbakker, egrisel, mvan-rij)
+- API for getting user results: With the API generated from the profile page after logging in, users can programmatically interact with our service, make profile changes and view profile details. (dbakker, egrisel)
 
 
 ## Instructions
@@ -124,6 +124,7 @@ and the following features:
 
 Personal challenges faced and overcome:
 - Getting things to be where they should be on the frontend with TailwindCSS was solved by asking my peers how they would do it.
+- Struggling with how to structure the expressjs backend was solved by finding a guide online that we followed.
 
 #### mgroos
 This team member has contributed/worked with the following modules:
@@ -162,7 +163,6 @@ and the following features:
 - Multiplayer rooms.
 - User login for result logging.
 - User page to view results and progress.
-- API for getting user results.
 
 Personal challenges faced and overcome:
 - When setting up the tech stack there was a lot of version collision specifically with the combination: Prisma, ExpressJS and Postgres. This was overcome by googling a lot and in the end downgrading Prisma to a more stable version.
